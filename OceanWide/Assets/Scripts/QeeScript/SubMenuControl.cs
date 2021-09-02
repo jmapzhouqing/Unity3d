@@ -62,6 +62,7 @@ public class SubMenuControl : MonoBehaviour,IPointerEnterHandler,IPointerExitHan
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
+		//PrimaryContorl.websocket.SendMsg("");
 		this.transform.parent.gameObject.SetActive(false);
 	}
 }
