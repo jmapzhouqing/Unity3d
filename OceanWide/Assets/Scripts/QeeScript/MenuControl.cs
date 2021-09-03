@@ -31,10 +31,16 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
     public Management management;
     public Management control;
 
+    private Dictionary<string, Dictionary<string,string>> all_menu;
+
     public void Awake()
     {
-        
-  
+        all_menu = new Dictionary<string, Dictionary<string, string>> {
+            { "management",new Dictionary<string, string>() },
+            { "buildercontrol",new Dictionary<string, string>{ { "8", "BA系统" }, { "7", "人脸识别系统" }, { "6", "能耗系统" }, { "5", "停车场所系统" }, { "4","变配电系统" },{"3", "智能照明系统" },{"2","机房环境监测"},{"1", "电梯运行监测" } } },
+            { "security",new Dictionary<string, string>{ {"1","视频监控"},{"2","消防系统"}, { "3", "电梯运行监测" } } },
+            { "information",new Dictionary<string, string>{ {"1","动态"}} },
+        };
     }
 
     void Start()
@@ -68,7 +74,6 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
             control.enabled = true;
         }
 
-
         for (int i = 0, child_number = dynamic_container.childCount; i < child_number; i++){
             GameObject.DestroyImmediate(dynamic_container.GetChild(i).gameObject);
         }
@@ -76,8 +81,21 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         RectTransform container = GameObject.Instantiate<RectTransform>(sub_menu_container_prefab, dynamic_container);
         container.anchoredPosition = this.GetComponent<RectTransform>().anchoredPosition;
 
+
+        Dictionary<string, string> submenus;
+
+        if (all_menu.TryGetValue(key, out submenus)) {
+            foreach (KeyValuePair<string, string> item in submenus) {
+                RectTransform menu = GameObject.Instantiate<RectTransform>(sub_menu_prefab, container);
+
+                SubMenuControl control = menu.GetComponentInChildren<SubMenuControl>();
+                control.SetName(item.Value);
+                control.SetId(item.Key);
+            }
+        }
+ 
         for (int i = 0; i < 5; i++) {
-            RectTransform menu = GameObject.Instantiate<RectTransform>(sub_menu_prefab, container);
+            
         }
 
         //container.sizeDelta
