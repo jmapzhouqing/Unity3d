@@ -73,6 +73,7 @@
     <Compile Include="Assets\Demigiant\DOTweenPro\DOTweenTk2d.cs" />
     <Compile Include="Assets\Scripts\Control\CameraControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\Control.cs" />
+    <Compile Include="Assets\Scripts\QeeScript\LevelControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\Management.cs" />
     <Compile Include="Assets\Scripts\QeeScript\MenuControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\PrimaryUI.cs" />
