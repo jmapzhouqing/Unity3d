@@ -6,7 +6,7 @@ public class Management : MonoBehaviour
     public RectTransform left;
     public RectTransform right;
 
-    private float duration = 0.5f;
+    private float duration = 0.2f;
 
     private Tween left_tween;
     private Tween right_tween;

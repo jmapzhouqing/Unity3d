@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class LevelControl : MonoBehaviour
+public class LevelExhibitionControl : MonoBehaviour
 {
     public Vector3 increment = new Vector3(0,5,0);
 
