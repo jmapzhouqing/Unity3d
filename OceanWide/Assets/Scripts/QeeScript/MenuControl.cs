@@ -8,6 +8,8 @@ using UIDataStruct;
 public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
+    public string key = "management";
+
     public RectTransform childMenu;
 
     public GameObject prefab;
@@ -25,6 +27,16 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
     private Transform dynamic_container;
     // Start is called before the first frame update
+
+    public Management management;
+    public Management control;
+
+    public void Awake()
+    {
+        
+  
+    }
+
     void Start()
     {
 
@@ -46,6 +58,17 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
     }
 
     public void OnPointerClick(PointerEventData eventData){
+        if (key.Equals("management"))
+        {
+            management.enabled = true;
+            control.enabled = false;
+        }
+        else {
+            management.enabled = false;
+            control.enabled = true;
+        }
+
+
         for (int i = 0, child_number = dynamic_container.childCount; i < child_number; i++){
             GameObject.DestroyImmediate(dynamic_container.GetChild(i).gameObject);
         }

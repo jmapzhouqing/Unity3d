@@ -69,7 +69,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 1007
-  m_MinSize: {x: 950, y: 524}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &4
 MonoBehaviour:
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_MinSize: {x: 611, y: 474}
   m_MaxSize: {x: 18006, y: 14024}
   vertical: 0
-  controlID: 102
+  controlID: 31
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_MinSize: {x: 102, y: 224}
   m_MaxSize: {x: 4002, y: 8024}
   vertical: 1
-  controlID: 30
+  controlID: 32
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 474}
   m_MaxSize: {x: 10004, y: 14024}
   vertical: 1
-  controlID: 82
+  controlID: 65
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -436,9 +436,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 81.09375, y: -86.6875, z: -104.25}
+    m_Target: {x: -0.3947356, y: 0.51084775, z: -2.2636719}
     speed: 2
-    m_Value: {x: 81.09375, y: -86.6875, z: -104.25}
+    m_Value: {x: -0.3947356, y: 0.51084775, z: -2.2636719}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -466,17 +466,17 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.23957747, y: 0.059664845, z: -0.0147525305, w: 0.9689299}
+    m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
-    m_Value: {x: 0.23957747, y: 0.059664845, z: -0.0147525305, w: 0.9689299}
+    m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 941.055
+    m_Target: 14.8811035
     speed: 2
-    m_Value: 941.055
+    m_Value: 14.8811035
   m_Ortho:
-    m_Target: 1
+    m_Target: 0
     speed: 2
-    m_Value: 1
+    m_Value: 0
   m_ShowGlobalGrid: 1
   m_LastSceneViewRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LastSceneViewOrtho: 1
@@ -579,9 +579,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 981e0000
-      m_LastClickedID: 0
-      m_ExpandedIDs: c6fbffff
+      m_SelectedIDs: 6e9bffff
+      m_LastClickedID: -25746
+      m_ExpandedIDs: 589affff6e9bffffc6fbffff1843000088430000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -669,7 +669,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scripts/QeeScript
   m_ViewMode: 0
   m_StartGridSize: 16
   m_LastFolders: []
@@ -706,10 +706,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 44}
+    scrollPos: {x: 0, y: 136}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000003a1e0000781e000074210000f4210000e422000058260000982600006a2a0000d2360000b23a0000c63c00003cbd0000
+    m_ExpandedIDs: ffffffff000000003a1e0000781e000074210000f4210000e4220000582600006a2a00001e320000b435000080360000d2360000b23a00003cbd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
