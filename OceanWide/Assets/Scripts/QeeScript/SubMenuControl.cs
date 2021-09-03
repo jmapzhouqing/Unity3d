@@ -8,6 +8,8 @@ public class SubMenuControl : MonoBehaviour,IPointerEnterHandler,IPointerExitHan
 {
 	private Text Name;
 
+    private Image image;
+
 	private string id;
 
 	private Color Color;
@@ -18,7 +20,8 @@ public class SubMenuControl : MonoBehaviour,IPointerEnterHandler,IPointerExitHan
 	void Awake()
 	{
 		this.Name = this.transform.GetComponentInChildren<Text>();
-		this.Color = this.GetComponent<RawImage>().color;
+        this.image = this.GetComponentInChildren<Image>();
+		this.Color = image.color;
 	}
 
 	// Update is called once per frame
@@ -50,18 +53,18 @@ public class SubMenuControl : MonoBehaviour,IPointerEnterHandler,IPointerExitHan
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		this.GetComponent<RawImage>().color = Color.gray;
+		image.color = Color.gray;
 		isPointerInside = true;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		this.GetComponent<RawImage>().color = this.Color;
+		image.color = this.Color;
 		isPointerInside = false;
 	}
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		this.transform.parent.gameObject.SetActive(false);
+	    GameObject.DestroyImmediate(this.transform.parent.gameObject);
 	}
 }
