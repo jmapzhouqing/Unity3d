@@ -26,4 +26,10 @@ public class BuilderManager : MonoBehaviour
             builderControl.CreateLevelItem();
         }
     }
+
+    public void Clear(){
+        for (int i = 0, number = container.childCount; i < number; i++){
+            GameObject.DestroyImmediate(container.GetChild(0).gameObject);
+        }
+    }
 }
