@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using httpTool;
+using LitJson;
+using UIDataStruct;
 
 public class BuilderManager : MonoBehaviour
 {
@@ -8,8 +11,18 @@ public class BuilderManager : MonoBehaviour
 
     public RectTransform container;
 
+    private Dictionary<string, List<FloorInfo>> all_building;
+
     void Awake(){
         builder_prefab = Resources.Load<RectTransform>("UIPrefab/Builder");
+        
+    }
+    private void Start()
+    {
+        all_building = new Dictionary<string, List<FloorInfo>> {
+            { "XHY",PrimaryContorl.XHY},
+            { "DF",PrimaryContorl.DF}
+        };
         this.CreateBuilder();
     }
 
@@ -19,11 +32,19 @@ public class BuilderManager : MonoBehaviour
     }
 
     public void CreateBuilder() {
-        for (int i = 0; i < 2; i++) {
+        foreach (string key in all_building.Keys) {
             RectTransform child = GameObject.Instantiate<RectTransform>(builder_prefab, container);
             BuilderControl builderControl = child.GetComponentInChildren<BuilderControl>();
-            builderControl.SetBuilderName("香海园-"+i);
-            builderControl.CreateLevelItem();
+            switch (key) {
+                case "XHY":
+                    builderControl.SetBuilderName("香海园");
+                    break;
+                case "DF":
+                    builderControl.SetBuilderName("东府");
+                    break;
+            }
+            
+            builderControl.CreateLevelItem(all_building[key], key);
         }
     }
 }

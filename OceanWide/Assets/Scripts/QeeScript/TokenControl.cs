@@ -4,9 +4,14 @@ using UnityEngine;
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using LitJson;
 
 namespace httpTool
 {
+    public class tokenMsg {
+        public int tenantId;
+        public string productKey;
+    }
     public class TokenControl
     {
         private string userName;
@@ -56,7 +61,7 @@ namespace httpTool
             return Convert.ToBase64String(cipherbytes);
         }
 
-        /*public string getToken() {
+        public string getToken() {
             string parameters = JsonMapper.ToJson(new Dictionary<string, string> {
             {"userAccount",this.userName},
             {"password",this.passwordBase64} });
@@ -76,7 +81,7 @@ namespace httpTool
             {"productKey",tokenMsg[0].productKey} });
             string tokrnResult3 = HTTPServiceControl.GetPostHttpResponse(this.tokenUrl3, tokenParam, tokenStr);
             //Debug.Log(tokrnResult3);
-            return tokenStrEncrypt;
-        }*/
+            return tokenStr;
+        }
     }
 }

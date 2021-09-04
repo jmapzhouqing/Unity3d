@@ -361,6 +361,9 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>F:/publishUnity/Unity3d/OceanWide/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>

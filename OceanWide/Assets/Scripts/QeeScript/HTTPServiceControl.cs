@@ -11,11 +11,7 @@ namespace httpTool
     public class HTTPServiceControl
     {
         
-        /// <summary>
-        /// Post请求
-        /// </summary>
-        /// <param name="content">提交数据内容</param>
-        /// <returns></returns>
+        
         public static string GetPostHttpResponse(string url, string content,string cookies)
         {
             var result = "";
@@ -32,6 +28,7 @@ namespace httpTool
                     CookieContainer cc = new CookieContainer();
                     cc.Add(new Uri(url), new Cookie("IORISESSION", cookies));
                     req.CookieContainer = cc;
+
                 }
 
                 byte[] data = Encoding.UTF8.GetBytes(content);
