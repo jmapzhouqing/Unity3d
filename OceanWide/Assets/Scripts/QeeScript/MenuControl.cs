@@ -33,8 +33,11 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
     private Dictionary<string, Dictionary<string,string>> all_menu;
 
+    private ResultManager result_manager;
+
     public void Awake()
     {
+        result_manager = FindObjectOfType<ResultManager>();
         all_menu = new Dictionary<string, Dictionary<string, string>> {
             { "management",new Dictionary<string, string>() },
             { "buildercontrol",new Dictionary<string, string>{ { "8", "BA系统" }, { "7", "人脸识别系统" }, { "6", "能耗系统" }, { "5", "停车场所系统" }, { "4","变配电系统" },{"3", "智能照明系统" },{"2","机房环境监测"},{"1", "电梯运行监测" } } },
@@ -75,7 +78,7 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         }
 
         for (int i = 0, child_number = dynamic_container.childCount; i < child_number; i++){
-            GameObject.DestroyImmediate(dynamic_container.GetChild(i).gameObject);
+            GameObject.DestroyImmediate(dynamic_container.GetChild(0).gameObject);
         }
 
         RectTransform container = GameObject.Instantiate<RectTransform>(sub_menu_container_prefab, dynamic_container);
@@ -87,15 +90,10 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         if (all_menu.TryGetValue(key, out submenus)) {
             foreach (KeyValuePair<string, string> item in submenus) {
                 RectTransform menu = GameObject.Instantiate<RectTransform>(sub_menu_prefab, container);
-
                 SubMenuControl control = menu.GetComponentInChildren<SubMenuControl>();
                 control.SetName(item.Value);
                 control.SetId(item.Key);
             }
-        }
- 
-        for (int i = 0; i < 5; i++) {
-            
         }
 
         //container.sizeDelta
@@ -127,6 +125,7 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         }
 
         this.SetSelectedColor();
+        result_manager.Clear();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
