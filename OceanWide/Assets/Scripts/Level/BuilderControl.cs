@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using UIDataStruct;
-using System;
 
 public class BuilderControl : MonoBehaviour
 {
@@ -26,11 +24,9 @@ public class BuilderControl : MonoBehaviour
 
     private Dictionary<int, LevelItemControl> levels;
 
-    
-
     // Start is called before the first frame update
-    void Awake(){
-        DOTween.Init(true,true,null);
+    void Awake() {
+        DOTween.Init(true, true, null);
         DOTween.defaultAutoPlay = AutoPlay.None;
         DOTween.defaultAutoKill = true;
 
@@ -39,34 +35,23 @@ public class BuilderControl : MonoBehaviour
         level_prefab = Resources.Load<RectTransform>("UIPrefab/LevelItem");
 
         element = this.GetComponent<LayoutElement>();
-        this.size = new Vector2(element.preferredWidth,element.preferredHeight);
+        this.size = new Vector2(element.preferredWidth, element.preferredHeight);
         this.Expand(false);
     }
 
-
     // Update is called once per frame
-    void Update(){
-        
+    void Update() {
+
     }
 
-    public void SetBuilderName(string name){
+    public void SetBuilderName(string name) {
         title.text = name;
     }
 
-    public void CreateLevelItem(List<FloorInfo> floors,string floorName){
-        for (int i = 0; i < floors.Count; i++) {
+    public void CreateLevelItem() {
+        for (int i = 0; i < 10; i++) {
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
-            switch (floorName) {
-                case"XHY":
-                    child.GetComponentInChildren<Text>().text = Enum.Format(typeof(XHYfloor), floors[i].positionId, "g");
-                    break;
-                case "DF":
-                    child.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floors[i].positionId, "g");
-                    break;
-            }
-            
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
-
             levels.Add(i, control);
         }
         StartCoroutine(UpdateElementHeight());
@@ -81,12 +66,12 @@ public class BuilderControl : MonoBehaviour
 
     private IEnumerator UpdateElementHeight() {
         if (is_expand) {
-            while(container.sizeDelta.y < Mathf.Pow(10, -2)) {
+            while (container.sizeDelta.y < Mathf.Pow(10, -2)) {
                 yield return new WaitForEndOfFrame();
             }
             float height = (title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
-            while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10,-2)){
+            while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2)) {
                 element.preferredHeight = height;
                 yield return new WaitForEndOfFrame();
             }
@@ -94,27 +79,33 @@ public class BuilderControl : MonoBehaviour
         //this.size = new Vector2(element.preferredWidth,element.preferredHeight);
     }
 
-    public void Expand(bool is_expand){
+    public void Expand(bool is_expand) {
         if (tween != null && tween.IsPlaying())
         {
             return;
         }
 
-        if (is_expand){
-            foreach (BuilderControl control in this.transform.parent.GetComponentsInChildren<BuilderControl>(true)){
+        if (is_expand) {
+            foreach (BuilderControl control in this.transform.parent.GetComponentsInChildren<BuilderControl>(true)) {
                 control.Expand(false);
             }
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
-        }else {
-            tween = element.DOPreferredSize(new Vector2(this.size.x,title.rectTransform.sizeDelta.y),duration).Play();
+        } else {
+            tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
         }
 
         this.is_expand = is_expand;
     }
 
-    public void Expand(){
+    public void Expand() {
         this.Expand(!is_expand);
+    }
+
+    public void Clear(){
+        for (int i = 0, number = container.childCount; i < number; i++) {
+            GameObject.DestroyImmediate(container.GetChild(0).gameObject);
+        }
     }
 }
