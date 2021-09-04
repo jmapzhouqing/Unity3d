@@ -11,6 +11,8 @@ public class DeviceItem : MonoBehaviour, IPointerClickHandler
 
     private Text Info;
 
+	private Color color = new Color(80 / 255, 80 / 255, 80 / 255);
+
 
     // Start is called before the first frame update
     void Start()

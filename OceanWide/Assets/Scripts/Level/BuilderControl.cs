@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UIDataStruct;
+using System;
 
 public class BuilderControl : MonoBehaviour
 {
@@ -23,7 +25,9 @@ public class BuilderControl : MonoBehaviour
     private RectTransform level_prefab;
 
     private Dictionary<int, LevelItemControl> levels;
+
     
+
     // Start is called before the first frame update
     void Awake(){
         DOTween.Init(true,true,null);
@@ -39,6 +43,7 @@ public class BuilderControl : MonoBehaviour
         this.Expand(false);
     }
 
+
     // Update is called once per frame
     void Update(){
         
@@ -48,10 +53,18 @@ public class BuilderControl : MonoBehaviour
         title.text = name;
     }
 
-    public void CreateLevelItem(){
-        for (int i = 0; i < 10; i++) {
+    public void CreateLevelItem(List<FloorInfo> floors,string floorName){
+        for (int i = 0; i < floors.Count; i++) {
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
-
+            switch (floorName) {
+                case"XHY":
+                    child.GetComponentInChildren<Text>().text = Enum.Format(typeof(XHYfloor), floors[i].positionId, "g");
+                    break;
+                case "DF":
+                    child.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floors[i].positionId, "g");
+                    break;
+            }
+            
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
 
             levels.Add(i, control);

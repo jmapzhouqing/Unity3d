@@ -3,48 +3,98 @@ using System.Collections.Generic;
 using UnityEngine;
 using httpTool;
 using System;
+using UIDataStruct;
+using LitJson;
+using System.Linq;
 
 public class PrimaryContorl : MonoBehaviour
 {
-    public RectTransform devive_container;
-    private RectTransform deviveItem_prefab;
     public static WebSocketControl websocket = new WebSocketControl();
     private TokenControl tokenControl;
-    public string token;
-    public static string urlPrefix = "qy_uat.civicsquare.com.cn/saascloud/saas";
+    public static string token;
+    private static string urlPrefix = "uat.qywlsp.com.cn/saascloud/saas";
     private string url = "http://" + urlPrefix + "/sso/servlet/login?wk=1";
     private string tokenUrl1 = "http://" + urlPrefix + "/sso/servlet/cookie?t=";
     private string tokenUrl2 = "http://" + urlPrefix + "/tenant/manager/findCurrentTenantList";
     private string tokenUrl3 = "http://" + urlPrefix + "/sso/param/decided/tenant";
-    public static string userName = "zg";
-    public static string password = "000000";
-    private string subscribeMsg = "Subscribe:FL_SHS_leftrun,FL_SHS_rightrun,FL_SHS_highlevel,FL_SHS_lowlevel,WSSTSP_FL_SHS_leftrun_ResetAcc,WSSTSP_FL_SHS_leftrun_AccTime,WSSTSP_FL_SHS_leftrun_VFDSwitchSetCount,WSSTSP_FL_SHS_leftrun_VFDSwitchSetCountReset,WSSTSP_FL_SHS_rightrun_ResetAcc,WSSTSP_FL_SHS_rightrun_AccTime,WSSTSP_FL_SHS_rightrun_VFDSwitchSetCount,WSSTSP_FL_SHS_rightrun_VFDSwitchSetCountReset,FL_SHS_leftfault,FL_SHS_rightfault,FL_A43_leftrun,FL_A43_leftfault,FL_A43_rightrun,FL_A43_highlevel,FL_A43_lowlevel,WSSTSP_FL_A43_leftrun_ResetAcc,WSSTSP_FL_A43_leftrun_AccTime,WSSTSP_FL_A43_leftrun_VFDSwitchSetCount,WSSTSP_FL_A43_leftrun_VFDSwitchSetCountReset,WSSTSP_FL_A43_rightrun_ResetAcc,WSSTSP_FL_A43_rightrun_AccTime,WSSTSP_FL_A43_rightrun_VFDSwitchSetCount,WSSTSP_FL_A43_rightrun_VFDSwitchSetCountReset,FL_A43_rightfault,FL_A53_leftrun,FL_A53_leftfault,FL_A53_rightrun,FL_A53_rightfault,FL_A53_highlevel,FL_A53_lowlevel,WSSTSP_FL_A53_leftrun_ResetAcc,WSSTSP_FL_A53_leftrun_AccTime,WSSTSP_FL_A53_leftrun_VFDSwitchSetCount,WSSTSP_FL_A53_leftrun_VFDSwitchSetCountReset,WSSTSP_FL_A53_rightrun_ResetAcc,WSSTSP_FL_A53_rightrun_AccTime,WSSTSP_FL_A53_rightrun_VFDSwitchSetCount,WSSTSP_FL_A53_rightrun_VFDSwitchSetCountReset,sensor_0005_RH1,sensor_0005_temp,sensor_0005_wateralarm,sensor_0006_RH,sensor_0006_temp,sensor_0006_wateralarm,sensor_0007_RH,sensor_0007_temp,sensor_0007_wateralarm,sensor_0008_RH,sensor_0008_temp,sensor_0008_wateralarm1,sensor_0009_RH,sensor_0009_temp,sensor_0009_wateralarm,sensor_0010_RH,sensor_0010_temp,sensor_0010_wateralarm,sensor_0011_RH,sensor_0011_temp,sensor_0011_wateralarm,sensor_0012_RH,sensor_0012_temp,sensor_0012_wateralarm,RF_0001_onoffstatus1,RF_0001_workingconditions1,RF_0001_alarmstatus1,RF_0001_timelimitstate1,RF_0001_preheatcondition1,RF_0001_digitaloutput1,RF_0001_digitalinput1,RF_0001_coolingbackwater1,RF_0001_frozenoutletwater1,RF_0001_refrigeratedbackwater1,RF_0001_exhausttemperature1,RF_0001_evaporatingpressure1,RF_0001_exhaustpressure1,RF_0001_theoilpressure1,RF_0001_compressorcurrent1,RF_0001_outlettemperature1,RF_";
+    private string userName = "qy";
+    private string password = "000000";
+
+    private string floorUrlPrefix = "http://" + urlPrefix + "/base/tenant/position/findPositionTree?projectId=";
+
+    public static List<FloorInfo> XHY;
+    public static List<FloorInfo> DF;
+
+    private string categoryUrl = "http://" + urlPrefix + "/base/tenant/category/list";
+    private static string deviceUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=100&projectId=";
+    private static string deviceUrlSuffix ="&deviceName=3%E5%8F%B7%E6%A5%BC&positionId=";
+
+    public static Dictionary<int, string> categoryDic = new Dictionary<int, string>();
+    public static Dictionary<int, List<DeviceInfo>> deviceDic = new Dictionary<int, List<DeviceInfo>>();
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        /*tokenControl = new TokenControl();
+        tokenControl = new TokenControl();
         tokenControl.setUrl(this.url);
         tokenControl.SetUserName(userName);
         tokenControl.SetPassword(password);
         tokenControl.setTokenUrl1(tokenUrl1);
         tokenControl.setTokenUrl2(tokenUrl2);
         tokenControl.setTokenUrl3(tokenUrl3);
-        token = tokenControl.getToken();*/
-        websocket.SetUrl("");
-        websocket.SetSubscribe(this.subscribeMsg);
-        websocket.receivePross += pointDataReceive;
-        websocket.Connect();
-        //websocket.SendMsg("");
-        devive_container = Resources.Load<RectTransform>("UIPrefab/deviceListContainer");
-        deviveItem_prefab = Resources.Load<RectTransform>("UIPrefab/deviceItem");
+        token = tokenControl.getToken();
+
+        string result_XHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
+
+        XHY = JsonMapper.ToObject<List<FloorInfo>>(result_XHY);
+
+        for (int i = XHY.Count - 1; i >= 0; i--)
+        {
+            if (XHY[i].positionCode.IndexOf("XHY") < 0|| XHY[i].positionCode == "XHY" || XHY[i].positionCode == "XHYDXEC" || XHY[i].positionCode == "XHYSW")
+                XHY.Remove(XHY[i]);
+        }
+
+
+        string result_DF= HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
+
+        DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
+
+        for (int i = DF.Count - 1; i >= 0; i--)
+        {
+            if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
+                DF.Remove(DF[i]);
+        }
+
+        DF.Reverse();
+
+        string result_category= HTTPServiceControl.GetHttpResponse(this.categoryUrl, token);
+
+        List<CategoryInfo> dic_category = JsonMapper.ToObject<List<CategoryInfo>>(result_category);
+
+        foreach (CategoryInfo item in dic_category) {
+
+            categoryDic.Add(item.categoryId, item.categoryName);
+        }
+        //qryDeviceByFloor(3, 26);
     }
 
-   
-
-    private void pointDataReceive(object sender, string msg)
-    {
-        
+    public static void qryDeviceByFloor(int projectId, int positionId) {
+        string resultDevice = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + positionId.ToString(), token);
+        DeviceRows devideRows = JsonMapper.ToObject<DeviceRows>(resultDevice);
+        deviceDic.Clear();
+        foreach (DeviceInfo item in devideRows.rows) {
+            if (deviceDic.ContainsKey(item.categoryId))
+            {
+                deviceDic[item.categoryId].Add(item);
+            }
+            else {
+                List<DeviceInfo> temp = new List<DeviceInfo>();
+                temp.Add(item);
+                deviceDic.Add(item.categoryId, temp);
+            }
+        }
     }
+
 
 
     void OnApplicationQuit()
@@ -52,3 +102,5 @@ public class PrimaryContorl : MonoBehaviour
         websocket.Close();
     }
 }
+
+
