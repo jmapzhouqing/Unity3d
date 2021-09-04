@@ -342,6 +342,9 @@
     <Reference Include="DOTweenProEditor">
       <HintPath>E:/Git/OceanWide/OceanWide/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>E:/Git/OceanWide/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>E:/Git/OceanWide/OceanWide/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>

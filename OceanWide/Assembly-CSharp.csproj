@@ -83,6 +83,9 @@
     <Compile Include="Assets\Scripts\QeeScript\SubMenuControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\SubMenuUI.cs" />
     <Compile Include="Assets\Scripts\QeeScript\UIDataStruct.cs" />
+    <Compile Include="Assets\Scripts\Result\CategoryControl.cs" />
+    <Compile Include="Assets\Scripts\Result\ResultControl.cs" />
+    <Compile Include="Assets\Scripts\Result\ResultManager.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Scripts\ARVideoCanvasHelper.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Scripts\EventsHandlerExample.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Scripts\SimpleRotateSphere.cs" />
@@ -382,6 +385,9 @@
     </Reference>
     <Reference Include="DOTweenPro">
       <HintPath>E:/Git/OceanWide/OceanWide/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>E:/Git/OceanWide/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>E:/Git/OceanWide/OceanWide/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
