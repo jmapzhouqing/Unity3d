@@ -85,7 +85,7 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         container.anchoredPosition = this.GetComponent<RectTransform>().anchoredPosition;
 
 
-        Dictionary<string, string> submenus;
+        /*Dictionary<string, string> submenus;
 
         if (all_menu.TryGetValue(key, out submenus)) {
             foreach (KeyValuePair<string, string> item in submenus) {
@@ -94,7 +94,7 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
                 control.SetName(item.Value);
                 control.SetId(item.Key);
             }
-        }
+        }*/
 
         //container.sizeDelta
 

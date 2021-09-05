@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UIDataStruct;
 
 public class CategoryControl : MonoBehaviour
 {
@@ -42,12 +43,13 @@ public class CategoryControl : MonoBehaviour
     }
 
     public void SetCategoryName(string name) {
-
+        this.title.text = name;
     }
 
     public void CreateDeviceList(List<DeviceInfo> devices) {
         foreach (DeviceInfo device in devices) {
             RectTransform child = GameObject.Instantiate<RectTransform>(result_prefab, container);
+            child.gameObject.GetComponentInChildren<Text>().text = device.deviceName;
             ResultControl categoryControl = child.GetComponentInChildren<ResultControl>();
         }
 

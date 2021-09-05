@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UIDataStruct;
+using System;
 
 public class BuilderControl : MonoBehaviour
 {
@@ -48,10 +50,23 @@ public class BuilderControl : MonoBehaviour
         title.text = name;
     }
 
-    public void CreateLevelItem() {
-        for (int i = 0; i < 10; i++) {
+    public void CreateLevelItem(List<FloorInfo> floorList,string name) {
+        for (int i = 0; i < floorList.Count; i++) {
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
+            switch (name) {
+                case "XHY":
+                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(XHYfloor), floorList[i].positionId, "g");
+                    control.setCategoryId(3);
+                    control.setFloorName("香海园3号楼"+floorList[i].positionName);
+                    break;
+                case "DF":
+                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
+                    control.setCategoryId(3);
+                    control.setFloorName("东府5号楼" + floorList[i].positionName);
+                    break;
+            }
+            control.setPositionId(floorList[i].positionId);
             levels.Add(i, control);
         }
         StartCoroutine(UpdateElementHeight());
