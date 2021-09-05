@@ -5,17 +5,17 @@ using UIDataStruct;
 
 public class PrimaryUI : MonoBehaviour
 {
-    public static Dictionary<string, List<subMenu>> menus;
+    public static Dictionary<string, List<SubMenu>> menus;
 
 
     // Start is called before the first frame update
     void Awake()
     {
-        menus = new Dictionary<string, List<subMenu>>();
-        subMenu item = new subMenu();
+        menus = new Dictionary<string, List<SubMenu>>();
+        SubMenu item = new SubMenu();
         item.name = "空调监测系统";
         item.id = "1";
-        List<subMenu> submenus = new List<subMenu>();
+        List<SubMenu> submenus = new List<SubMenu>();
         submenus.Add(item);
         menus.Add("楼控系统", submenus);
         menus.Add("安防系统", submenus);

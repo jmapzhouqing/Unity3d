@@ -14587,9 +14587,9 @@ GameObject:
   - component: {fileID: 2616224749601046920}
   - component: {fileID: 2616224749601046919}
   - component: {fileID: 2616224749601046918}
-  - component: {fileID: 2616224749601046922}
   - component: {fileID: 2616224749601046924}
   - component: {fileID: 2616224749601046923}
+  - component: {fileID: 2616224749601046922}
   m_Layer: 5
   m_Name: UIROOT
   m_TagString: Untagged
@@ -14693,7 +14693,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2616224749601046917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f81aad0b455c6e4f8d3f560b735f1b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 920e394fe02af1644926b2e2275efa4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2616224749601046923
