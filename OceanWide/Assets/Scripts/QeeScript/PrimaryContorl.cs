@@ -56,7 +56,7 @@ public class PrimaryContorl : MonoBehaviour
                 XHY.Remove(XHY[i]);
         }
 
-
+        XHY.Reverse();
         string result_DF= HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);

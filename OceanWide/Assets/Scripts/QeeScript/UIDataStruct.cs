@@ -17,10 +17,10 @@ namespace UIDataStruct {
 	}
 
 	public enum XHYfloor { 
-		B2=27,
-		B1=26,
-		F1=33,
-		F2=70
+		B2=70,
+		B1=33,
+		F1=26,
+		F2=27
 	}
 
 	public enum DFfloor
