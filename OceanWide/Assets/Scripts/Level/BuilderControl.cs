@@ -28,11 +28,15 @@ public class BuilderControl : MonoBehaviour
 
     public LevelExhibitionControl level_exhibition_control;
 
+    private ResultManager result_manager;
+
     // Start is called before the first frame update
     void Awake() {
         DOTween.Init(true, true, null);
         DOTween.defaultAutoPlay = AutoPlay.None;
         DOTween.defaultAutoKill = true;
+
+        result_manager = FindObjectOfType<ResultManager>();
 
         levels = new Dictionary<int, LevelItemControl>();
 
@@ -124,6 +128,7 @@ public class BuilderControl : MonoBehaviour
             {
                 this.level_exhibition_control.Recover();
             }
+            result_manager.Clear();
         }
 
         this.is_expand = is_expand;
