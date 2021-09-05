@@ -32,6 +32,8 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<int, string> categoryDic = new Dictionary<int, string>();
     public static Dictionary<int, List<DeviceInfo>> deviceDic = new Dictionary<int, List<DeviceInfo>>();
 
+    public static bool isDevice=false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -75,10 +77,11 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-        //qryDeviceByFloor(3, 26);
+        qryDeviceByFloor(3, 33);
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {
+        isDevice = false;
         string resultDevice = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + positionId.ToString(), token);
         DeviceRows devideRows = JsonMapper.ToObject<DeviceRows>(resultDevice);
         deviceDic.Clear();
@@ -88,6 +91,7 @@ public class PrimaryContorl : MonoBehaviour
                 deviceDic[item.categoryId].Add(item);
             }
             else {
+                isDevice = true;
                 List<DeviceInfo> temp = new List<DeviceInfo>();
                 temp.Add(item);
                 deviceDic.Add(item.categoryId, temp);

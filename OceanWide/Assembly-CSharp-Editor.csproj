@@ -347,7 +347,7 @@
       <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
     </Reference>
     <Reference Include="LitJson">
-      <HintPath>E:/Git/OceanWide/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
+      <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>F:/publishUnity/Unity3d/OceanWide/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
@@ -363,9 +363,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>F:/publishUnity/Unity3d/OceanWide/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="LitJson">
-      <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

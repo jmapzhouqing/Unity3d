@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UIDataStruct;
 
-public class DeviceInfo{
 
-}
 public class ResultManager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -34,18 +33,14 @@ public class ResultManager : MonoBehaviour
         }
 
         category_prefab = Resources.Load<RectTransform>("UIPrefab/Category");
-        //this.CreateCategory(null,null);
+        
 
-        Dictionary<int, string> names = new Dictionary<int, string> {
-            {1,"安防系统"},{ 2,"电梯系统"}
-        };
+    }
 
-        Dictionary<int, List<DeviceInfo>> devices = new Dictionary<int, List<DeviceInfo>> {
-            { 1,new List<DeviceInfo>{new DeviceInfo(),new DeviceInfo()}},{ 2,new List<DeviceInfo>{new DeviceInfo(),new DeviceInfo()} }
-        };
-
-        this.CreateCategory(names, devices);
-     }
+    private void Start()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -58,6 +53,10 @@ public class ResultManager : MonoBehaviour
     }
     public void CreateCategory(Dictionary<int,string> categoryName,Dictionary<int,List<DeviceInfo>> devices)
     {
+        for (int i = 0, number = container.childCount; i < number; i++)
+        {
+            GameObject.DestroyImmediate(container.GetChild(0).gameObject);
+        }
         foreach (KeyValuePair<int,List<DeviceInfo>> item in devices)
         {
             RectTransform child = GameObject.Instantiate<RectTransform>(category_prefab, container);
