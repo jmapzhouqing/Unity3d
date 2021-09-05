@@ -7,6 +7,10 @@ public class LevelExhibitionControl : MonoBehaviour
 {
     public Vector3 increment = new Vector3(0,5,0);
 
+    public Vector3 target_position;
+    public Vector2 rotation;
+    public float distance;
+
     private int index = 0;
 
     private float duration = 0.2f;
@@ -18,9 +22,13 @@ public class LevelExhibitionControl : MonoBehaviour
     private Sequence sequence;
 
     private int pre_index = -1;
+
+    private CameraControl camera_control;
     // Start is called before the first frame update
     void Awake()
     {
+        camera_control = FindObjectOfType<CameraControl>();
+
         origin_position = new List<Vector3>();
         children = new List<Transform>();
 
@@ -33,9 +41,13 @@ public class LevelExhibitionControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         
+    }
+
+    public void SelectLevel(string name) {
+        int index = this.transform.Find(name).GetSiblingIndex();
+        this.SelectLevel(index);
     }
 
     public void SelectLevel(int index) {
@@ -43,25 +55,30 @@ public class LevelExhibitionControl : MonoBehaviour
             return;
         }
 
-        //index = Mathf.FloorToInt(Random.Range(0,child_number))+1;
-
         if (pre_index != -1)
         {
             if (index < pre_index)
             {
-                for (int i = index; i < pre_index; i++){
-                    sequence.Append(children[i].DOMove(origin_position[i] + increment, duration)).SetAutoKill(true);
+                for (int i = index+1; i <= pre_index; i++){
+                    sequence.Append(children[i].DOMove(origin_position[i] + increment, duration).Play()).SetAutoKill(true);
                 }
             }else if (index > pre_index) {
-                for (int i = pre_index; i < index; i++){
-                    sequence.Append(children[i].DOMove(origin_position[i], duration)).SetAutoKill(true);
+                for (int i = pre_index+1; i <= index; i++){
+                    sequence.Append(children[i].DOMove(origin_position[i], duration).Play()).SetAutoKill(true);
                 }
             }
         }else {
-            for (int i = index; i < child_number; i++){
-                sequence.Append(children[i].DOMove(origin_position[i] + increment, duration)).SetAutoKill(true);
+            for (int i = index+1; i < child_number; i++){
+                sequence.Append(children[i].DOMove(origin_position[i] + increment, duration).Play()).SetAutoKill(true);
             }
         }
+
         pre_index = index;
+    }
+
+    public void CameraLocation() {
+        camera_control.target_position = this.target_position;
+        camera_control.distance = this.distance;
+        camera_control.rotation = this.rotation;
     }
 }

@@ -99,7 +99,10 @@ public class PrimaryContorl : MonoBehaviour
         }
     }
 
-
+    private void OnEnable()
+    {
+        FindObjectsOfType<MenuControl>()[0].OnPointerClick(null);
+    }
 
     void OnApplicationQuit()
     {

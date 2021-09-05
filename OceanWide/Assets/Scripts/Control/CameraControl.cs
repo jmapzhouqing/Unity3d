@@ -38,21 +38,21 @@ public class CameraControl : MonoBehaviour
 
     private Vector3 origin;
 
-    private Vector2 rotation;
+    public Vector2 rotation;
 
     private Vector2 pre_rotation;
 
     private float pre_distance = 100;
 
-    private Vector3 target_position;
+    public Vector3 target_position;
     // Start is called before the first frame update
     void Start()
     {
         pre_distance = distance;
 
-        target_position = target.position;
+        //target_position = target.position;
 
-        rotation = Vector2.zero;
+        //rotation = Vector2.zero;
 
         matrix = new Matrix4x4();
 

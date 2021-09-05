@@ -14,6 +14,10 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
     private int categoryId;
     private int positionId;
     private string floorName;
+
+    private string levelExhibitionName;
+
+    private LevelExhibitionControl level_exhibition_control;
     // Start is called before the first frame update
     void Awake(){
         image = this.GetComponent<Image>();
@@ -31,6 +35,10 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
 
         Color color = image.color;
         image.color = new Color(color.r,color.g,color.b,1);
+
+        if (this.level_exhibition_control != null) {
+            this.level_exhibition_control.SelectLevel(this.levelExhibitionName);
+        }
     }
 
     public void UnSelected() {
@@ -62,5 +70,14 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
     public void setFloorName(string value)
     {
         this.floorName = value;
+    }
+
+    public void SetLevelControl(LevelExhibitionControl control) {
+        this.level_exhibition_control = control;
+    }
+
+    public void SetLevelName(string name) {
+        this.levelExhibitionName = name;
+        this.GetComponentInChildren<Text>().text = name;
     }
 }

@@ -26,8 +26,13 @@ namespace UIDataStruct {
 	public enum DFfloor
 	{
 		B1 = 63,
-		F1 = 62
-	}
+		F1 = 62,
+        F2 = 64,
+        F3 = 65,
+        F4 = 66,
+        F5 = 67,
+        F6 = 68
+    }
 
 	public class CategoryInfo
 	{

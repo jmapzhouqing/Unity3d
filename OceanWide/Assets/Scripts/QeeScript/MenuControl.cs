@@ -44,10 +44,6 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
             { "security",new Dictionary<string, string>{ {"1","视频监控"},{"2","消防系统"}, { "3", "电梯运行监测" } } },
             { "information",new Dictionary<string, string>{ {"1","动态"}} },
         };
-    }
-
-    void Start()
-    {
 
         this.Name = this.transform.GetComponentInChildren<Text>();
         this.image = this.transform.GetComponentInChildren<Image>();
@@ -58,12 +54,6 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         sub_menu_prefab = Resources.Load<RectTransform>("UIPrefab/SubMenu");
 
         dynamic_container = this.transform.root.Find("container");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnPointerClick(PointerEventData eventData){
@@ -123,8 +113,8 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         foreach (MenuControl control in this.transform.parent.GetComponentsInChildren<MenuControl>(true)) {
             control.SetUnSelectColor();
         }
-
         this.SetSelectedColor();
+
         result_manager.Clear();
     }
 
