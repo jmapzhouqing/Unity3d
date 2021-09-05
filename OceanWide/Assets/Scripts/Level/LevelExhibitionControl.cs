@@ -40,11 +40,6 @@ public class LevelExhibitionControl : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update(){
-        
-    }
-
     public void SelectLevel(string name) {
         int index = this.transform.Find(name).GetSiblingIndex();
         this.SelectLevel(index);
@@ -80,5 +75,13 @@ public class LevelExhibitionControl : MonoBehaviour
         camera_control.target_position = this.target_position;
         camera_control.distance = this.distance;
         camera_control.rotation = this.rotation;
+    }
+
+    public void Recover() {
+        for (int i = 0,number = this.transform.childCount; i < number; i++)
+        {
+            Transform child = this.transform.GetChild(i);
+            child.transform.position = origin_position[i];
+        }
     }
 }

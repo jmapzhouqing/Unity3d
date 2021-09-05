@@ -120,6 +120,10 @@ public class BuilderControl : MonoBehaviour
             }
         } else {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
+            if (this.level_exhibition_control)
+            {
+                this.level_exhibition_control.Recover();
+            }
         }
 
         this.is_expand = is_expand;
