@@ -34,6 +34,8 @@ public class PrimaryContorl : MonoBehaviour
 
     public static bool isDevice=false;
 
+    public static GameObject dialog;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -77,7 +79,7 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-        qryDeviceByFloor(3, 33);
+        dialog = this.transform.Find("messageBox").gameObject;
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {
