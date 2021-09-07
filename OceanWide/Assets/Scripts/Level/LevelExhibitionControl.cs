@@ -79,8 +79,7 @@ public class LevelExhibitionControl : MonoBehaviour
 
     public void Recover() {
         pre_index = -1;
-        for (int i = 0,number = this.transform.childCount; i < number; i++)
-        {
+        for (int i = 0,number = this.transform.childCount; i < number; i++){
             Transform child = this.transform.GetChild(i);
             child.transform.position = origin_position[i];
         }
