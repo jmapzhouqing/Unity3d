@@ -16,11 +16,11 @@ namespace UIDataStruct {
 		public string positionCode;
 	}
 
-	public enum XHYfloor { 
-		B2=70,
-		B1=33,
-		F1=26,
-		F2=27
+	public enum LHYfloor { 
+		B2=78,
+		B1=77,
+		F1=22,
+		F2=23
 	}
 
 	public enum DFfloor

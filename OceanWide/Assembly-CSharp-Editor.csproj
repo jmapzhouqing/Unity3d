@@ -66,6 +66,18 @@
   <ItemGroup>
     <Compile Include="Assets\Demigiant\DOTweenPro\Editor\DOTweenAnimationInspector.cs" />
     <Compile Include="Assets\Demigiant\DOTweenPro\Editor\DOTweenPreviewManager.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Axis_Graph_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Bezier_Band_Graph_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_E_Util.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_EnumFlagDrawer.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Hierarchical_Tree_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Legend_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Pie_Graph_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Pie_Graph_Slice_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Prefab_Gen.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Radar_Graph_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Ring_Graph_E.cs" />
+    <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Series_E.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPEditor.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPPostBuilds.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPPreference.cs" />

@@ -12,6 +12,12 @@ public class BuilderControl : MonoBehaviour
 
     public Text title;
 
+    public Texture expand_img;
+
+    public Texture unExpand_img;
+
+    public RawImage background;
+
     private Vector2 size;
 
     private bool is_expand = false;
@@ -55,10 +61,10 @@ public class BuilderControl : MonoBehaviour
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
             switch (name) {
-                case "XHY":
-                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(XHYfloor), floorList[i].positionId, "g");
+                case "LHY":
+                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
                     control.setCategoryId(3);
-                    control.setFloorName("香海园3号楼"+floorList[i].positionName);
+                    control.setFloorName("兰海园3号楼"+floorList[i].positionName);
                     break;
                 case "DF":
                     child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
@@ -107,8 +113,10 @@ public class BuilderControl : MonoBehaviour
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
+            background.texture = expand_img;
         } else {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
+            background.texture = unExpand_img;
         }
 
         this.is_expand = is_expand;

@@ -14,6 +14,7 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
     private int categoryId;
     private int positionId;
     private string floorName;
+    
     // Start is called before the first frame update
     void Awake(){
         image = this.GetComponent<Image>();
@@ -29,13 +30,13 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
             control.UnSelected();
         }
 
-        Color color = image.color;
-        image.color = new Color(color.r,color.g,color.b,1);
+
+        image.color = new Color(10 / 255f, 91 / 255f, 167 / 255f, 1f);
     }
 
     public void UnSelected() {
         Color color = image.color;
-        image.color = new Color(color.r, color.g, color.b, 0.5f);
+        image.color = new Color(60 / 255f, 87 / 255f, 122 / 255f, 0.3f);
     }
 
     public void OnPointerClick(PointerEventData eventData) {

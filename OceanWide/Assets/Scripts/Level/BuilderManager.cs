@@ -20,7 +20,7 @@ public class BuilderManager : MonoBehaviour
     private void Start()
     {
         all_building = new Dictionary<string, List<FloorInfo>> {
-            { "XHY",PrimaryContorl.XHY},
+            { "LHY",PrimaryContorl.LHY},
             { "DF",PrimaryContorl.DF}
         };
         this.CreateBuilder();
@@ -36,8 +36,8 @@ public class BuilderManager : MonoBehaviour
             RectTransform child = GameObject.Instantiate<RectTransform>(builder_prefab, container);
             BuilderControl builderControl = child.GetComponentInChildren<BuilderControl>();
             switch (key) {
-                case "XHY":
-                    builderControl.SetBuilderName("香海园");
+                case "LHY":
+                    builderControl.SetBuilderName("兰海园");
                     break;
                 case "DF":
                     builderControl.SetBuilderName("东府");
