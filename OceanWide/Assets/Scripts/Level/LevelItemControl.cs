@@ -14,14 +14,11 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
     private int categoryId;
     private int positionId;
     private string floorName;
-<<<<<<< HEAD
 
     private string levelExhibitionName;
 
     private LevelExhibitionControl level_exhibition_control;
-=======
-    
->>>>>>> 8d9273a2d409433549feb9c4c3e8514f038a5ea2
+
     // Start is called before the first frame update
     void Awake(){
         image = this.GetComponent<Image>();
@@ -37,17 +34,14 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
             control.UnSelected();
         }
 
-<<<<<<< HEAD
         Color color = image.color;
-        image.color = new Color(color.r,color.g,color.b,1);
+        //image.color = new Color(color.r,color.g,color.b,1);
 
         if (this.level_exhibition_control != null) {
             this.level_exhibition_control.SelectLevel(this.levelExhibitionName);
         }
-=======
 
         image.color = new Color(10 / 255f, 91 / 255f, 167 / 255f, 1f);
->>>>>>> 8d9273a2d409433549feb9c4c3e8514f038a5ea2
     }
 
     public void UnSelected() {
