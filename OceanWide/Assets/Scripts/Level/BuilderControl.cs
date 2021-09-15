@@ -12,6 +12,12 @@ public class BuilderControl : MonoBehaviour
 
     public Text title;
 
+    public Texture expand_img;
+
+    public Texture unExpand_img;
+
+    public RawImage background;
+
     private Vector2 size;
 
     private bool is_expand = false;
@@ -63,10 +69,17 @@ public class BuilderControl : MonoBehaviour
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
             switch (name) {
+<<<<<<< HEAD
                 case "XHY":
                     control.setCategoryId(3);
                     control.setFloorName("香海园3号楼"+floorList[i].positionName);
                     control.SetLevelName(Enum.Format(typeof(XHYfloor), floorList[i].positionId,"g"));
+=======
+                case "LHY":
+                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
+                    control.setCategoryId(3);
+                    control.setFloorName("兰海园3号楼"+floorList[i].positionName);
+>>>>>>> 8d9273a2d409433549feb9c4c3e8514f038a5ea2
                     break;
                 case "DF":
                     control.setCategoryId(3);
@@ -118,6 +131,7 @@ public class BuilderControl : MonoBehaviour
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
+<<<<<<< HEAD
 
             if (this.level_exhibition_control) {
                 this.level_exhibition_control.CameraLocation();
@@ -129,6 +143,12 @@ public class BuilderControl : MonoBehaviour
                 this.level_exhibition_control.Recover();
             }
             result_manager.Clear();
+=======
+            background.texture = expand_img;
+        } else {
+            tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
+            background.texture = unExpand_img;
+>>>>>>> 8d9273a2d409433549feb9c4c3e8514f038a5ea2
         }
 
         this.is_expand = is_expand;

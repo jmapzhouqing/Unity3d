@@ -22,7 +22,7 @@ public class PrimaryContorl : MonoBehaviour
 
     private string floorUrlPrefix = "http://" + urlPrefix + "/base/tenant/position/findPositionTree?projectId=";
 
-    public static List<FloorInfo> XHY;
+    public static List<FloorInfo> LHY;
     public static List<FloorInfo> DF;
 
     private string categoryUrl = "http://" + urlPrefix + "/base/tenant/category/list";
@@ -33,6 +33,8 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<int, List<DeviceInfo>> deviceDic = new Dictionary<int, List<DeviceInfo>>();
 
     public static bool isDevice=false;
+
+    public static GameObject dialog;
 
     // Start is called before the first frame update
     void Awake()
@@ -46,17 +48,17 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
-        string result_XHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
+        string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
-        XHY = JsonMapper.ToObject<List<FloorInfo>>(result_XHY);
+        LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
 
-        for (int i = XHY.Count - 1; i >= 0; i--)
+        for (int i = LHY.Count - 1; i >= 0; i--)
         {
-            if (XHY[i].positionCode.IndexOf("XHY") < 0|| XHY[i].positionCode == "XHY" || XHY[i].positionCode == "XHYDXEC" || XHY[i].positionCode == "XHYSW")
-                XHY.Remove(XHY[i]);
+            if (LHY[i].positionCode.IndexOf("LHY") < 0|| LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYSW"||LHY[i].positionCode== "LHYDXYC")
+                LHY.Remove(LHY[i]);
         }
 
-        XHY.Reverse();
+        LHY.Reverse();
         string result_DF= HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
@@ -77,7 +79,7 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-        qryDeviceByFloor(3, 33);
+        dialog = this.transform.Find("messageBox").gameObject;
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {
