@@ -27,15 +27,19 @@ public class PrimaryContorl : MonoBehaviour
 
     private string categoryUrl = "http://" + urlPrefix + "/base/tenant/category/list";
     private static string deviceUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=100&projectId=";
-    private static string deviceUrlSuffix ="&deviceName=3%E5%8F%B7%E6%A5%BC&positionId=";
+    private static string deviceUrlSuffix = "&deviceName=3%E5%8F%B7%E6%A5%BC&positionId=";
 
     public static Dictionary<int, string> categoryDic = new Dictionary<int, string>();
     public static Dictionary<int, List<DeviceInfo>> deviceDic = new Dictionary<int, List<DeviceInfo>>();
 
-    public static bool isDevice=false;
+    public static bool isDevice = false;
 
     public static GameObject dialog;
 
+    public static string waterEleUrl = "http://" + urlPrefix + "/camera/camera/consumption/level1?pageNum=1&pageSize=10&energytype=";
+    public static string alarmUrl = "http://" + urlPrefix + "/nanhai/tenant/realtime/alarm?level=";
+    public static string positionIdStr = "000,78,77,22,23,63,62,000";
+    public static List<AlarmGrid> alarmList=new List<AlarmGrid>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -80,6 +84,7 @@ public class PrimaryContorl : MonoBehaviour
             categoryDic.Add(item.categoryId, item.categoryName);
         }
         dialog = this.transform.Find("messageBox").gameObject;
+
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {
@@ -97,6 +102,57 @@ public class PrimaryContorl : MonoBehaviour
                 List<DeviceInfo> temp = new List<DeviceInfo>();
                 temp.Add(item);
                 deviceDic.Add(item.categoryId, temp);
+            }
+        }
+        if (positionId == 77 || positionId == 78) {
+            string resultDeviceEC;
+            if (positionId == 77)
+            {
+                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + "30", token);
+            }
+            else {
+                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + "25", token);
+            }
+            DeviceRows devideRowsEC = JsonMapper.ToObject<DeviceRows>(resultDeviceEC);
+            foreach (DeviceInfo item in devideRowsEC.rows)
+            {
+                if (deviceDic.ContainsKey(item.categoryId))
+                {
+                    deviceDic[item.categoryId].Add(item);
+                }
+                else
+                {
+                    isDevice = true;
+                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                    temp.Add(item);
+                    deviceDic.Add(item.categoryId, temp);
+                }
+            }
+        }
+    }
+
+
+    public static void qryTotalEleWaterNum(ref string powerYear,ref string waterYear) {
+        string result = HTTPServiceControl.GetHttpResponse(waterEleUrl, token);
+        WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
+        waterYear = waterPower.data.waterYear;
+        powerYear = waterPower.data.powerYear;
+    }
+
+    public static void qryAlarmList()
+    {
+        alarmList.Clear();
+        string result = HTTPServiceControl.GetHttpResponse(alarmUrl + "3", token);
+        List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
+        foreach (AlarmInfo alarmInfo in alarmInfoList) {
+            if (positionIdStr.IndexOf(","+alarmInfo.positionId.ToString()+",") > -1) {
+                int idx = alarmInfo.deviceName.IndexOf("_");
+                AlarmGrid alarmGrid = new AlarmGrid();
+                alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
+                alarmGrid.monitorName = alarmInfo.monitorName;
+                alarmGrid.categoryName = alarmInfo.categoryName;
+                alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                alarmList.Add(alarmGrid);
             }
         }
     }

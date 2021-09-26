@@ -116,7 +116,9 @@
     <Compile Include="Assets\Scripts\Level\BuilderManager.cs" />
     <Compile Include="Assets\Scripts\Level\LevelExhibitionControl.cs" />
     <Compile Include="Assets\Scripts\Level\LevelItemControl.cs" />
+    <Compile Include="Assets\Scripts\QeeScript\AlarmItem.cs" />
     <Compile Include="Assets\Scripts\QeeScript\Control.cs" />
+    <Compile Include="Assets\Scripts\QeeScript\DeviceDetailControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\DeviceItem.cs" />
     <Compile Include="Assets\Scripts\QeeScript\DialogControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\HTTPServiceControl.cs" />

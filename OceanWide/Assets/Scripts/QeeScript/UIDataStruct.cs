@@ -40,10 +40,37 @@ namespace UIDataStruct {
 		public int categoryId;
 		public int deviceId;
 		public string deviceName;
+		public string rtsp;
 	}
 
 	public class DeviceRows
 	{
 		public List<DeviceInfo> rows;
+	}
+
+	public class WaterPower {
+		public string msg;
+		public int code;
+		public WaterPowerData data;
+	}
+	public class WaterPowerData {
+		public string waterYear;
+		public string powerYear;
+	}
+
+	public class AlarmInfo {
+		public string deviceName;
+		public string monitorName;
+		public string categoryName;
+		public string descName;
+		public int positionId;
+	}
+
+	public class AlarmGrid
+	{
+		public string deviceName;
+		public string monitorName;
+		public string categoryName;
+		public string descName;
 	}
 }
