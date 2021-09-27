@@ -13,11 +13,11 @@ public class CategoryControl : MonoBehaviour
 
     public Text title;
 
-    public Texture expand_img;
+    public Sprite expand_img;
 
-    public Texture unExpand_img;
+    public Sprite unexpand_img;
 
-    public RawImage background;
+    public Image expand_control;
 
     private Vector2 size;
 
@@ -97,12 +97,12 @@ public class CategoryControl : MonoBehaviour
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
-            background.texture = expand_img;
+            expand_control.sprite = expand_img;
         }
         else
         {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
-            background.texture = unExpand_img;
+            expand_control.sprite = unexpand_img;
         }
 
         this.is_expand = is_expand;

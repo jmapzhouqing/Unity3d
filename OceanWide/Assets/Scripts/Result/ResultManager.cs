@@ -29,7 +29,7 @@ public class ResultManager : MonoBehaviour
 
         if (result_exhibition != null)
         {
-            result_tween = result_exhibition.DOAnchorPos3DX(-10, duration);
+            result_tween = result_exhibition.DOAnchorPos3DX(0, duration);
         }
 
         category_prefab = Resources.Load<RectTransform>("UIPrefab/Category");
@@ -92,7 +92,7 @@ public class ResultManager : MonoBehaviour
     }
 
     public void Clear() {
-        this.title.text = "";
+        this.title.name = "";
         for (int i = 0, number = container.childCount; i < number; i++){
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
         }

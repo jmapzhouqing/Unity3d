@@ -12,11 +12,11 @@ public class BuilderControl : MonoBehaviour
 
     public Text title;
 
-    public Texture expand_img;
+    public Sprite expand_img;
 
-    public Texture unExpand_img;
+    public Sprite unexpand_img;
 
-    public RawImage background;
+    public Image expand_control;
 
     private Vector2 size;
 
@@ -32,17 +32,11 @@ public class BuilderControl : MonoBehaviour
 
     private Dictionary<int, LevelItemControl> levels;
 
-    public LevelExhibitionControl level_exhibition_control;
-
-    private ResultManager result_manager;
-
     // Start is called before the first frame update
     void Awake() {
         DOTween.Init(true, true, null);
         DOTween.defaultAutoPlay = AutoPlay.None;
         DOTween.defaultAutoKill = true;
-
-        result_manager = FindObjectOfType<ResultManager>();
 
         levels = new Dictionary<int, LevelItemControl>();
 
@@ -58,13 +52,11 @@ public class BuilderControl : MonoBehaviour
 
     }
 
-    public void SetBuilderName(string name){
+    public void SetBuilderName(string name) {
         title.text = name;
     }
 
     public void CreateLevelItem(List<FloorInfo> floorList,string name) {
-        level_exhibition_control = GameObject.Find(name)?.GetComponent<LevelExhibitionControl>();
-
         for (int i = 0; i < floorList.Count; i++) {
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
@@ -75,24 +67,20 @@ public class BuilderControl : MonoBehaviour
                     control.setFloorName("兰海园3号楼"+floorList[i].positionName);
                     break;
                 case "DF":
+                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
                     control.setCategoryId(3);
                     control.setFloorName("东府5号楼" + floorList[i].positionName);
-                    control.SetLevelName(Enum.Format(typeof(DFfloor), floorList[i].positionId,"g"));
                     break;
             }
-
-           
             control.setPositionId(floorList[i].positionId);
-            control.SetLevelControl(this.level_exhibition_control);
             levels.Add(i, control);
         }
-
         StartCoroutine(UpdateElementHeight());
     }
 
     public void SetLevel(int index) {
         LevelItemControl control;
-        if (levels.TryGetValue(index, out control)){
+        if (levels.TryGetValue(index, out control)) {
             control.Selected();
         }
     }
@@ -113,7 +101,8 @@ public class BuilderControl : MonoBehaviour
     }
 
     public void Expand(bool is_expand) {
-        if (tween != null && tween.IsPlaying()){
+        if (tween != null && tween.IsPlaying())
+        {
             return;
         }
 
@@ -124,19 +113,11 @@ public class BuilderControl : MonoBehaviour
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
-
-            if (this.level_exhibition_control) {
-                this.level_exhibition_control.CameraLocation();
-            }
+            expand_control.sprite = expand_img;
         } else {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
-            if (this.level_exhibition_control)
-            {
-                this.level_exhibition_control.Recover();
-            }
-            result_manager.Clear();
-            background.texture = expand_img;
-        } 
+            expand_control.sprite = unexpand_img;
+        }
 
         this.is_expand = is_expand;
     }
