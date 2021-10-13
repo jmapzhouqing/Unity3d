@@ -43,11 +43,7 @@ public class PrimaryContorl : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-<<<<<<< HEAD
         dialog = this.transform.Find("messageBox").gameObject;
-
-=======
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
         tokenControl = new TokenControl();
         tokenControl.setUrl(this.url);
         tokenControl.SetUserName(userName);
@@ -88,12 +84,6 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-<<<<<<< HEAD
-       
-=======
-        dialog = this.transform.Find("messageBox").gameObject;
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
-
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {

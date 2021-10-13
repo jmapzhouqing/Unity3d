@@ -62,10 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Demigiant\DOTweenPro\Editor\DOTweenAnimationInspector.cs" />
     <Compile Include="Assets\Demigiant\DOTweenPro\Editor\DOTweenPreviewManager.cs" />
-<<<<<<< HEAD
     <Compile Include="Assets\Editor\Util.cs" />
-=======
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
     <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Axis_Graph_E.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_Bezier_Band_Graph_E.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\Editor\WMG_E_Util.cs" />
@@ -366,9 +363,6 @@
     </Reference>
     <Reference Include="LitJson">
       <HintPath>E:/Git/OceanWide/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
-    </Reference>
-    <Reference Include="LitJson">
-      <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>E:/Git/OceanWide/OceanWide/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>

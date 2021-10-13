@@ -108,10 +108,7 @@
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Ring.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Series.cs" />
     <Compile Include="Assets\Scripts\Control\CameraControl.cs" />
-<<<<<<< HEAD
     <Compile Include="Assets\Scripts\Control\PlayVideo.cs" />
-=======
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
     <Compile Include="Assets\Scripts\Level\BuilderControl.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderManager.cs" />
     <Compile Include="Assets\Scripts\Level\LevelExhibitionControl.cs" />
@@ -446,9 +443,6 @@
     </Reference>
     <Reference Include="LitJson">
       <HintPath>E:/Git/OceanWide/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
-    </Reference>
-    <Reference Include="LitJson">
-      <HintPath>F:/publishUnity/Unity3d/OceanWide/Assets/Plugins/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>E:/Git/OceanWide/OceanWide/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>

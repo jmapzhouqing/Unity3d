@@ -5,15 +5,11 @@ using DG.Tweening;
 
 public class LevelExhibitionControl : MonoBehaviour
 {
-<<<<<<< HEAD
     public Vector3 increment = new Vector3(0, 5, 0);
 
     public Vector3 target_position;
     public Vector2 rotation;
     public float distance;
-=======
-    public Vector3 increment = new Vector3(0,5,0);
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
 
     private int index = 0;
 
@@ -26,7 +22,6 @@ public class LevelExhibitionControl : MonoBehaviour
     private Sequence sequence;
 
     private int pre_index = -1;
-<<<<<<< HEAD
 
     private CameraControl camera_control;
 
@@ -38,28 +33,18 @@ public class LevelExhibitionControl : MonoBehaviour
 
         camera_control = FindObjectOfType<CameraControl>();
 
-=======
-    // Start is called before the first frame update
-    void Awake()
-    {
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
         origin_position = new List<Vector3>();
         children = new List<Transform>();
 
         child_number = this.transform.childCount;
-<<<<<<< HEAD
         for (int i = 0; i < child_number; i++)
         {
-=======
-        for (int i = 0; i < child_number; i++) {
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
             Transform trans = this.transform.GetChild(i);
             children.Add(trans);
             origin_position.Add(trans.position);
         }
     }
 
-<<<<<<< HEAD
     public void SelectLevel(string name){
         if (name.Contains("B"))
         {
@@ -83,26 +68,10 @@ public class LevelExhibitionControl : MonoBehaviour
             return;
         }
 
-=======
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SelectLevel(int index) {
-        if (sequence != null && sequence.IsPlaying()) {
-            return;
-        }
-
-        //index = Mathf.FloorToInt(Random.Range(0,child_number))+1;
-
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
         if (pre_index != -1)
         {
             if (index < pre_index)
             {
-<<<<<<< HEAD
                 for (int i = index + 1; i <= pre_index; i++)
                 {
                     sequence.Append(children[i].DOMove(origin_position[i] + increment, duration).Play()).SetAutoKill(true);
@@ -146,21 +115,4 @@ public class LevelExhibitionControl : MonoBehaviour
             child.transform.position = origin_position[i];
         }
     }
-=======
-                for (int i = index; i < pre_index; i++){
-                    sequence.Append(children[i].DOMove(origin_position[i] + increment, duration)).SetAutoKill(true);
-                }
-            }else if (index > pre_index) {
-                for (int i = pre_index; i < index; i++){
-                    sequence.Append(children[i].DOMove(origin_position[i], duration)).SetAutoKill(true);
-                }
-            }
-        }else {
-            for (int i = index; i < child_number; i++){
-                sequence.Append(children[i].DOMove(origin_position[i] + increment, duration)).SetAutoKill(true);
-            }
-        }
-        pre_index = index;
-    }
->>>>>>> dab206c7fe45844fb501de68831e78a7a77090d3
 }
