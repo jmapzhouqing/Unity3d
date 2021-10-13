@@ -13,11 +13,11 @@ public class CategoryControl : MonoBehaviour
 
     public Text title;
 
-    public Texture expand_img;
+    public Sprite expand_img;
 
-    public Texture unExpand_img;
+    public Sprite unexpand_img;
 
-    public RawImage background;
+    public Image expand_control;
 
     private Vector2 size;
 
@@ -52,21 +52,25 @@ public class CategoryControl : MonoBehaviour
         this.title.text = name;
     }
 
-    public void CreateDeviceList(List<DeviceInfo> devices) {
+    public void CreateDeviceList(List<DeviceInfo> devices)
+    {
         int i = 0;
         foreach (DeviceInfo device in devices) {
             RectTransform child = GameObject.Instantiate<RectTransform>(result_prefab, container);
             child.gameObject.GetComponentInChildren<Text>().text = device.deviceName;
+            ResultControl categoryControl = child.GetComponentInChildren<ResultControl>();
             ResultControl resultControl = child.GetComponentInChildren<ResultControl>();
             resultControl.setDeviceInfo(device);
             if (!string.IsNullOrEmpty(device.rtsp))
             {
                 resultControl.DeviceEvent = DeviceEventType.Video;
             }
-            else {
+            else
+            {
                 resultControl.DeviceEvent = DeviceEventType.DeTailInfo;
             }
-            if (i % 2 == 1) {
+            if (i % 2 == 1)
+            {
                 Color temp = child.gameObject.GetComponent<Image>().color;
                 child.gameObject.GetComponent<Image>().color = new Color(temp.r, temp.g, temp.b, 1);
             }
@@ -111,12 +115,12 @@ public class CategoryControl : MonoBehaviour
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
-            background.texture = expand_img;
+            expand_control.sprite = expand_img;
         }
         else
         {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
-            background.texture = unExpand_img;
+            expand_control.sprite = unexpand_img;
         }
 
         this.is_expand = is_expand;
