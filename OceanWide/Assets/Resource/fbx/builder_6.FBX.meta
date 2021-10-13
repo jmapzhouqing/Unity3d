@@ -9,9 +9,20 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: builder_6
+    4300002: builder_6-1
     7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: builder_6-1
+    second: {fileID: 2100000, guid: 848388c25149dc34f8ac5e604ecaae59, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: builder_6-2
+    second: {fileID: 2100000, guid: 2f6869e144dd12242bbc6646120bd2cf, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -63,7 +74,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.001
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60

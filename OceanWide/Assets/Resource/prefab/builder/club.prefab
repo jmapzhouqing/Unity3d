@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3338005616390098319}
   - component: {fileID: 3338005616397787755}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: club
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3338005616390525359}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 194.9, y: -28.6, z: 230}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 3338005616390098377}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 0}
 --- !u!95 &3338005616397787755
 Animator:
   serializedVersion: 3
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 3338005616390098357}
   - component: {fileID: 3338005616387198425}
   - component: {fileID: 3338005616388329369}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: club
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 3338005616390098377}
   - component: {fileID: 3338005616387198429}
   - component: {fileID: 3338005616388329373}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\u5BF9\u8C61003"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 3338005616390098379}
   - component: {fileID: 3338005616387198431}
   - component: {fileID: 3338005616388329375}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: club001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
