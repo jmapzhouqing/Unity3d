@@ -48,9 +48,9 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<string, List<string>> LHYDeviceDic ;
     public static Dictionary<string, List<string>> DFDeviceDic ;
 
-    public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 22, "1F" }, { 23, "ROOF" } };
+    public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 22, "1F" }, { 23, "roof" } };
     //public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 63, "B1" }, { 62, "1F" } };
-    public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "ROOF" } };
+    public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "roof" } };
     int[] DFFloorSort = new int[] {48,59,49,87,88,89,90,91,92,93,94,95,50 };
     
     // Start is called before the first frame update
