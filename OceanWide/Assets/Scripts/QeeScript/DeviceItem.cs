@@ -5,36 +5,34 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class DeviceItem : MonoBehaviour, IPointerClickHandler
+public class DeviceItem : MonoBehaviour
 {
-    private Text Name;
+	public Text key;
+	public Text value;
 
-    private Text Info;
-
-	private Color color = new Color(80 / 255, 80 / 255, 80 / 255);
+	private Color color;
 
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
     {
-		this.Name = this.transform.GetChild(0).GetComponent<Text>();
-		this.Info = this.transform.GetChild(1).GetComponent<Text>();
+		this.color = this.transform.GetComponent<RawImage>().color;
 	}
 
 
-	public void SetName(string value)
+	public void SetKey(string value)
 	{
-		this.Name.text = value;
+		this.key.text = value;
 	}
 
-	public void SetId(string value)
+	public void SetValue(string value)
 	{
-		this.Info.text = value;
+		this.value.text = value;
 	}
 
 
-	public void OnPointerClick(PointerEventData eventData)
+	public void setColor()
 	{
-		
+		this.transform.GetComponent<RawImage>().color = new Color(this.color.r, this.color.g, this.color.b, 193 / 255);
 	}
 }

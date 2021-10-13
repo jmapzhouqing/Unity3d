@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UIDataStruct;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,7 +13,11 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
 {
     // Start is called before the first frame update
 
-    private DeviceEventType devideEvent;
+    private DeviceEventType devideEvent; 
+    
+    private Transform dynamic_container;
+
+    private DeviceInfo deviceInfo;
 
     public DeviceEventType DeviceEvent
     {
@@ -22,24 +27,23 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
         }
     
     }
+
+    public void setDeviceInfo(DeviceInfo value) {
+        this.deviceInfo = value;
+    }
     private double t1, t2;
     public void OnPointerClick(PointerEventData eventData) {
         t2 = Time.realtimeSinceStartup;
         if (t2 - t1 < 0.2)
         {
-            if (devideEvent == DeviceEventType.DeTailInfo) {
-
-            } else if (devideEvent == DeviceEventType.RecordGrid) {
-
-            } else if (devideEvent == DeviceEventType.Video) { 
-            
-            }
+            DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+            deviceDetailControl.setContainer(this.devideEvent,this.deviceInfo);
         }
         t1 = t2;
     }
     void Start()
     {
-        
+        dynamic_container = this.transform.root.Find("deviceContainer");
     }
 
     // Update is called once per frame

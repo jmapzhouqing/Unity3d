@@ -62,13 +62,15 @@ public class BuilderControl : MonoBehaviour
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
             switch (name) {
                 case "LHY":
-                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
-                    control.setCategoryId(3);
+                    //child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
+                    child.gameObject.GetComponentInChildren<Text>().text = PrimaryContorl.LHYFloorDic[floorList[i].positionId];
+                    control.setProjectId(3);
                     control.setFloorName("兰海园3号楼"+floorList[i].positionName);
                     break;
                 case "DF":
-                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
-                    control.setCategoryId(3);
+                    //child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
+                    child.gameObject.GetComponentInChildren<Text>().text = PrimaryContorl.DFFloorDic[floorList[i].positionId];
+                    control.setProjectId(4);
                     control.setFloorName("东府5号楼" + floorList[i].positionName);
                     break;
             }

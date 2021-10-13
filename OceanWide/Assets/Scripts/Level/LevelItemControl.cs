@@ -11,7 +11,7 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
 
     private Image image;
 
-    private int categoryId;
+    private int projectId;
     private int positionId;
     private string floorName;
     
@@ -41,7 +41,7 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData) {
         this.Selected();
-        PrimaryContorl.qryDeviceByFloor(this.categoryId, this.positionId);
+        PrimaryContorl.qryDeviceByFloor(this.projectId, this.positionId);
         GameObject.FindObjectOfType<ResultManager>().SetLevelName(this.floorName);
         if (PrimaryContorl.isDevice)
         {
@@ -52,8 +52,8 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
         }
     }
 
-    public void setCategoryId(int value) {
-        this.categoryId = value;
+    public void setProjectId(int value) {
+        this.projectId = value;
     }
 
     public void setPositionId(int value)
@@ -64,4 +64,5 @@ public class LevelItemControl : MonoBehaviour,IPointerClickHandler
     {
         this.floorName = value;
     }
+
 }
