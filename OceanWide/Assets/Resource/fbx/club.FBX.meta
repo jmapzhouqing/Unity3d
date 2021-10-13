@@ -34,6 +34,9 @@ ModelImporter:
     100056: "\u7EC4050"
     100058: "\u7EC4051"
     100060: "\u7EC4052"
+    100062: club
+    100064: club001
+    100066: "\u5BF9\u8C61003"
     400000: BLD-Type-2001
     400002: BLD-Type-2002
     400004: //RootNode
@@ -65,12 +68,24 @@ ModelImporter:
     400056: "\u7EC4050"
     400058: "\u7EC4051"
     400060: "\u7EC4052"
+    400062: club
+    400064: club001
+    400066: "\u5BF9\u8C61003"
     2100000: Bricks-2
     2100002: Roof-2
     2100004: Mat3d66-1150365-73-9346
     2100006: Mat3d66-1150365-67-4619
     2100008: Mat3d66-1150365-2-6926
     2100010: Mat3d66-1150365-66-1758
+    2100012: BLD-Type-2001-1
+    2100014: BLD-Type-2001-2
+    2100016: BLD-Type-2001-4
+    2100018: BLD-Type-2001-3
+    2100020: DX_shuichi-1
+    2100022: DX_shuichi-2
+    2100024: DX_shuichi-4
+    2100026: DX_shuichi-3
+    2100028: DX_shuichi-5
     2300000: BLD-Type-2001
     2300002: BLD-Type-2002
     2300004: Line009
@@ -95,6 +110,10 @@ ModelImporter:
     2300042: Obj3d66-1150365-160-623
     2300044: top-type-004
     2300046: top-type-3
+    2300048: //RootNode
+    2300050: club
+    2300052: club001
+    2300054: "\u5BF9\u8C61003"
     3300000: BLD-Type-2001
     3300002: BLD-Type-2002
     3300004: Line009
@@ -119,6 +138,10 @@ ModelImporter:
     3300042: Obj3d66-1150365-160-623
     3300044: top-type-004
     3300046: top-type-3
+    3300048: //RootNode
+    3300050: club
+    3300052: club001
+    3300054: "\u5BF9\u8C61003"
     4300000: BLD-Type-2001
     4300002: top-type-3
     4300004: BLD-Type-2002
@@ -143,6 +166,9 @@ ModelImporter:
     4300042: Obj3d66-1150365-158-991
     4300044: Obj3d66-1150365-159-932
     4300046: Obj3d66-1150365-160-623
+    4300048: club
+    4300050: club001
+    4300052: "\u5BF9\u8C61003"
     7400000: Take 001
     9500000: //RootNode
   externalObjects: {}
@@ -150,7 +176,7 @@ ModelImporter:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

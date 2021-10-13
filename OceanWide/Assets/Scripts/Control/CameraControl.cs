@@ -31,28 +31,28 @@ public class CameraControl : MonoBehaviour
 
     public Transform target;
 
-    private float speed = 30;
+    private float speed = 60;
     
 
     private Matrix4x4 matrix;
 
     private Vector3 origin;
 
-    private Vector2 rotation;
+    public Vector2 rotation;
 
     private Vector2 pre_rotation;
 
     private float pre_distance = 100;
 
-    private Vector3 target_position;
+    public Vector3 target_position;
     // Start is called before the first frame update
     void Start()
     {
         pre_distance = distance;
 
-        target_position = target.position;
+        //target_position = target.position;
 
-        rotation = Vector2.zero;
+        //rotation = Vector2.zero;
 
         matrix = new Matrix4x4();
 
@@ -62,7 +62,7 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update(){
         if (control_state.Equals(MouseControl.LeftDrag)){
-            rotation += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 1;
+            rotation += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 2;
 
             rotation.y = Mathf.Clamp(rotation.y, pitch_min, pitch_max);
         }
@@ -75,7 +75,8 @@ public class CameraControl : MonoBehaviour
         else if (control_state.Equals(MouseControl.WheelDrag)) {
             //this.target.position += new Vector3(10,0,10);
             Vector3 direction = Vector3.Cross(this.transform.right, Vector3.up).normalized;
-            target_position += -1 * this.transform.right * Input.GetAxis("Mouse X") - direction * Input.GetAxis("Mouse Y");
+            target_position += (-1 * this.transform.right * Input.GetAxis("Mouse X") - direction * Input.GetAxis("Mouse Y"))*4
+                ;
         }
     }
 

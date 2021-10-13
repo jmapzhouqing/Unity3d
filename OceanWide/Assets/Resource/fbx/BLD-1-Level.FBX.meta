@@ -1,0 +1,283 @@
+fileFormatVersion: 2
+guid: 4a40c9a023950414e96b8de6295be5ce
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: B1
+    100002: B2
+    100004: //RootNode
+    100006: BLD_xifu_fw00
+    100008: BLD_xifu_fw01
+    100010: BLD_xifu_fw02
+    100012: BLD_xifu_fw03
+    100014: BLD_xifu_fw04
+    100016: BLD_xifu_fw05
+    100018: BLD_xifu_fw06
+    100020: BLD_xifu_fw07
+    100022: BLD_xifu_fw08
+    100024: BLD_xifu_fw09
+    100026: BLD_xifu_fw10
+    100028: BLD_xifu_fw11
+    100030: Group_206
+    100032: interior_1
+    100034: interior_10
+    100036: interior_2
+    100038: interior_3
+    100040: interior_4
+    100042: interior_5
+    100044: interior_6
+    100046: interior_7
+    100048: interior_8
+    100050: interior_9
+    100052: interior_top
+    400000: B1
+    400002: B2
+    400004: //RootNode
+    400006: BLD_xifu_fw00
+    400008: BLD_xifu_fw01
+    400010: BLD_xifu_fw02
+    400012: BLD_xifu_fw03
+    400014: BLD_xifu_fw04
+    400016: BLD_xifu_fw05
+    400018: BLD_xifu_fw06
+    400020: BLD_xifu_fw07
+    400022: BLD_xifu_fw08
+    400024: BLD_xifu_fw09
+    400026: BLD_xifu_fw10
+    400028: BLD_xifu_fw11
+    400030: Group_206
+    400032: interior_1
+    400034: interior_10
+    400036: interior_2
+    400038: interior_3
+    400040: interior_4
+    400042: interior_5
+    400044: interior_6
+    400046: interior_7
+    400048: interior_8
+    400050: interior_9
+    400052: interior_top
+    2100000: Bricks
+    2100002: BLD-xifu-2-Windows
+    2100004: BLD-xifu-1-Windows
+    2100006: xifu-sun-dif
+    2100008: xifu-sun-dif02
+    2100010: BLD-xifu-1-xuanzhuanmen
+    2100012: BLD-xifu-1-zheyangpeng
+    2100014: BLD-xifu-1-FANGDING
+    2100016: No Name
+    2300000: B1
+    2300002: B2
+    2300004: BLD_xifu_fw00
+    2300006: BLD_xifu_fw01
+    2300008: BLD_xifu_fw02
+    2300010: BLD_xifu_fw03
+    2300012: BLD_xifu_fw04
+    2300014: BLD_xifu_fw05
+    2300016: BLD_xifu_fw06
+    2300018: BLD_xifu_fw07
+    2300020: BLD_xifu_fw08
+    2300022: BLD_xifu_fw09
+    2300024: BLD_xifu_fw10
+    2300026: BLD_xifu_fw11
+    2300028: interior_1
+    2300030: interior_10
+    2300032: interior_2
+    2300034: interior_3
+    2300036: interior_4
+    2300038: interior_5
+    2300040: interior_6
+    2300042: interior_7
+    2300044: interior_8
+    2300046: interior_9
+    2300048: interior_top
+    2300050: //RootNode
+    3300000: B1
+    3300002: B2
+    3300004: BLD_xifu_fw00
+    3300006: BLD_xifu_fw01
+    3300008: BLD_xifu_fw02
+    3300010: BLD_xifu_fw03
+    3300012: BLD_xifu_fw04
+    3300014: BLD_xifu_fw05
+    3300016: BLD_xifu_fw06
+    3300018: BLD_xifu_fw07
+    3300020: BLD_xifu_fw08
+    3300022: BLD_xifu_fw09
+    3300024: BLD_xifu_fw10
+    3300026: BLD_xifu_fw11
+    3300028: interior_1
+    3300030: interior_10
+    3300032: interior_2
+    3300034: interior_3
+    3300036: interior_4
+    3300038: interior_5
+    3300040: interior_6
+    3300042: interior_7
+    3300044: interior_8
+    3300046: interior_9
+    3300048: interior_top
+    3300050: //RootNode
+    4300000: BLD_xifu_fw00
+    4300002: BLD_xifu_fw01
+    4300004: BLD_xifu_fw02
+    4300006: BLD_xifu_fw03
+    4300008: BLD_xifu_fw04
+    4300010: BLD_xifu_fw05
+    4300012: BLD_xifu_fw06
+    4300014: BLD_xifu_fw07
+    4300016: BLD_xifu_fw08
+    4300018: BLD_xifu_fw09
+    4300020: BLD_xifu_fw10
+    4300022: BLD_xifu_fw11
+    4300024: interior_1
+    4300026: B1
+    4300028: interior_top
+    4300030: interior_3
+    4300032: interior_2
+    4300034: B2
+    4300036: interior_4
+    4300038: interior_5
+    4300040: interior_6
+    4300042: interior_7
+    4300044: interior_8
+    4300046: interior_9
+    4300048: interior_10
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 02 - Default
+    second: {fileID: 2100000, guid: 3d85ea576377a094fbb615a1195b70b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 07 - Default
+    second: {fileID: 2100000, guid: 317db9ebf42c6ae4aafcd28b3e7c8b41, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 08 - Default
+    second: {fileID: 2100000, guid: 647d31da4b23c4649aec7eb4d5767fc5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 09 - Default
+    second: {fileID: 2100000, guid: 0435d9ef5763e27448b0f1c53346b38d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat3d66-734106-54-1711
+    second: {fileID: 2100000, guid: c701f0832a5d8e84881f95c118c1e99b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat3d66-734106-55-4732
+    second: {fileID: 2100000, guid: 862f170c2da94874dafb15010005557d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat3d66-734106-56-6027
+    second: {fileID: 2100000, guid: 231eca90be0a53c489d8c97389ee10f9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dbl_Group_001
+    second: {fileID: 2100000, guid: 1e9858e9f87c0654fb8616ce634b2251, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dbl_Group_003
+    second: {fileID: 2100000, guid: 0ee564924ac67d94a94a1d946738b247, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skp_line_default
+    second: {fileID: 2100000, guid: d032caeef1b9e0b4dbf5433c192adbcd, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

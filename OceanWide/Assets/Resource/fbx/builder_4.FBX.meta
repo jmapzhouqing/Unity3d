@@ -17,6 +17,18 @@ ModelImporter:
     100022: "\u9999\u6D77\u56ED_045"
     100024: "\u9999\u6D77\u56ED_046"
     100026: "\u9999\u6D77\u56ED_047"
+    100028: BLD_xifu_fw00
+    100030: BLD_xifu_fw01
+    100032: BLD_xifu_fw02
+    100034: BLD_xifu_fw03
+    100036: BLD_xifu_fw04
+    100038: BLD_xifu_fw05
+    100040: BLD_xifu_fw06
+    100042: BLD_xifu_fw07
+    100044: BLD_xifu_fw08
+    100046: BLD_xifu_fw09
+    100048: BLD_xifu_fw10
+    100050: BLD_xifu_fw11
     400000: builder_4
     400002: //RootNode
     400004: "\u9999\u6D77\u56ED_036"
@@ -31,6 +43,18 @@ ModelImporter:
     400022: "\u9999\u6D77\u56ED_045"
     400024: "\u9999\u6D77\u56ED_046"
     400026: "\u9999\u6D77\u56ED_047"
+    400028: BLD_xifu_fw00
+    400030: BLD_xifu_fw01
+    400032: BLD_xifu_fw02
+    400034: BLD_xifu_fw03
+    400036: BLD_xifu_fw04
+    400038: BLD_xifu_fw05
+    400040: BLD_xifu_fw06
+    400042: BLD_xifu_fw07
+    400044: BLD_xifu_fw08
+    400046: BLD_xifu_fw09
+    400048: BLD_xifu_fw10
+    400050: BLD_xifu_fw11
     2100000: Bricks
     2100002: Balcony
     2100004: Regular-Windows
@@ -52,6 +76,18 @@ ModelImporter:
     2300022: "\u9999\u6D77\u56ED_045"
     2300024: "\u9999\u6D77\u56ED_046"
     2300026: "\u9999\u6D77\u56ED_047"
+    2300028: BLD_xifu_fw00
+    2300030: BLD_xifu_fw01
+    2300032: BLD_xifu_fw02
+    2300034: BLD_xifu_fw03
+    2300036: BLD_xifu_fw04
+    2300038: BLD_xifu_fw05
+    2300040: BLD_xifu_fw06
+    2300042: BLD_xifu_fw07
+    2300044: BLD_xifu_fw08
+    2300046: BLD_xifu_fw09
+    2300048: BLD_xifu_fw10
+    2300050: BLD_xifu_fw11
     3300000: builder_4
     3300002: //RootNode
     3300004: "\u9999\u6D77\u56ED_036"
@@ -66,6 +102,18 @@ ModelImporter:
     3300022: "\u9999\u6D77\u56ED_045"
     3300024: "\u9999\u6D77\u56ED_046"
     3300026: "\u9999\u6D77\u56ED_047"
+    3300028: BLD_xifu_fw00
+    3300030: BLD_xifu_fw01
+    3300032: BLD_xifu_fw02
+    3300034: BLD_xifu_fw03
+    3300036: BLD_xifu_fw04
+    3300038: BLD_xifu_fw05
+    3300040: BLD_xifu_fw06
+    3300042: BLD_xifu_fw07
+    3300044: BLD_xifu_fw08
+    3300046: BLD_xifu_fw09
+    3300048: BLD_xifu_fw10
+    3300050: BLD_xifu_fw11
     4300000: builder_4
     4300002: "\u9999\u6D77\u56ED_036"
     4300004: "\u9999\u6D77\u56ED_037"
@@ -79,9 +127,46 @@ ModelImporter:
     4300020: "\u9999\u6D77\u56ED_045"
     4300022: "\u9999\u6D77\u56ED_046"
     4300024: "\u9999\u6D77\u56ED_047"
+    4300026: BLD_xifu_fw00
+    4300028: BLD_xifu_fw01
+    4300030: BLD_xifu_fw02
+    4300032: BLD_xifu_fw03
+    4300034: BLD_xifu_fw04
+    4300036: BLD_xifu_fw05
+    4300038: BLD_xifu_fw06
+    4300040: BLD_xifu_fw07
+    4300042: BLD_xifu_fw08
+    4300044: BLD_xifu_fw09
+    4300046: BLD_xifu_fw10
+    4300048: BLD_xifu_fw11
     7400000: Take 001
     9500000: //RootNode
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLD-xifu-1-FANGDING
+    second: {fileID: 2100000, guid: 966e735d97356e4459ed4e9c35dcbd59, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLD-xifu-1-Windows
+    second: {fileID: 2100000, guid: 0076839ae49884a4fa3580f4b19e342a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLD-xifu-1-xuanzhuanmen
+    second: {fileID: 2100000, guid: 0017edc0cec729a44a14bb8fec803a8b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLD-xifu-1-zheyangpeng
+    second: {fileID: 2100000, guid: cb7ac426c94a85649b98366e808edd9a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLD-xifu-2-Windows
+    second: {fileID: 2100000, guid: d188d07178440e74281e18fc99bec892, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -106,7 +191,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Bricks
-    second: {fileID: 2100000, guid: 43f10940139a4d348b78f7da7800e1ef, type: 2}
+    second: {fileID: 2100000, guid: 988aba67b79f6c04a9cb937e44470588, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -117,6 +202,16 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Roof-21
     second: {fileID: 2100000, guid: 215426bf859aa5c4ca15c6f297e88990, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: xifu-sun-dif
+    second: {fileID: 2100000, guid: 9c94dadedde271d4a8ffd16a46b29d26, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: xifu-sun-dif02
+    second: {fileID: 2100000, guid: cf4df997a5752be468631a51bfb55560, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

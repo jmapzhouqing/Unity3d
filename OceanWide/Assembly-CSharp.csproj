@@ -108,6 +108,7 @@
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Ring.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Series.cs" />
     <Compile Include="Assets\Scripts\Control\CameraControl.cs" />
+    <Compile Include="Assets\Scripts\Control\PlayVideo.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderControl.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderManager.cs" />
     <Compile Include="Assets\Scripts\Level\LevelExhibitionControl.cs" />

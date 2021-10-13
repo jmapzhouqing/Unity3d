@@ -66,9 +66,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 934873004126127308}
   title: {fileID: 471923234622332033}
-  expand_img: {fileID: 21300000, guid: d9dff5f620c9bfd45acd2fdacd81c698, type: 3}
-  unexpand_img: {fileID: 21300000, guid: 0df088b07328711478ef785fc0c75966, type: 3}
-  expand_control: {fileID: 4591875671884468484}
+  expand_img: {fileID: 21300000, guid: 0df088b07328711478ef785fc0c75966, type: 3}
+  unexpand_img: {fileID: 21300000, guid: d9dff5f620c9bfd45acd2fdacd81c698, type: 3}
+  expand: {fileID: 4591875671884468484}
+  level_exhibition_control: {fileID: 0}
 --- !u!114 &4694011337625161152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,7 +303,7 @@ GameObject:
   - component: {fileID: 4591875671884468484}
   - component: {fileID: 4887298427480105937}
   m_Layer: 5
-  m_Name: Button
+  m_Name: expand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

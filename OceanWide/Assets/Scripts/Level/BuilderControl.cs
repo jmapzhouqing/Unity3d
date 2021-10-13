@@ -16,7 +16,7 @@ public class BuilderControl : MonoBehaviour
 
     public Sprite unexpand_img;
 
-    public Image expand_control;
+    public Image expand;
 
     private Vector2 size;
 
@@ -32,11 +32,18 @@ public class BuilderControl : MonoBehaviour
 
     private Dictionary<int, LevelItemControl> levels;
 
+    public LevelExhibitionControl level_exhibition_control;
+
+    private ResultManager result_manager;
+
     // Start is called before the first frame update
-    void Awake() {
+    void Awake()
+    {
         DOTween.Init(true, true, null);
         DOTween.defaultAutoPlay = AutoPlay.None;
         DOTween.defaultAutoKill = true;
+
+        result_manager = FindObjectOfType<ResultManager>();
 
         levels = new Dictionary<int, LevelItemControl>();
 
@@ -48,51 +55,69 @@ public class BuilderControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
     }
 
-    public void SetBuilderName(string name) {
+    public void SetBuilderName(string name)
+    {
         title.text = name;
     }
 
-    public void CreateLevelItem(List<FloorInfo> floorList,string name) {
-        for (int i = 0; i < floorList.Count; i++) {
+    public void CreateLevelItem(List<FloorInfo> floorList, string name)
+    {
+        level_exhibition_control = GameObject.Find(name)?.GetComponent<LevelExhibitionControl>();
+
+        for (int i = 0; i < floorList.Count; i++)
+        {
             RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
             LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
-            switch (name) {
+            switch (name)
+            {
                 case "LHY":
                     child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
                     control.setCategoryId(3);
-                    control.setFloorName("兰海园3号楼"+floorList[i].positionName);
+                    control.setFloorName("兰海园3号楼" + floorList[i].positionName);
+                    control.SetLevelName(Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g"));
                     break;
                 case "DF":
-                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(DFfloor), floorList[i].positionId, "g");
                     control.setCategoryId(3);
                     control.setFloorName("东府5号楼" + floorList[i].positionName);
+                    control.SetLevelName(Enum.Format(typeof(DFfloor), floorList[i].positionId, "g"));
                     break;
             }
+
+
             control.setPositionId(floorList[i].positionId);
+            control.SetLevelControl(this.level_exhibition_control);
             levels.Add(i, control);
         }
+
         StartCoroutine(UpdateElementHeight());
     }
 
-    public void SetLevel(int index) {
+    public void SetLevel(int index)
+    {
         LevelItemControl control;
-        if (levels.TryGetValue(index, out control)) {
+        if (levels.TryGetValue(index, out control))
+        {
             control.Selected();
         }
     }
 
-    private IEnumerator UpdateElementHeight() {
-        if (is_expand) {
-            while (container.sizeDelta.y < Mathf.Pow(10, -2)) {
+    private IEnumerator UpdateElementHeight()
+    {
+        if (is_expand)
+        {
+            while (container.sizeDelta.y < Mathf.Pow(10, -2))
+            {
                 yield return new WaitForEndOfFrame();
             }
             float height = (title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
-            while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2)) {
+            while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2))
+            {
                 element.preferredHeight = height;
                 yield return new WaitForEndOfFrame();
             }
@@ -100,34 +125,53 @@ public class BuilderControl : MonoBehaviour
         //this.size = new Vector2(element.preferredWidth,element.preferredHeight);
     }
 
-    public void Expand(bool is_expand) {
+    public void Expand(bool is_expand)
+    {
         if (tween != null && tween.IsPlaying())
         {
             return;
         }
 
-        if (is_expand) {
-            foreach (BuilderControl control in this.transform.parent.GetComponentsInChildren<BuilderControl>(true)) {
+        if (is_expand)
+        {
+            foreach (BuilderControl control in this.transform.parent.GetComponentsInChildren<BuilderControl>(true))
+            {
                 control.Expand(false);
             }
             size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
-            expand_control.sprite = expand_img;
-        } else {
+
+            if (this.level_exhibition_control)
+            {
+                this.level_exhibition_control.CameraLocation();
+            }
+
+            expand.sprite = expand_img;
+        }
+        else
+        {
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
-            expand_control.sprite = unexpand_img;
+            if (this.level_exhibition_control)
+            {
+                this.level_exhibition_control.Recover();
+            }
+            result_manager.Clear();
+            expand.sprite = unexpand_img;
         }
 
         this.is_expand = is_expand;
     }
 
-    public void Expand() {
+    public void Expand()
+    {
         this.Expand(!is_expand);
     }
 
-    public void Clear(){
-        for (int i = 0, number = container.childCount; i < number; i++) {
+    public void Clear()
+    {
+        for (int i = 0, number = container.childCount; i < number; i++)
+        {
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
         }
     }

@@ -43,6 +43,8 @@ public class PrimaryContorl : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        dialog = this.transform.Find("messageBox").gameObject;
+
         tokenControl = new TokenControl();
         tokenControl.setUrl(this.url);
         tokenControl.SetUserName(userName);
@@ -83,7 +85,7 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-        dialog = this.transform.Find("messageBox").gameObject;
+       
 
     }
 
