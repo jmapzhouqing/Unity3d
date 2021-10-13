@@ -34,7 +34,7 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     private double t1, t2;
     public void OnPointerClick(PointerEventData eventData) {
         t2 = Time.realtimeSinceStartup;
-        if (t2 - t1 < 0.2)
+        if (t2 - t1 < 0.5)
         {
             DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
             deviceDetailControl.setContainer(this.devideEvent,this.deviceInfo);
