@@ -37,8 +37,8 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.clickCount == 2) {
             this.Location(this.deviceInfo.deviceEui);
-            //DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-            //deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+            DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+            deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
         }
     }
     void Start()
