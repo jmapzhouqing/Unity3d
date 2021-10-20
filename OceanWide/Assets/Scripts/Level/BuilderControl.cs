@@ -76,15 +76,16 @@ public class BuilderControl : MonoBehaviour
             switch (name)
             {
                 case "LHY":
-                    child.gameObject.GetComponentInChildren<Text>().text = Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g");
-                    control.setCategoryId(3);
+                    /*
+                    control.setProjectId(3);
                     control.setFloorName("兰海园3号楼" + floorList[i].positionName);
-                    control.SetLevelName(Enum.Format(typeof(LHYfloor), floorList[i].positionId, "g"));
+                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);*/
                     break;
                 case "DF":
-                    control.setCategoryId(3);
+                    /*
+                    control.setProjectId(4);
                     control.setFloorName("东府5号楼" + floorList[i].positionName);
-                    control.SetLevelName(Enum.Format(typeof(DFfloor), floorList[i].positionId, "g"));
+                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);*/
                     break;
             }
 
@@ -170,8 +171,7 @@ public class BuilderControl : MonoBehaviour
 
     public void Clear()
     {
-        for (int i = 0, number = container.childCount; i < number; i++)
-        {
+        for (int i = 0, number = container.childCount; i < number; i++){
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
         }
     }
