@@ -41,6 +41,7 @@ namespace UIDataStruct {
 		public int deviceId;
 		public string deviceName;
 		public string rtsp;
+		public string deviceEui;
 	}
 
 	public class DeviceRows
@@ -72,5 +73,16 @@ namespace UIDataStruct {
 		public string monitorName;
 		public string categoryName;
 		public string descName;
+	}
+
+	public class DeviceDetail {
+		public int rowCount;
+		public List<DeviceDetailData> rows;
+	}
+
+	public class DeviceDetailData
+	{
+		public int deviceId;
+		public string deviceEui;
 	}
 }

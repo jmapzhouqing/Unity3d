@@ -76,16 +76,14 @@ public class BuilderControl : MonoBehaviour
             switch (name)
             {
                 case "LHY":
-                    /*
                     control.setProjectId(3);
                     control.setFloorName("兰海园3号楼" + floorList[i].positionName);
-                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);*/
+                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);
                     break;
                 case "DF":
-                    /*
-                    control.setProjectId(4);
-                    control.setFloorName("东府5号楼" + floorList[i].positionName);
-                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);*/
+                    control.setProjectId(3);
+                    control.setFloorName("兰海园3号楼" + floorList[i].positionName);
+                    control.SetLevelName(PrimaryContorl.DFFloorDic[floorList[i].positionId]);
                     break;
             }
 

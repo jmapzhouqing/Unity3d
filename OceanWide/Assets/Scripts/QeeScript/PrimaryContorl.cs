@@ -26,7 +26,7 @@ public class PrimaryContorl : MonoBehaviour
     public static List<FloorInfo> DF;
 
     private string categoryUrl = "http://" + urlPrefix + "/base/tenant/category/list";
-    private static string deviceUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=100&projectId=";
+    private static string deviceUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=10000&projectId=";
     private static string deviceUrlSuffix = "&deviceName=3%E5%8F%B7%E6%A5%BC&positionId=";
 
     public static Dictionary<int, string> categoryDic = new Dictionary<int, string>();
@@ -40,10 +40,24 @@ public class PrimaryContorl : MonoBehaviour
     public static string alarmUrl = "http://" + urlPrefix + "/nanhai/tenant/realtime/alarm?level=";
     public static string positionIdStr = "000,78,77,22,23,63,62,000";
     public static List<AlarmGrid> alarmList=new List<AlarmGrid>();
+
+    public static string deviceDetailUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=40000";
+    public static Dictionary<int, DeviceDetailData> deviceInfo = new Dictionary<int, DeviceDetailData>();
+    public static string LHYDevice = "{\"22\":[\"SPEGCU_0038\",\"SPEGCU_0039\"],\"78\":[\"SPVSCMSP_0559\",\"SPVSCMSP_0497\",\"SPVSCMSP_0490\",\"SPVSCMSP_0571\",\"SPVSCMSP_0561\",\"SPVSCMSP_0568\",\"SPVSCMSP_0498\",\"SPVSCMSP_0567\",\"SPVSCMSP_0569\",\"SPVSCMSP_0560\",\"SPVSCMSP_0563\",\"SPVSCMSP_0557\",\"SPVSCMSP_0562\",\"SPVSCMSP_0564\",\"SPVSCMSP_0555\",\"SPVSCMSP_0491\",\"SPVSCMSP_0556\",\"SPVSCMSP_0572\",\"SPVSCMSP_0558\",\"SPVSCMSP_0570\",\"SPVSCMSP_0566\",\"WEECEE_0112\",\"WEECEE_0113\",\"WEECEE_0114\",\"WEECEE_0115\",\"WEECEE_0116\"],\"77\":[\"SPVSCMSP_0535\",\"SPVSCMSP_0495\",\"SPVSCMSP_0540\",\"SPVSCMSP_0488\",\"SPVSCMSP_0553\",\"SPVSCMSP_0565\",\"SPVSCMSP_0541\",\"SPVSCMSP_0552\",\"SPVSCMSP_0489\",\"SPVSCMSP_0543\",\"SPVSCMSP_0545\",\"SPVSCMSP_0542\",\"SPVSCMSP_0549\",\"SPVSCMSP_0546\",\"SPVSCMSP_0551\",\"SPVSCMSP_0537\",\"SPVSCMSP_0554\",\"SPVSCMSP_0548\",\"SPVSCMSP_0544\",\"SPVSCMSP_0538\",\"SPVSCMSP_0539\",\"SPVSCMSP_0496\",\"SPVSCMSP_0536\",\"WEECWM_0007\",\"WEECWM_0008\"]}";
+    public static string DFDevice = "{\"49\":[\"SPVSCMSP_0998\",\"SPVSCMSP_0999\",\"SPVSCMSP_1000\",\"SPVSCMSP_1001\",\"SPVSCMSP_1002\",\"SPVSCMSP_1003\",\"SPVSCMSP_1004\",\"SPVSCMSP_1005\",\"SPVSCMSP_1006\",\"SPVSCMSP_1007\",\"SPVSCMSP_1008\"],\"B2\":[\"SPVSCMSP_0834\",\"SPVSCMSP_1191\",\"SPVSCMSP_1192\",\"SPVSCMSP_1196\",\"SPVSCMSP_1193\",\"SPVSCMSP_0875\",\"SPVSCMSP_0877\",\"SPVSCMSP_1198\",\"SPVSCMSP_0835\",\"SPVSCMSP_1195\",\"SPVSCMSP_1194\",\"SPVSCMSP_0983\",\"SPVSCMSP_0984\",\"SPVSCMSP_0985\",\"SPVSCMSP_0986\",\"SPVSCMSP_0987\",\"SPVSCMSP_0988\",\"SPVSCMSP_0989\",\"SPVSCMSP_0990\",\"SPVSCMSP_0991\",\"SPVSCMSP_0992\",\"SPVSCMSP_0993\",\"ACATFU_0018\",\"ACATFU_0020\",\"ACATFU_0022\",\"ACATFU_0024\",\"ACVTFN_0001\",\"ACVTFN_0002\",\"ACVTFN_0003\",\"ACVTFN_0004\",\"ACVTFN_005\",\"ACVTFN_006\",\"ACVTFN_007\",\"ACVTFN_008\",\"WEECWM_0017\",\"WEECWM_0018\"],\"59\":[\"SPVSCMSP_0978\",\"SPVSCMSP_0976\",\"SPVSCMSP_0971\",\"SPVSCMSP_0973\",\"SPVSCMSP_0980\",\"SPVSCMSP_0970\",\"SPVSCMSP_0974\",\"SPVSCMSP_0982\",\"SPVSCMSP_0975\",\"SPVSCMSP_0979\",\"SPVSCMSP_0972\",\"SPVSCMSP_0981\",\"SPVSCMSP_0977\"],\"11F\":[\"SPVSCMSP_0924\",\"SPVSCMSP_0925\",\"SPVSCMSP_0926\",\"SPVSCMSP_0927\",\"SPVSCMSP_0928\",\"SPVSCMSP_0929\",\"SPVSCMSP_0930\",\"SPVSCMSP_0994\",\"SPVSCMSP_0995\",\"SPVSCMSP_0996\",\"SPVSCMSP_0997\"]}";
+    public static Dictionary<string, List<string>> LHYDeviceDic ;
+    public static Dictionary<string, List<string>> DFDeviceDic ;
+
+    public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 22, "1F" }, { 23, "roof" } };
+    //public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 63, "B1" }, { 62, "1F" } };
+    public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "roof" } };
+    int[] DFFloorSort = new int[] {48,59,49,87,88,89,90,91,92,93,94,95,50 };
+    
     // Start is called before the first frame update
     void Awake()
     {
-        dialog = this.transform.Find("messageBox").gameObject;
+        LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
+        DFDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(DFDevice);
         tokenControl = new TokenControl();
         tokenControl.setUrl(this.url);
         tokenControl.SetUserName(userName);
@@ -59,22 +73,32 @@ public class PrimaryContorl : MonoBehaviour
 
         for (int i = LHY.Count - 1; i >= 0; i--)
         {
-            if (LHY[i].positionCode.IndexOf("LHY") < 0|| LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYSW"||LHY[i].positionCode== "LHYDXYC")
+            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYSW" || LHY[i].positionCode == "LHYDXYC")
                 LHY.Remove(LHY[i]);
         }
 
         LHY.Reverse();
-        string result_DF= HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
+        string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
 
         for (int i = DF.Count - 1; i >= 0; i--)
         {
-            if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
-                DF.Remove(DF[i]);
+            //if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
+            if (DF[i].positionCode.IndexOf("DF") < 0 || DF[i].positionCode.IndexOf("DFHS")>-1 || DF[i].positionCode == "DF" || DF[i].positionCode == "DFSW")
+                    DF.Remove(DF[i]);
         }
 
-        DF.Reverse();
+        DF = DF.OrderBy(e =>
+        { 
+            int index = 0;
+            index = Array.IndexOf(DFFloorSort, e.positionId);
+            if (index != -1) { return index; }
+            else {
+                return int.MaxValue;
+            }
+        }).ToList();
+        //DF.Reverse();
 
         string result_category= HTTPServiceControl.GetHttpResponse(this.categoryUrl, token);
 
@@ -84,26 +108,33 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
+        dialog = this.transform.Find("messageBox").gameObject;
+
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId) {
         isDevice = false;
-        string resultDevice = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + positionId.ToString(), token);
+        if ((projectId == 3 && !LHYDeviceDic.ContainsKey(positionId.ToString())) || (projectId == 4 && !DFDeviceDic.ContainsKey(positionId.ToString())))
+            return;
+        //string resultDevice = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + positionId.ToString(), token);
+        string resultDevice = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + "&positionId=" + positionId.ToString(), token);
         DeviceRows devideRows = JsonMapper.ToObject<DeviceRows>(resultDevice);
         deviceDic.Clear();
         foreach (DeviceInfo item in devideRows.rows) {
-            if (deviceDic.ContainsKey(item.categoryId))
-            {
-                deviceDic[item.categoryId].Add(item);
-            }
-            else {
-                isDevice = true;
-                List<DeviceInfo> temp = new List<DeviceInfo>();
-                temp.Add(item);
-                deviceDic.Add(item.categoryId, temp);
+            if ((projectId==3&&LHYDeviceDic[positionId.ToString()].Contains(item.deviceEui))|| (projectId == 4 && DFDeviceDic[positionId.ToString()].Contains(item.deviceEui))) {
+                if (deviceDic.ContainsKey(item.categoryId))
+                {
+                    deviceDic[item.categoryId].Add(item);
+                }
+                else {
+                    isDevice = true;
+                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                    temp.Add(item);
+                    deviceDic.Add(item.categoryId, temp);
+                } 
             }
         }
-        if (positionId == 77 || positionId == 78) {
+        if (projectId==3&&(positionId == 77 || positionId == 78)) {
             string resultDeviceEC;
             if (positionId == 77)
             {
@@ -115,16 +146,19 @@ public class PrimaryContorl : MonoBehaviour
             DeviceRows devideRowsEC = JsonMapper.ToObject<DeviceRows>(resultDeviceEC);
             foreach (DeviceInfo item in devideRowsEC.rows)
             {
-                if (deviceDic.ContainsKey(item.categoryId))
+                if (LHYDeviceDic[positionId.ToString()].Contains(item.deviceEui))
                 {
-                    deviceDic[item.categoryId].Add(item);
-                }
-                else
-                {
-                    isDevice = true;
-                    List<DeviceInfo> temp = new List<DeviceInfo>();
-                    temp.Add(item);
-                    deviceDic.Add(item.categoryId, temp);
+                    if (deviceDic.ContainsKey(item.categoryId))
+                    {
+                        deviceDic[item.categoryId].Add(item);
+                    }
+                    else
+                    {
+                        isDevice = true;
+                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                        temp.Add(item);
+                        deviceDic.Add(item.categoryId, temp);
+                    }
                 }
             }
         }
@@ -154,6 +188,11 @@ public class PrimaryContorl : MonoBehaviour
                 alarmList.Add(alarmGrid);
             }
         }
+    }
+
+    public static void qryDeviceDetail(int projectId,int positionId) {
+        string result = HTTPServiceControl.GetHttpResponse(deviceDetailUrl + "&projectId=" + projectId + "&positionId=" + positionId, token);
+        DeviceDetail alarmInfoList = JsonMapper.ToObject<DeviceDetail>(result);
     }
 
 

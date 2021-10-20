@@ -52,11 +52,29 @@ public class CategoryControl : MonoBehaviour
         this.title.text = name;
     }
 
-    public void CreateDeviceList(List<DeviceInfo> devices) {
+    public void CreateDeviceList(List<DeviceInfo> devices)
+    {
+        int i = 0;
         foreach (DeviceInfo device in devices) {
             RectTransform child = GameObject.Instantiate<RectTransform>(result_prefab, container);
             child.gameObject.GetComponentInChildren<Text>().text = device.deviceName;
             ResultControl categoryControl = child.GetComponentInChildren<ResultControl>();
+            ResultControl resultControl = child.GetComponentInChildren<ResultControl>();
+            resultControl.setDeviceInfo(device);
+            if (!string.IsNullOrEmpty(device.rtsp))
+            {
+                resultControl.DeviceEvent = DeviceEventType.Video;
+            }
+            else
+            {
+                resultControl.DeviceEvent = DeviceEventType.DeTailInfo;
+            }
+            if (i % 2 == 1)
+            {
+                Color temp = child.gameObject.GetComponent<Image>().color;
+                child.gameObject.GetComponent<Image>().color = new Color(temp.r, temp.g, temp.b, 1);
+            }
+            i++;
         }
 
         StartCoroutine(UpdateElementHeight());
