@@ -62,6 +62,15 @@
   <ItemGroup>
     <Compile Include="Assets\Plugins\Demigiant\DOTweenPro\DOTweenDeAudio.cs" />
     <Compile Include="Assets\Plugins\Demigiant\DOTweenPro\DOTweenDeUnityExtended.cs" />
+    <Compile Include="Assets\Plugins\HighlightingSystem\Scripts\HighlightableObject.cs" />
+    <Compile Include="Assets\Plugins\HighlightingSystem\Scripts\HighlightingEffect.cs" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilTransparent.shader" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingInclude.cginc" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingComposite.shader" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaqueZ.shader" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilOpaque.shader" />
+    <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingStencilTransparentZ.shader" />
     <Reference Include="Unity.DocZh.Editor">
       <HintPath>E:/Git/OceanWide/OceanWide/Library/ScriptAssemblies/Unity.DocZh.Editor.dll</HintPath>
     </Reference>

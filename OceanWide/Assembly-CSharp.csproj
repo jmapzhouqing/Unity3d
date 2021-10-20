@@ -107,6 +107,17 @@
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Pie_Graph_Slice.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Ring.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\WMG_Series.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\CameraTargeting.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\CompoundObjectController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\DelayedDestroyController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\FlashingController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\HighlightingController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\OccluderController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\RotationController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\SceneLoader.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\SpectrumController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\StaticOccluderController.cs" />
+    <Compile Include="Assets\HighlightingSystemDemo\Scripts\WallMovementController.cs" />
     <Compile Include="Assets\Scripts\Control\CameraControl.cs" />
     <Compile Include="Assets\Scripts\Control\PlayVideo.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderControl.cs" />
