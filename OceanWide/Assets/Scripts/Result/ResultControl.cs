@@ -56,7 +56,7 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
 
     private void Location(string id) {
         GameObject target = GameObject.Find(id);
-
+        target.GetComponent<TwinkleControl>()?.Twinkle();
         camera_control.Location(target.transform);
     }
 }
