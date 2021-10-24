@@ -78,6 +78,8 @@ namespace httpTool
             }
             catch (Exception ex)
             {
+                PrimaryContorl.dialog.SetActive(true);
+                PrimaryContorl.dialog.GetComponent<DialogControl>().setContent(ex.Message);
                 Debug.Log("GetPostHttpResponse err：" + ex.Message);
             }
             return retString;

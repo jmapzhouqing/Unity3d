@@ -56,6 +56,7 @@ public class PrimaryContorl : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        dialog = this.transform.Find("messageBox").gameObject;
         LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
         DFDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(DFDevice);
         tokenControl = new TokenControl();
@@ -108,7 +109,6 @@ public class PrimaryContorl : MonoBehaviour
 
             categoryDic.Add(item.categoryId, item.categoryName);
         }
-        dialog = this.transform.Find("messageBox").gameObject;
 
     }
 
