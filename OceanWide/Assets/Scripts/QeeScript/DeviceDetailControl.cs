@@ -66,8 +66,8 @@ public class DeviceDetailControl : MonoBehaviour
         {
             RectTransform item = GameObject.Instantiate<RectTransform>(detail_vedio_prefab, detail_container);
             UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
-            control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
-            //control.Path = deviceInfo.rtsp;
+            //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
+            control.Path = deviceInfo.rtsp;
             control.Play(); 
             Button btn = item.GetComponentInChildren<Button>();
             btn.onClick.AddListener(delegate () {

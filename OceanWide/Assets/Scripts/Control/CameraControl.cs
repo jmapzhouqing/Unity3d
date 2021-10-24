@@ -98,6 +98,12 @@ public class CameraControl : MonoBehaviour
         this.transform.LookAt(target);
     }
 
+    public void Location(Transform target) {
+        target_position = target.position;
+        distance = distance_min;
+        rotation.y = pitch_max;
+    }
+
     void OnGUI(){
         Event mouse_event = Event.current;
         if (mouse_event.isMouse && mouse_event.button == 0 && mouse_event.type == EventType.MouseDown && mouse_event.clickCount == 1) {

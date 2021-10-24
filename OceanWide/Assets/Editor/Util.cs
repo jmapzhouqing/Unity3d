@@ -9,7 +9,7 @@ public class Util:EditorWindow
     [MenuItem("tools/prfab")]
     public static void ReplacePrefab() {
         GameObject[] selected = Selection.gameObjects;
-        GameObject origin = AssetDatabase.LoadAssetAtPath("Assets/Resource/prefab/电表.prefab", typeof(GameObject)) as GameObject;
+        GameObject origin = AssetDatabase.LoadAssetAtPath("Assets/Resource/prefab/枪机-室外.prefab", typeof(GameObject)) as GameObject;
         foreach (GameObject item in selected) {
             
             GameObject child = PrefabUtility.InstantiatePrefab(origin) as GameObject;
@@ -42,12 +42,13 @@ public class Util:EditorWindow
                 Transform child = item.transform.GetChild(i);
                 List<string> ids = new List<string>();
 
-                for (int j = 0, child_len = child.childCount; j < child_len; j++) {
-                    Transform _child = child.GetChild(j); 
-                    ids.Add(_child.name);
+                foreach (TwinkleControl control in child.GetComponentsInChildren<TwinkleControl>(true)) {
+                    ids.Add(control.name);
                 }
 
-                dic.Add(child.name, ids);
+                if (ids.Count != 0) {
+                    dic.Add(child.name, ids);
+                }
             }
 
             Debug.Log(JsonMapper.ToJson(dic));

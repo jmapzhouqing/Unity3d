@@ -19,6 +19,8 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
 
     private DeviceInfo deviceInfo;
 
+    private CameraControl camera_control;
+
     public DeviceEventType DeviceEvent
     {
         get { return devideEvent; }
@@ -33,22 +35,28 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     }
     private double t1, t2;
     public void OnPointerClick(PointerEventData eventData) {
-        t2 = Time.realtimeSinceStartup;
-        if (t2 - t1 < 0.5)
-        {
+        if (eventData.clickCount == 2) {
+            this.Location(this.deviceInfo.deviceEui);
             DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-            deviceDetailControl.setContainer(this.devideEvent,this.deviceInfo);
+            deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
         }
-        t1 = t2;
     }
     void Start()
     {
         dynamic_container = this.transform.root.Find("deviceContainer");
+
+        camera_control = FindObjectOfType<CameraControl>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void Location(string id) {
+        GameObject target = GameObject.Find(id);
+        target.GetComponent<TwinkleControl>()?.Twinkle();
+        camera_control.Location(target.transform);
     }
 }

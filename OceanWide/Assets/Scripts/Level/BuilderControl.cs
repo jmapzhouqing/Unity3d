@@ -169,8 +169,7 @@ public class BuilderControl : MonoBehaviour
 
     public void Clear()
     {
-        for (int i = 0, number = container.childCount; i < number; i++)
-        {
+        for (int i = 0, number = container.childCount; i < number; i++){
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
         }
     }
