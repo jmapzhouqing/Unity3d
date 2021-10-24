@@ -33,8 +33,7 @@ namespace httpTool
 
                 byte[] data = Encoding.UTF8.GetBytes(content);
                 req.ContentLength = data.Length;
-                using (Stream reqStream = req.GetRequestStream())
-                {
+                using (Stream reqStream = req.GetRequestStream()){
                     reqStream.Write(data, 0, data.Length);
                     reqStream.Close();
                 }
@@ -44,9 +43,7 @@ namespace httpTool
                 {
                     result = reader.ReadToEnd();
                 }
-            }
-            catch (Exception ex)
-            {
+            }catch (Exception ex){
                 PrimaryContorl.dialog.SetActive(true);
                 PrimaryContorl.dialog.GetComponent<DialogControl>().setContent(ex.Message);
                 Debug.Log("GetPostHttpResponse err：" + ex.Message);
