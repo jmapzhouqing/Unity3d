@@ -1,16 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UIDataStruct;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TwinkleControl : MonoBehaviour
+public class TwinkleControl : MonoBehaviour,IPointerClickHandler
 {
     HighlightableObject[] children;
+
+    private DeviceEventType devideEvent;
+
+    private Transform dynamic_container;
+
+    private DeviceInfo deviceInfo;
+
+    public DeviceEventType DeviceEvent
+    {
+        get { return devideEvent; }
+        set
+        {
+            this.devideEvent = value;
+        }
+
+    }
+
     // Start is called before the first frame update
     void Awake(){
         children = this.GetComponentsInChildren<HighlightableObject>(true);
+        dynamic_container = this.transform.root.Find("deviceContainer");
     }
 
-    // Update is called once per fram
+    public void OnPointerClick(PointerEventData eventData) {
+        DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+        deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+    }
+
+    public void setInfo(DeviceEventType type, DeviceInfo value) {
+        this.devideEvent = type;
+        this.deviceInfo = value;
+    }
 
     public void Twinkle()
     {

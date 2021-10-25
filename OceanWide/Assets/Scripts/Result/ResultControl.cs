@@ -33,17 +33,25 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     public void setDeviceInfo(DeviceInfo value) {
         this.deviceInfo = value;
     }
-    private double t1, t2;
-    public void OnPointerClick(PointerEventData eventData) {
-        if (eventData.clickCount == 2) {
-            this.Location(this.deviceInfo.deviceEui);
-            DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-            deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.clickCount == 2)
+        {
+            if (GameObject.Find(this.deviceInfo.deviceEui)==null) {
+                DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+                deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+            }
+            else {
+                this.Location(this.deviceInfo.deviceEui);
+            }
+            //DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+            //deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
         }
     }
-    void Start()
+        void Start()
     {
-        dynamic_container = this.transform.root.Find("deviceContainer");
+        //dynamic_container = this.transform.root.Find("deviceContainer");
 
         camera_control = FindObjectOfType<CameraControl>();
     }
@@ -57,6 +65,7 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     private void Location(string id) {
         GameObject target = GameObject.Find(id);
         target.GetComponent<TwinkleControl>()?.Twinkle();
+        target.GetComponent<TwinkleControl>()?.setInfo(this.devideEvent,this.deviceInfo);
         camera_control.Location(target.transform);
     }
 }

@@ -42,6 +42,18 @@ namespace UIDataStruct {
 		public string deviceName;
 		public string rtsp;
 		public string deviceEui;
+		public List<monitorItem> monitorList;
+	}
+
+	public class monitorItem {
+		public string monitorName;
+		public string historyTable;
+	}
+
+	public class DeviceShowInfo
+	{
+		public string alarmFlagName;
+		public string monitorName;
 	}
 
 	public class DeviceRows
