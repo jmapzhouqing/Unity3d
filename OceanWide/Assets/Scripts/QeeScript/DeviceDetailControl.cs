@@ -43,12 +43,24 @@ public class DeviceDetailControl : MonoBehaviour
             RectTransform item = GameObject.Instantiate<RectTransform>(detail_info_prefab, detail_container);
             Transform container = item.Find("container").transform;
 
-           
-            RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
-            DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
-            deviceItem2.SetKey("deviceName");
-            deviceItem2.SetValue(deviceInfo.deviceName);
-            
+            if (deviceInfo.monitorList == null)
+            {
+                RectTransform info_item = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
+                DeviceItem deviceItem = info_item.GetComponentInChildren<DeviceItem>();
+                deviceItem.SetKey("设备名称");
+                deviceItem.SetValue(deviceInfo.deviceName);
+            }
+            else {
+                    for (int i = 0; i < deviceInfo.monitorList.Count; i++) {
+                        if (1==1) {
+                            RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
+                            DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
+                            deviceItem2.SetKey("MonitorName");
+                            deviceItem2.SetValue(deviceInfo.monitorList[i].monitorName);
+
+                        }
+                    }
+                }
 
             Button btn = item.GetComponentInChildren<Button>();
             btn.onClick.AddListener(delegate () {
