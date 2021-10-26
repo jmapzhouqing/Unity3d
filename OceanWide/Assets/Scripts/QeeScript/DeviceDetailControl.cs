@@ -51,16 +51,17 @@ public class DeviceDetailControl : MonoBehaviour
                 deviceItem.SetValue(deviceInfo.deviceName);
             }
             else {
-                    for (int i = 0; i < deviceInfo.monitorList.Count; i++) {
-                        if (1==1) {
-                            RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
-                            DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
-                            deviceItem2.SetKey("MonitorName");
-                            deviceItem2.SetValue(deviceInfo.monitorList[i].monitorName);
-
-                        }
+                for (int i = 0; i < deviceInfo.monitorList.Count; i++) {
+                    if (String.IsNullOrEmpty(deviceInfo.monitorList[i].monitorPath)) {
+                        RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
+                        DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
+                        deviceItem2.SetKey(deviceInfo.monitorList[i].monitorName);
+                        deviceItem2.SetValue(deviceInfo.monitorList[i].value);
+                    }else {
+                        Debug.Log(deviceInfo.monitorList[i].monitorPath);
                     }
                 }
+            }
 
             Button btn = item.GetComponentInChildren<Button>();
             btn.onClick.AddListener(delegate () {

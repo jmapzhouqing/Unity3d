@@ -27,7 +27,14 @@ public class DeviceItem : MonoBehaviour
 
 	public void SetValue(string value)
 	{
-		this.value.text = value;
+		if (string.IsNullOrEmpty(value) || value == "true" || value == "false")
+		{
+			this.value.text = value == "true" ? "是" : "否";
+		}
+		else 
+		{
+			this.value.text = value;
+		}
 	}
 
 

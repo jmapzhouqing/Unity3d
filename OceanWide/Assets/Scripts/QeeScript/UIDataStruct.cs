@@ -48,6 +48,9 @@ namespace UIDataStruct {
 	public class monitorItem {
 		public string monitorName;
 		public string historyTable;
+		public string value;
+		public string deviceEUI;
+		public string monitorPath;
 	}
 
 	public class DeviceShowInfo

@@ -182,7 +182,11 @@ public class PrimaryContorl : MonoBehaviour
                     {
                         if (deviceDic.ContainsKey(item.categoryId))
                         {
-                            deviceDic[item.categoryId].Add(item);
+                            foreach (DeviceInfo origin in deviceDic[item.categoryId]) {
+                                if (origin.deviceEui == item.monitorList[0].deviceEUI)
+                                    origin.monitorList = item.monitorList;
+                            }
+                            //deviceDic[item.categoryId].Add(item);
                         }
                         else
                         {
