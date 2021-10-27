@@ -88,7 +88,7 @@ public class CategoryControl : MonoBehaviour
             {
                 yield return new WaitForEndOfFrame();
             }
-            float height = 400; //(title.rectTransform.sizeDelta.y + container.sizeDelta.y);
+            float height = (title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2))
             {
@@ -112,7 +112,7 @@ public class CategoryControl : MonoBehaviour
             {
                 control.Expand(false);
             }
-            size = new Vector2(this.size.x, title.rectTransform.sizeDelta.y + container.sizeDelta.y);
+            size = new Vector2(this.size.x,title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             tween = element.DOPreferredSize(size, duration).Play();
             expand_control.sprite = expand_img;

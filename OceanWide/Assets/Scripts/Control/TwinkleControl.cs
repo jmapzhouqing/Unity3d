@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UIDataStruct;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class TwinkleControl : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class TwinkleControl : MonoBehaviour
     private Transform dynamic_container;
 
     private DeviceInfo deviceInfo;
+
+    private float click_time;
 
     public DeviceEventType DeviceEvent
     {
@@ -27,12 +31,15 @@ public class TwinkleControl : MonoBehaviour
     void Awake(){
         children = this.GetComponentsInChildren<HighlightableObject>(true);
         dynamic_container = GameObject.Find("deviceContainer").transform;
+        click_time = Time.realtimeSinceStartup;
     }
 
-    public void OnMouseDown()
-    {
-        DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-        deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+    public void OnMouseDown(){
+        if (Time.realtimeSinceStartup - click_time < 0.5f) {
+            DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+            deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+        }
+        click_time = Time.realtimeSinceStartup;
     }
 
 
