@@ -88,7 +88,7 @@ public class CategoryControl : MonoBehaviour
             {
                 yield return new WaitForEndOfFrame();
             }
-            float height = (title.rectTransform.sizeDelta.y + container.sizeDelta.y);
+            float height = 400; //(title.rectTransform.sizeDelta.y + container.sizeDelta.y);
 
             while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2))
             {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 enum MouseControl {
     None,
@@ -61,6 +62,11 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        if (EventSystem.current.IsPointerOverGameObject()) {
+            return;
+        }
+
+
         if (control_state.Equals(MouseControl.LeftDrag)){
             rotation += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 2;
 
