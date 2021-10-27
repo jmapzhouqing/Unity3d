@@ -146,10 +146,10 @@ public class PrimaryContorl : MonoBehaviour
             string resultDeviceEC;
             if (positionId == 77)
             {
-                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + "30", token);
+                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + "&positionId=" + "30", token);
             }
             else {
-                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + deviceUrlSuffix + "25", token);
+                resultDeviceEC = HTTPServiceControl.GetHttpResponse(deviceUrl + projectId.ToString() + "&positionId=" + "25", token);
             }
             DeviceRows devideRowsEC = JsonMapper.ToObject<DeviceRows>(resultDeviceEC);
             foreach (DeviceInfo item in devideRowsEC.rows)
@@ -171,7 +171,9 @@ public class PrimaryContorl : MonoBehaviour
             }
         }
         
-        if (projectId == 3) { 
+        if (projectId == 3)
+        {
+            if (!LHYfloor2MapDic.ContainsKey(positionId)) return;
             int[]  mapArr = LHYfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
@@ -200,7 +202,8 @@ public class PrimaryContorl : MonoBehaviour
                 }
             }
         }
-        else if (projectId == 4) { 
+        else if (projectId == 4) {
+            if (!DFfloor2MapDic.ContainsKey(positionId)) return;
             int[] mapArr = DFfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
