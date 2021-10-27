@@ -12,12 +12,14 @@ public class DeviceDetailControl : MonoBehaviour
     private RectTransform detail_info_item_prefab;
     private RectTransform detail_vedio_prefab;
     private RectTransform detail_grid_prefab;
+    private RectTransform detail_info_control_prefab;
     // Start is called before the first frame update
     void Start()
     {
         detail_info_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfoForm");
         detail_info_item_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfo");
         detail_vedio_prefab = Resources.Load<RectTransform>("UIPrefab/deviceVedioForm");
+        detail_info_control_prefab= Resources.Load<RectTransform>("UIPrefab/deviceInfoControl");
     }
 
     
@@ -57,8 +59,14 @@ public class DeviceDetailControl : MonoBehaviour
                         DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
                         deviceItem2.SetKey(deviceInfo.monitorList[i].monitorName);
                         deviceItem2.SetValue(deviceInfo.monitorList[i].value);
-                    }else {
-                        Debug.Log(deviceInfo.monitorList[i].monitorPath);
+                        if (i % 2 == 1) deviceItem2.setColor();
+                    }
+                    else {
+                        RectTransform info_item3 = GameObject.Instantiate<RectTransform>(detail_info_control_prefab, container);
+                        DeviceItem deviceItem3 = info_item3.GetComponentInChildren<DeviceItem>();
+                        deviceItem3.SetKey(deviceInfo.monitorList[i].monitorName);
+                        deviceItem3.SetValue(deviceInfo.monitorList[i].value);
+                        if (i % 2 == 1) deviceItem3.setColor();
                     }
                 }
             }

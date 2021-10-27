@@ -60,6 +60,7 @@ public class PrimaryContorl : MonoBehaviour
 
     public static Dictionary<string, string> deviceDetailShowDic = new Dictionary<string, string>() { {"运行", "monitorName" },{ "故障", "alarmFlagName" }, { "远程/就地", "method" }, { "启动", "value" } };
 
+    public static string deviceControlUrl = "http://" + urlPrefix + "/base/tenant/controlsource/setPoint";
     // Start is called before the first frame update
     void Awake()
     {
@@ -259,9 +260,12 @@ public class PrimaryContorl : MonoBehaviour
         DeviceDetail alarmInfoList = JsonMapper.ToObject<DeviceDetail>(result);
     }
 
-    public static void qryDeviceMonitor(int digitalMapId,int categoryId) {
-        string result = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "&digitalMapId=" + digitalMapId + "&categoryId=" + categoryId, token);
-
+    public static void setDeviceControl(string sourceCode,bool value) {
+        DeviceControl deviceControl = new DeviceControl();
+        deviceControl.sourceCode = sourceCode;
+        deviceControl.value = value;
+        string content = JsonMapper.ToJson(deviceControl);
+        string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
 
     }
 

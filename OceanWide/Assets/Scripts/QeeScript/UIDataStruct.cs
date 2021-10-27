@@ -53,6 +53,11 @@ namespace UIDataStruct {
 		public string monitorPath;
 	}
 
+	public class DeviceControl {
+		public string sourceCode;
+		public bool value;
+	}
+
 	public class DeviceShowInfo
 	{
 		public string alarmFlagName;

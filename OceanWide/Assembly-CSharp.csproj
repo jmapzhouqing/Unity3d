@@ -133,6 +133,7 @@
     <Compile Include="Assets\Scripts\QeeScript\Control.cs" />
     <Compile Include="Assets\Scripts\QeeScript\DeviceDetailControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\DeviceItem.cs" />
+    <Compile Include="Assets\Scripts\QeeScript\DeviceItemControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\DialogControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\HTTPServiceControl.cs" />
     <Compile Include="Assets\Scripts\QeeScript\Management.cs" />
