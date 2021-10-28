@@ -63,9 +63,10 @@ public class DeviceDetailControl : MonoBehaviour
                     }
                     else {
                         RectTransform info_item3 = GameObject.Instantiate<RectTransform>(detail_info_control_prefab, container);
-                        DeviceItem deviceItem3 = info_item3.GetComponentInChildren<DeviceItem>();
+                        DeviceItemControl deviceItem3 = info_item3.GetComponentInChildren<DeviceItemControl>();
                         deviceItem3.SetKey(deviceInfo.monitorList[i].monitorName);
                         deviceItem3.SetValue(deviceInfo.monitorList[i].value);
+                        deviceItem3.SetSourceCode(deviceInfo.monitorList[i].historyTable);
                         if (i % 2 == 1) deviceItem3.setColor();
                     }
                 }

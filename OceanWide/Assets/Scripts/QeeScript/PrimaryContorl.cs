@@ -207,7 +207,7 @@ public class PrimaryContorl : MonoBehaviour
             int[] mapArr = DFfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
-                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "&digitalMapId=" + mapArr[i] + "&categoryId=0", token);
+                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
                 List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
                 foreach (DeviceInfo item in deviceInfos)
                 {
@@ -215,7 +215,12 @@ public class PrimaryContorl : MonoBehaviour
                     {
                         if (deviceDic.ContainsKey(item.categoryId))
                         {
-                            deviceDic[item.categoryId].Add(item);
+                            foreach (DeviceInfo origin in deviceDic[item.categoryId])
+                            {
+                                if (origin.deviceEui == item.monitorList[0].deviceEUI)
+                                    origin.monitorList = item.monitorList;
+                            }
+                            //deviceDic[item.categoryId].Add(item);
                         }
                         else
                         {
