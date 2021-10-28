@@ -62,6 +62,15 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        if (Input.GetKeyDown(KeyCode.Escape)){
+            Screen.fullScreen = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F11)){
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.fullScreen = true;
+        }
+
         if (EventSystem.current.IsPointerOverGameObject()) {
             return;
         }

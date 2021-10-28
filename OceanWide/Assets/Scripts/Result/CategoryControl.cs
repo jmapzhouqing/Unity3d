@@ -28,10 +28,14 @@ public class CategoryControl : MonoBehaviour
     private float duration = 0.2f;
 
     private LayoutElement element;
+
+    private float viewer_height = 0;
     // Start is called before the first frame update
     void Awake()
     {
         result_prefab = Resources.Load<RectTransform>("UIPrefab/result");
+
+        viewer_height = container.parent.GetComponent<RectTransform>().sizeDelta.y;
 
         DOTween.Init(true, true, null);
         DOTween.defaultAutoPlay = AutoPlay.None;
@@ -88,7 +92,8 @@ public class CategoryControl : MonoBehaviour
             {
                 yield return new WaitForEndOfFrame();
             }
-            float height = (title.rectTransform.sizeDelta.y + container.sizeDelta.y);
+
+            float height = (title.rectTransform.sizeDelta.y + viewer_height);
 
             while (Mathf.Abs(element.preferredHeight - height) > Mathf.Pow(10, -2))
             {
@@ -112,7 +117,7 @@ public class CategoryControl : MonoBehaviour
             {
                 control.Expand(false);
             }
-            size = new Vector2(this.size.x,title.rectTransform.sizeDelta.y + container.sizeDelta.y);
+            size = new Vector2(this.size.x,title.rectTransform.sizeDelta.y + viewer_height);
 
             tween = element.DOPreferredSize(size, duration).Play();
             expand_control.sprite = expand_img;

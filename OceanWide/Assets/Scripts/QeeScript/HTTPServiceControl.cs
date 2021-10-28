@@ -58,7 +58,7 @@ namespace httpTool
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "GET";
-                request.ContentType = "text/html;charset=UTF-8";
+                request.ContentType = "application/json;charset=UTF-8";
                 request.UserAgent = "Mozilla/5.0";
                 if (cookies != null)
                 {

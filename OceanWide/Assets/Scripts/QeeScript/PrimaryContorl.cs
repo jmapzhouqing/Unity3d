@@ -207,7 +207,7 @@ public class PrimaryContorl : MonoBehaviour
             int[] mapArr = DFfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
-                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "&digitalMapId=" + mapArr[i] + "&categoryId=0", token);
+                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
                 List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
                 foreach (DeviceInfo item in deviceInfos)
                 {
