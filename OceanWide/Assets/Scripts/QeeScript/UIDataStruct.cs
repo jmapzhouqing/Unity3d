@@ -43,7 +43,17 @@ namespace UIDataStruct {
 		public string rtsp;
 		public string deviceEui;
 		public List<monitorItem> monitorList;
+		public int digitalMapId;
+		public string doorId;
+		public string doorName;
+		public List<DynamicEnvironmentDataItem> dynamicEnvironmentDataList;
 	}
+
+	public class DynamicEnvironmentDataItem {
+		public string serviceName;
+		public string statusInformation;
+	}
+
 
 	public class monitorItem {
 		public string monitorName;

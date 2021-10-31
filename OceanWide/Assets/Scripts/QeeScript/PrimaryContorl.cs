@@ -61,6 +61,9 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<string, string> deviceDetailShowDic = new Dictionary<string, string>() { {"运行", "monitorName" },{ "故障", "alarmFlagName" }, { "远程/就地", "method" }, { "启动", "value" } };
 
     public static string deviceControlUrl = "http://" + urlPrefix + "/base/tenant/controlsource/setPoint";
+
+    public static string doorInfoUrl = "http://" + urlPrefix + "/attendance/door/list";
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -199,7 +202,36 @@ public class PrimaryContorl : MonoBehaviour
                             deviceDic.Add(item.categoryId, temp);
                         }
                     }
+
                 }
+                //门禁动环
+                int[] typeArr = new int[] { 0, 1 };
+                    for(int j=0;j< typeArr.Length; j++) { 
+                    string doorParam = JsonMapper.ToJson(new Dictionary<string, string> {
+                                                            {"Type",typeArr[j].ToString()},
+                                                            {"ifBind","1"},
+                                                            {"projectId","3"} });
+                    string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
+                    List<DeviceInfo> doorInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultDoor);
+                    foreach (DeviceInfo door in doorInfos)
+                    {
+                        if (door.digitalMapId == mapArr[i])
+                        {
+                            if (deviceDic.ContainsKey(door.categoryId))
+                            {
+                                deviceDic[door.categoryId].Add(door);
+                            }
+                            else
+                            {
+                                isDevice = true;
+                                List<DeviceInfo> temp = new List<DeviceInfo>();
+                                temp.Add(door);
+                                deviceDic.Add(door.categoryId, temp);
+                            }
+                        }
+                    }
+                }
+                
             }
         }
         else if (projectId == 4) {
@@ -228,6 +260,35 @@ public class PrimaryContorl : MonoBehaviour
                             List<DeviceInfo> temp = new List<DeviceInfo>();
                             temp.Add(item);
                             deviceDic.Add(item.categoryId, temp);
+                        }
+                    }
+                }
+
+                //门禁动环
+                int[] typeArr = new int[] { 0, 1 };
+                for (int j = 0; j < typeArr.Length; j++)
+                {
+                    string doorParam = JsonMapper.ToJson(new Dictionary<string, string> {
+                                                            {"Type",typeArr[j].ToString()},
+                                                            {"ifBind","1"},
+                                                            {"projectId","3"} });
+                    string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
+                    List<DeviceInfo> doorInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultDoor);
+                    foreach (DeviceInfo door in doorInfos)
+                    {
+                        if (door.digitalMapId == mapArr[i])
+                        {
+                            if (deviceDic.ContainsKey(door.categoryId))
+                            {
+                                deviceDic[door.categoryId].Add(door);
+                            }
+                            else
+                            {
+                                isDevice = true;
+                                List<DeviceInfo> temp = new List<DeviceInfo>();
+                                temp.Add(door);
+                                deviceDic.Add(door.categoryId, temp);
+                            }
                         }
                     }
                 }
