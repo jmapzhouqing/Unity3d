@@ -61,7 +61,7 @@ public class CategoryControl : MonoBehaviour
         int i = 0;
         foreach (DeviceInfo device in devices) {
             RectTransform child = GameObject.Instantiate<RectTransform>(result_prefab, container);
-            child.gameObject.GetComponentInChildren<Text>().text = device.deviceName;
+            child.gameObject.GetComponentInChildren<Text>().text = device.deviceName == null?device.doorName:device.deviceName;
             ResultControl categoryControl = child.GetComponentInChildren<ResultControl>();
             ResultControl resultControl = child.GetComponentInChildren<ResultControl>();
             resultControl.setDeviceInfo(device);

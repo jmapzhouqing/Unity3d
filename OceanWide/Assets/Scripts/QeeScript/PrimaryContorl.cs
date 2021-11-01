@@ -63,7 +63,7 @@ public class PrimaryContorl : MonoBehaviour
     public static string deviceControlUrl = "http://" + urlPrefix + "/base/tenant/controlsource/setPoint";
 
     public static string doorInfoUrl = "http://" + urlPrefix + "/attendance/door/list";
-
+    public static string doorControlUrl = "http://" + urlPrefix + "/attendance/door/remoteOpenDoor?doorId=";
     // Start is called before the first frame update
     void Awake()
     {
@@ -207,13 +207,14 @@ public class PrimaryContorl : MonoBehaviour
                 //门禁动环
                 int[] typeArr = new int[] { 0, 1 };
                     for(int j=0;j< typeArr.Length; j++) { 
-                    string doorParam = JsonMapper.ToJson(new Dictionary<string, string> {
-                                                            {"Type",typeArr[j].ToString()},
-                                                            {"ifBind","1"},
-                                                            {"projectId","3"} });
+                    string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",typeArr[j]},
+                                                            {"ifBind",1},
+                                                            {"projectId",3} });
                     string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
-                    List<DeviceInfo> doorInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultDoor);
-                    foreach (DeviceInfo door in doorInfos)
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
+                    foreach (DeviceInfo door in doorInfos.data)
                     {
                         if (door.digitalMapId == mapArr[i])
                         {
@@ -268,13 +269,14 @@ public class PrimaryContorl : MonoBehaviour
                 int[] typeArr = new int[] { 0, 1 };
                 for (int j = 0; j < typeArr.Length; j++)
                 {
-                    string doorParam = JsonMapper.ToJson(new Dictionary<string, string> {
-                                                            {"Type",typeArr[j].ToString()},
-                                                            {"ifBind","1"},
-                                                            {"projectId","3"} });
+                    string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",typeArr[j]},
+                                                            {"ifBind",1},
+                                                            {"projectId",4} });
                     string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
-                    List<DeviceInfo> doorInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultDoor);
-                    foreach (DeviceInfo door in doorInfos)
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
+                    foreach (DeviceInfo door in doorInfos.data)
                     {
                         if (door.digitalMapId == mapArr[i])
                         {
@@ -337,7 +339,15 @@ public class PrimaryContorl : MonoBehaviour
         string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
 
     }
-
+    public static void setDoorControl(string sourceCode)
+    {
+        string result = HTTPServiceControl.GetHttpResponse(doorControlUrl+ sourceCode, token);
+        DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result);
+        if (doorInfos.code==0) {
+            dialog.SetActive(true);
+            dialog.GetComponent<DialogControl>().setContent(doorInfos.msg);
+        }
+    }
 
     void OnApplicationQuit()
     {

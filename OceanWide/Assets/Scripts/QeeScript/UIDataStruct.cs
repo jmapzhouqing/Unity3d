@@ -54,6 +54,11 @@ namespace UIDataStruct {
 		public string statusInformation;
 	}
 
+	public class DoorInfo {
+		public int code;
+		public List<DeviceInfo> data;
+		public string msg;
+	}
 
 	public class monitorItem {
 		public string monitorName;

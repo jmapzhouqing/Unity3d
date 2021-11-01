@@ -12,6 +12,7 @@ public class DeviceItemControl : MonoBehaviour
 
 	private bool controlState=false;
 	private string sourceCode;
+	private bool isDoor = false;
 
 	// Start is called before the first frame update
 	void Start()
@@ -32,7 +33,7 @@ public class DeviceItemControl : MonoBehaviour
 
 	public void SetValue(string value)
 	{
-		if (string.IsNullOrEmpty(value) || value == "true" || value == "false")
+		if (string.IsNullOrEmpty(value) || value.ToLower() == "true" || value.ToLower() == "false")
 		{
 			this.value.text = value == "true" ? "关闭" : "开启";
 			controlState= value == "true" ? true : false;
@@ -43,6 +44,10 @@ public class DeviceItemControl : MonoBehaviour
 		}
 	}
 
+	public void setIsDoor() {
+		this.isDoor = true;
+	}
+
 
 	public void setColor()
 	{
@@ -50,6 +55,14 @@ public class DeviceItemControl : MonoBehaviour
 	}
 
 	public void setControl() {
-		PrimaryContorl.setDeviceControl(this.sourceCode, !this.controlState);
+		if (this.isDoor)
+		{
+			PrimaryContorl.setDoorControl(this.sourceCode);
+		}
+		else {
+			PrimaryContorl.setDeviceControl(this.sourceCode, !this.controlState);
+			this.controlState = !this.controlState;
+			SetValue(this.controlState.ToString());
+		}
 	}
 }

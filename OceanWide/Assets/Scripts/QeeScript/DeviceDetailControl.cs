@@ -47,10 +47,36 @@ public class DeviceDetailControl : MonoBehaviour
 
             if (deviceInfo.monitorList == null)
             {
-                RectTransform info_item = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
-                DeviceItem deviceItem = info_item.GetComponentInChildren<DeviceItem>();
-                deviceItem.SetKey("设备名称");
-                deviceItem.SetValue(deviceInfo.deviceName);
+
+                if (deviceInfo.doorId == null)
+                {
+                    RectTransform info_item = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
+                    DeviceItem deviceItem = info_item.GetComponentInChildren<DeviceItem>();
+                    deviceItem.SetKey("设备名称");
+                    deviceItem.SetValue(deviceInfo.deviceName);
+                }
+                else {
+                    if (deviceInfo.dynamicEnvironmentDataList == null)
+                    {
+                        RectTransform info_item3 = GameObject.Instantiate<RectTransform>(detail_info_control_prefab, container);
+                        DeviceItemControl deviceItem3 = info_item3.GetComponentInChildren<DeviceItemControl>();
+                        deviceItem3.SetKey("操作");
+                        deviceItem3.SetValue("打开");
+                        deviceItem3.SetSourceCode(deviceInfo.doorId);
+                        deviceItem3.setIsDoor();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < deviceInfo.dynamicEnvironmentDataList.Count; i++)
+                        {
+                            RectTransform info_item = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
+                            DeviceItem deviceItem = info_item.GetComponentInChildren<DeviceItem>();
+                            deviceItem.SetKey(deviceInfo.dynamicEnvironmentDataList[i].serviceName);
+                            deviceItem.SetValue(deviceInfo.dynamicEnvironmentDataList[i].statusInformation);
+                            if (i % 2 == 1) deviceItem.setColor();
+                        }
+                    }
+                }
             }
             else {
                 for (int i = 0; i < deviceInfo.monitorList.Count; i++) {
