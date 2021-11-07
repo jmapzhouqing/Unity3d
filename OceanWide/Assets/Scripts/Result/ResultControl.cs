@@ -38,14 +38,14 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
     {
         if (eventData.clickCount == 2)
         {
-            if (GameObject.Find(this.deviceInfo.deviceEui)==null) {
+            if (GameObject.Find(this.deviceInfo.deviceEUI)==null) {
                 if(deviceInfo.customType != 1) { 
                     DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
                     deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
                 }
             }
             else {
-                this.Location(this.deviceInfo.deviceEui);
+                this.Location(this.deviceInfo.deviceEUI);
             }
             //DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
             //deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
