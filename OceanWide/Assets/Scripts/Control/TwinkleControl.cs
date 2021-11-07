@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UIDataStruct;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class TwinkleControl : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class TwinkleControl : MonoBehaviour
 
     private float click_time;
 
+    private Image image;
+
     public DeviceEventType DeviceEvent
     {
         get { return devideEvent; }
@@ -29,17 +33,28 @@ public class TwinkleControl : MonoBehaviour
 
     // Start is called before the first frame update
     void Awake(){
+        image = this.GetComponent<Image>();
         children = this.GetComponentsInChildren<HighlightableObject>(true);
         dynamic_container = GameObject.Find("deviceContainer").transform;
         click_time = Time.realtimeSinceStartup;
     }
 
     public void OnMouseDown(){
-        if (Time.realtimeSinceStartup - click_time < 0.5f) {
+        if(Time.realtimeSinceStartup - click_time < 0.5f) {
             DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
             deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
         }
         click_time = Time.realtimeSinceStartup;
+    }
+
+    public void OnMouseEnter()
+    {
+        image.color = new Color(1,1,0,1);
+    }
+
+    public void OnMouseExit()
+    {
+        image.color = Color.white;
     }
 
 
