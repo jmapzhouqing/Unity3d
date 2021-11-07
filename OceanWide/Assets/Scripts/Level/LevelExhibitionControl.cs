@@ -57,8 +57,12 @@ public class LevelExhibitionControl : MonoBehaviour
                 terrain.SetActive(true);
             }
         }
-        int index = this.transform.Find(name).GetSiblingIndex();
-        this.SelectLevel(index);
+
+        int? index = this.transform.Find(name)?.GetSiblingIndex();
+        if (index.HasValue) {
+            this.SelectLevel(index.Value);
+        }
+        
     }
 
     public void SelectLevel(int index)
