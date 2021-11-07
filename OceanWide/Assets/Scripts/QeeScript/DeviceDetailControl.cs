@@ -11,6 +11,7 @@ public class DeviceDetailControl : MonoBehaviour
     private RectTransform detail_info_prefab;
     private RectTransform detail_info_item_prefab;
     private RectTransform detail_vedio_prefab;
+    private RectTransform detail_lift_prefab;
     private RectTransform detail_grid_prefab;
     private RectTransform detail_info_control_prefab;
     // Start is called before the first frame update
@@ -19,7 +20,8 @@ public class DeviceDetailControl : MonoBehaviour
         detail_info_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfoForm");
         detail_info_item_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfo");
         detail_vedio_prefab = Resources.Load<RectTransform>("UIPrefab/deviceVedioForm");
-        detail_info_control_prefab= Resources.Load<RectTransform>("UIPrefab/deviceInfoControl");
+        detail_lift_prefab = Resources.Load<RectTransform>("UIPrefab/deviceLiftForm");
+        detail_info_control_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfoControl");
     }
 
     
@@ -37,6 +39,13 @@ public class DeviceDetailControl : MonoBehaviour
     {
         if (deviceInfo.categoryId == 3) {
             deviceInfo.rtsp = PrimaryContorl.qryDeviceRstp(deviceInfo.deviceId);
+            if (!String.IsNullOrEmpty(deviceInfo.rtsp)) deviceEventType = DeviceEventType.Video;
+        } else if (deviceInfo.categoryId == 17) {
+            LiftInfo lift = PrimaryContorl.qryLiftRstp(deviceInfo.deviceEUI);
+            deviceInfo.rtsp= lift.videoList[0].rtspUrl;
+            deviceInfo.roomTemperature = lift.roomTemperature;
+            deviceInfo.ytStatusName = lift.ytStatusName;
+            deviceInfo.carTopTemperature = lift.carTopTemperature;
             if (!String.IsNullOrEmpty(deviceInfo.rtsp)) deviceEventType = DeviceEventType.Video;
         }
 
@@ -122,15 +131,37 @@ public class DeviceDetailControl : MonoBehaviour
         }
         else if (deviceEventType == DeviceEventType.Video)
         {
-            RectTransform item = GameObject.Instantiate<RectTransform>(detail_vedio_prefab, detail_container);
-            UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
-            //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
-            control.Path = deviceInfo.rtsp;
-            control.Play(); 
-            Button btn = item.GetComponentInChildren<Button>();
-            btn.onClick.AddListener(delegate () {
-                this.close();
-            });
+            if (deviceInfo.categoryId == 17)
+            {
+
+                RectTransform item = GameObject.Instantiate<RectTransform>(detail_lift_prefab, detail_container);
+
+                Transform info = item.transform.Find("container/deviceInfo").transform;
+                info.GetChild(1).GetComponent<Text>().text = deviceInfo.ytStatusName;
+                info.GetChild(3).GetComponent<Text>().text = deviceInfo.carTopTemperature.ToString();
+                info.GetChild(5).GetComponent<Text>().text = deviceInfo.roomTemperature.ToString();
+
+                UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
+                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
+                control.Path = deviceInfo.rtsp;
+                control.Play();
+                Button btn = item.GetComponentInChildren<Button>();
+                btn.onClick.AddListener(delegate () {
+                    this.close();
+                });
+            }
+            else {
+                RectTransform item = GameObject.Instantiate<RectTransform>(detail_vedio_prefab, detail_container);
+                UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
+                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
+                control.Path = deviceInfo.rtsp;
+                control.Play();
+                Button btn = item.GetComponentInChildren<Button>();
+                btn.onClick.AddListener(delegate () {
+                    this.close();
+                });
+            }
+            
         }
         
 

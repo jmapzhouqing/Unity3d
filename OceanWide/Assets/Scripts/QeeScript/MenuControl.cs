@@ -71,6 +71,12 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         {
             management.enabled = true;
             control.enabled = false;
+            //关闭详细信息
+            Transform detail_container=this.transform.parent.parent.Find("deviceContainer").transform;
+            for (int i = 0, child_number = detail_container.childCount; i < child_number; i++)
+            {
+                GameObject.DestroyImmediate(detail_container.GetChild(0).gameObject);
+            }
         }
         else {
             management.enabled = false;
