@@ -51,8 +51,7 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
             //deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
         }
     }
-        void Start()
-    {
+    void Start(){
         dynamic_container = this.transform.root.Find("deviceContainer");
 
         camera_control = FindObjectOfType<CameraControl>();

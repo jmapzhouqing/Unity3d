@@ -30,6 +30,13 @@ public class CategoryControl : MonoBehaviour
     private LayoutElement element;
 
     private float viewer_height = 0;
+
+    public Transform target;
+
+    private Transform category_container;
+
+    private string categoryName;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -46,14 +53,11 @@ public class CategoryControl : MonoBehaviour
         this.Expand(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetCategoryName(string name) {
         this.title.text = name;
+        this.categoryName = name;
+        category_container = target?.Find(name);
+       
     }
 
     public void CreateDeviceList(List<DeviceInfo> devices)
@@ -113,7 +117,7 @@ public class CategoryControl : MonoBehaviour
 
         if (is_expand)
         {
-            foreach (BuilderControl control in this.transform.parent.GetComponentsInChildren<BuilderControl>(true))
+            foreach (CategoryControl control in this.transform.parent.GetComponentsInChildren<CategoryControl>(true))
             {
                 control.Expand(false);
             }
@@ -121,9 +125,13 @@ public class CategoryControl : MonoBehaviour
 
             tween = element.DOPreferredSize(size, duration).Play();
             expand_control.sprite = expand_img;
+
+            category_container?.gameObject.SetActive(true);
         }
         else
         {
+            category_container?.gameObject.SetActive(false);
+
             tween = element.DOPreferredSize(new Vector2(this.size.x, title.rectTransform.sizeDelta.y), duration).Play();
             expand_control.sprite = unexpand_img;
         }
