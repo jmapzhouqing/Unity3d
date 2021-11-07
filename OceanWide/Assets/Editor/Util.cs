@@ -16,16 +16,16 @@ public class Util:EditorWindow
         foreach (GameObject item in selected) {
             GameObject child = null;
             
-            /*
+            
             if (item.transform.childCount == 2)
             {
                 child = PrefabUtility.InstantiatePrefab(origin_q) as GameObject;
             }
             else {
                 child = PrefabUtility.InstantiatePrefab(origin_Q) as GameObject;
-            }*/
+            }
 
-            child = PrefabUtility.InstantiatePrefab(origin) as GameObject;
+            //child = PrefabUtility.InstantiatePrefab(origin) as GameObject;
 
             child.transform.localScale = new Vector3(1, 1, 1);
 
