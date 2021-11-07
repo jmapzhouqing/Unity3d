@@ -47,6 +47,7 @@ namespace UIDataStruct {
 		public string doorId;
 		public string doorName;
 		public List<DynamicEnvironmentDataItem> dynamicEnvironmentDataList;
+		public int customType;
 	}
 
 	public class DynamicEnvironmentDataItem {
@@ -119,5 +120,17 @@ namespace UIDataStruct {
 	{
 		public int deviceId;
 		public string deviceEui;
+	}
+
+	public class TabData{
+		public string name;
+		public string value;
+		public string type;
+		public int deviceId;
+	}
+
+	public class FireProtect {
+		public string floor;
+		public Dictionary<string, string> deviceData;
 	}
 }

@@ -43,7 +43,7 @@ public class DeviceDetailControl : MonoBehaviour
         if (deviceEventType == DeviceEventType.DeTailInfo)
         {
             RectTransform item = GameObject.Instantiate<RectTransform>(detail_info_prefab, detail_container);
-            Transform container = item.Find("container").transform;
+            Transform container = item.Find("view/container").transform;
 
             if (deviceInfo.monitorList == null)
             {

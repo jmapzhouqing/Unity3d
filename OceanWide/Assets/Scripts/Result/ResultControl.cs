@@ -39,9 +39,10 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
         if (eventData.clickCount == 2)
         {
             if (GameObject.Find(this.deviceInfo.deviceEui)==null) {
-                //Debug.Log(this.deviceInfo.deviceEui);
-                DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-                deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+                if(deviceInfo.customType != 1) { 
+                    DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
+                    deviceDetailControl.setContainer(this.devideEvent, this.deviceInfo);
+                }
             }
             else {
                 this.Location(this.deviceInfo.deviceEui);
