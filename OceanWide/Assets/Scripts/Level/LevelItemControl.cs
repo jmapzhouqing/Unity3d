@@ -57,7 +57,7 @@ public class LevelItemControl : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        this.Selected();
+        //this.Selected();
         PrimaryContorl.qryDeviceByFloor(this.projectId, this.positionId);
         GameObject.FindObjectOfType<ResultManager>().SetLevelName(this.floorName);
         if (PrimaryContorl.isDevice)
