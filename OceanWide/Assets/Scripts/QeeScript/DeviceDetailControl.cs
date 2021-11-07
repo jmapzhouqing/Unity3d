@@ -35,6 +35,11 @@ public class DeviceDetailControl : MonoBehaviour
 
     public void setContainer(DeviceEventType deviceEventType,DeviceInfo deviceInfo) 
     {
+        if (deviceInfo.categoryId == 3) {
+            deviceInfo.rtsp = PrimaryContorl.qryDeviceRstp(deviceInfo.deviceId);
+            if (!String.IsNullOrEmpty(deviceInfo.rtsp)) deviceEventType = DeviceEventType.Video;
+        }
+
         for (int i = 0, child_number = detail_container.childCount; i < child_number; i++)
         {
             GameObject.DestroyImmediate(detail_container.GetChild(0).gameObject);
