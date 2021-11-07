@@ -76,6 +76,7 @@ public class PrimaryContorl : MonoBehaviour
 
     public static string rstpUrl = "http://" + urlPrefix + "/base/tenant/device/get/";
 
+    public static string liftUrl = "http://" + urlPrefix + "/attendance/elevator/queryLiftDetail?registerCode=";
     // Start is called before the first frame update
     void Awake()
     {
@@ -164,6 +165,7 @@ public class PrimaryContorl : MonoBehaviour
                 List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
                 foreach (DeviceInfo item in deviceInfos)
                 {
+                    
                     //if (item.monitorList != null)
                     //{
                     if (deviceDic.ContainsKey(item.categoryId))
@@ -211,6 +213,7 @@ public class PrimaryContorl : MonoBehaviour
                     }
                 }
 
+                
             }
         }
         else if (projectId == 4) {
@@ -254,6 +257,7 @@ public class PrimaryContorl : MonoBehaviour
                                 item.customType = 1;
                                 temp.Add(item);
                             }
+                            if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
                             deviceDic.Add(11, temp);
                             break;
                         }
@@ -383,6 +387,9 @@ public class PrimaryContorl : MonoBehaviour
                 item.rtsp = info.rtsp;
             }
         }*/
+        foreach (int key in deviceDic.Keys) {
+            deviceDic[key].OrderBy(d => d.deviceName).ToList();
+        }
     }
 
     public static string qryDeviceRstp(int deviceId) {
@@ -390,6 +397,14 @@ public class PrimaryContorl : MonoBehaviour
         DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
         return info.rtsp;
     }
+
+    public static LiftInfo qryLiftRstp(string deviceEUI) {
+        string resultLight = HTTPServiceControl.GetHttpResponse(liftUrl + deviceEUI, token);
+        LiftInfoAll info = JsonMapper.ToObject<LiftInfoAll>(resultLight);
+        return info.data;
+    }
+
+
     public static void qryDeviceByFloorBak(int projectId, int positionId)
     {
         isDevice = false;

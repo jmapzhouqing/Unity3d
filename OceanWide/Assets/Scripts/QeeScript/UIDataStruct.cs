@@ -48,6 +48,10 @@ namespace UIDataStruct {
 		public string doorName;
 		public List<DynamicEnvironmentDataItem> dynamicEnvironmentDataList;
 		public int customType;
+
+		public double carTopTemperature;
+		public string ytStatusName;
+		public double roomTemperature;
 	}
 
 	public class DynamicEnvironmentDataItem {
@@ -133,4 +137,23 @@ namespace UIDataStruct {
 		public string floor;
 		public Dictionary<string, string> deviceData;
 	}
+
+	public class LiftInfo {
+		public double carTopTemperature;
+		public double roomTemperature;
+		public string ytStatusName;
+		public List<LiftVideo> videoList;
+	}
+
+	public class LiftVideo {
+		public string rtspUrl;
+	}
+
+	public class LiftInfoAll
+	{
+		public string msg;
+		public int code;
+		public LiftInfo data;
+	}
+
 }
