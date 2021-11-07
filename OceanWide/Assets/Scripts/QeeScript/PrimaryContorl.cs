@@ -371,16 +371,21 @@ public class PrimaryContorl : MonoBehaviour
         }
 
         //安防系统rstp查询
-        if (deviceDic.ContainsKey(3)) {
+        /*if (deviceDic.ContainsKey(3)) {
             foreach (DeviceInfo item in deviceDic[3]) {
                 string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl+ item.deviceId.ToString(), token);
                 DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
                 
                 item.rtsp = info.rtsp;
             }
-        }
+        }*/
     }
 
+    public static string qryDeviceRstp(int deviceId) {
+        string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl + deviceId.ToString(), token);
+        DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
+        return info.rtsp;
+    }
     public static void qryDeviceByFloorBak(int projectId, int positionId)
     {
         isDevice = false;
