@@ -41,7 +41,7 @@ namespace UIDataStruct {
 		public int deviceId;
 		public string deviceName;
 		public string rtsp;
-		public string deviceEui;
+		public string deviceEUI;
 		public List<monitorItem> monitorList;
 		public int digitalMapId;
 		public string doorId;

@@ -53,7 +53,7 @@ public class DeviceDetailControl : MonoBehaviour
                     RectTransform info_item = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
                     DeviceItem deviceItem = info_item.GetComponentInChildren<DeviceItem>();
                     deviceItem.SetKey("设备名称");
-                    deviceItem.SetValue(deviceInfo.deviceName);
+                    deviceItem.SetValue(deviceInfo.deviceEUI);
                 }
                 else {
                     if (deviceInfo.dynamicEnvironmentDataList == null)
@@ -80,7 +80,15 @@ public class DeviceDetailControl : MonoBehaviour
             }
             else {
                 for (int i = 0; i < deviceInfo.monitorList.Count; i++) {
-                    if (String.IsNullOrEmpty(deviceInfo.monitorList[i].monitorPath)) {
+                    if (deviceInfo.customType==2) {
+                        RectTransform info_item3 = GameObject.Instantiate<RectTransform>(detail_info_control_prefab, container);
+                        DeviceItemControl deviceItem3 = info_item3.GetComponentInChildren<DeviceItemControl>();
+                        deviceItem3.SetKey(deviceInfo.monitorList[i].monitorName);
+                        deviceItem3.SetValue("打开");
+                        deviceItem3.SetSourceCode(deviceInfo.monitorList[i].historyTable);
+                        if (i % 2 == 1) deviceItem3.setColor();
+                    }
+                    else if (String.IsNullOrEmpty(deviceInfo.monitorList[i].monitorPath)) {
                         RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
                         DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
                         deviceItem2.SetKey(deviceInfo.monitorList[i].monitorName);
