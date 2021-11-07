@@ -49,9 +49,9 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<string, List<string>> LHYDeviceDic;
     public static Dictionary<string, List<string>> DFDeviceDic;
 
-    public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 24, "室外" }, { 22, "1F" }, { 23, "19F" } };
+    public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" },  { 22, "1F" }, { 23, "19F" } };//{ 24, "室外" },
     //public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 63, "B1" }, { 62, "1F" } };
-    public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 47, "室外" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "11F" } };
+    public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "11F" } };//{ 47, "室外" }, 
     int[] DFFloorSort = new int[] { 48, 59, 47, 49, 87, 88, 89, 90, 91, 92, 93, 94, 95, 50 };
 
     public static string deviceDialogUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectDeviceList";
@@ -97,7 +97,7 @@ public class PrimaryContorl : MonoBehaviour
 
         for (int i = LHY.Count - 1; i >= 0; i--)
         {
-            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")
+            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYSW" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")
                 LHY.Remove(LHY[i]);
         }
 
@@ -109,7 +109,7 @@ public class PrimaryContorl : MonoBehaviour
         for (int i = DF.Count - 1; i >= 0; i--)
         {
             //if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
-            if (DF[i].positionCode.IndexOf("DF") < 0 || DF[i].positionCode.IndexOf("DFHS") > -1 || DF[i].positionCode == "DF")
+            if (DF[i].positionCode.IndexOf("DF") < 0 || DF[i].positionCode.IndexOf("DFHS") > -1 || DF[i].positionCode == "DF" || DF[i].positionCode == "DFSW")
                 DF.Remove(DF[i]);
         }
 
@@ -194,6 +194,8 @@ public class PrimaryContorl : MonoBehaviour
                     {
                         if (door.digitalMapId == mapArr[i])
                         {
+                            door.deviceEUI = door.doorId;
+                            door.customType = 3;
                             if (deviceDic.ContainsKey(door.categoryId))
                             {
                                 deviceDic[door.categoryId].Add(door);
@@ -300,6 +302,8 @@ public class PrimaryContorl : MonoBehaviour
                 {
                     if (door.digitalMapId == mapArr[i])
                     {
+                        door.deviceEUI = door.doorId;
+                        door.customType = 3;
                         if (deviceDic.ContainsKey(door.categoryId))
                         {
                             deviceDic[door.categoryId].Add(door);
