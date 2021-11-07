@@ -161,8 +161,8 @@ public class PrimaryContorl : MonoBehaviour
                 List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
                 foreach (DeviceInfo item in deviceInfos)
                 {
-                    if (item.monitorList != null)
-                    {
+                    //if (item.monitorList != null)
+                    //{
                         if (deviceDic.ContainsKey(item.categoryId))
                         {
                             deviceDic[item.categoryId].Add(item);
@@ -174,7 +174,7 @@ public class PrimaryContorl : MonoBehaviour
                             temp.Add(item);
                             deviceDic.Add(item.categoryId, temp);
                         }
-                    }
+                    //}
 
                 }
                 //门禁动环
@@ -217,8 +217,8 @@ public class PrimaryContorl : MonoBehaviour
                 List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
                 foreach (DeviceInfo item in deviceInfos)
                 {
-                    if (item.monitorList != null)
-                    {
+                    //if (item.monitorList != null)
+                    //{
                         if (deviceDic.ContainsKey(item.categoryId))
                         {
                             deviceDic[item.categoryId].Add(item);
@@ -230,7 +230,7 @@ public class PrimaryContorl : MonoBehaviour
                             temp.Add(item);
                             deviceDic.Add(item.categoryId, temp);
                         }
-                    }
+                    //}
                 }
 
                 //消防
@@ -281,6 +281,32 @@ public class PrimaryContorl : MonoBehaviour
                                 temp.Add(item);
                                 deviceDic.Add(item.categoryId, temp);
                             }
+                        }
+                    }
+                }
+
+                //动环
+                string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",1},
+                                                            {"ifBind",1},
+                                                            {"projectId",3} });
+                string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
+                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
+                foreach (DeviceInfo door in doorInfos.data)
+                {
+                    if (door.digitalMapId == mapArr[i])
+                    {
+                        if (deviceDic.ContainsKey(door.categoryId))
+                        {
+                            deviceDic[door.categoryId].Add(door);
+                        }
+                        else
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            temp.Add(door);
+                            deviceDic.Add(door.categoryId, temp);
                         }
                     }
                 }
