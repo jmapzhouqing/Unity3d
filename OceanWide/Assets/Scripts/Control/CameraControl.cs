@@ -115,8 +115,8 @@ public class CameraControl : MonoBehaviour
 
     public void Location(Transform target) {
         target_position = target.position;
-        distance = distance_min;
-        rotation.y = pitch_max;
+        distance = 60.0f;
+        //rotation.y = pitch_max;
     }
 
     void OnGUI(){

@@ -51,7 +51,7 @@ public class ResultManager : MonoBehaviour
     public void SetLevelName(string name) {
         this.title.text = name;
     }
-    public void CreateCategory(Dictionary<int,string> categoryName,Dictionary<int,List<DeviceInfo>> devices)
+    public void CreateCategory(Transform floor,Dictionary<int,string> categoryName,Dictionary<int,List<DeviceInfo>> devices)
     {
         for (int i = 0, number = container.childCount; i < number; i++)
         {
@@ -61,6 +61,7 @@ public class ResultManager : MonoBehaviour
         {
             RectTransform child = GameObject.Instantiate<RectTransform>(category_prefab, container);
             CategoryControl categoryControl = child.GetComponentInChildren<CategoryControl>();
+            categoryControl.target = floor;
             string category_name;
             if (categoryName.TryGetValue(item.Key, out category_name)) {
                 categoryControl.SetCategoryName(category_name);

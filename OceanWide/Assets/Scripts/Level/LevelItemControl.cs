@@ -58,15 +58,20 @@ public class LevelItemControl : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         this.Selected();
+
+        ResultManager resultManager = GameObject.FindObjectOfType<ResultManager>();
+
+        Transform floor = level_exhibition_control.transform.Find(this.levelExhibitionName);
+
         PrimaryContorl.qryDeviceByFloor(this.projectId, this.positionId);
-        GameObject.FindObjectOfType<ResultManager>().SetLevelName(this.floorName);
+        resultManager.SetLevelName(this.floorName);
         if (PrimaryContorl.isDevice)
         {
-            GameObject.FindObjectOfType<ResultManager>().CreateCategory(PrimaryContorl.categoryDic, PrimaryContorl.deviceDic);
+            resultManager.CreateCategory(floor,PrimaryContorl.categoryDic, PrimaryContorl.deviceDic);
         }
         else
         {
-            GameObject.FindObjectOfType<ResultManager>().Clear();
+            resultManager.Clear();
         }
     }
 
