@@ -50,6 +50,10 @@ public class CameraControl : MonoBehaviour
 
     private Timer timer;
 
+    private Vector3 origin_rotation;
+    private Vector3 origin_position;
+    private float origin_distance;
+
     private bool Sleep {
         get { return this.sleep; }
         set {
@@ -67,7 +71,11 @@ public class CameraControl : MonoBehaviour
     private void Awake()
     {
         timer = new Timer();
-        timer.Interval = 5000;
+        timer.Interval = 60000;
+
+        this.origin_position = target_position;
+        this.origin_rotation = rotation;
+        this.origin_distance = distance;
 
     }
     // Start is called before the first frame update
@@ -143,6 +151,13 @@ public class CameraControl : MonoBehaviour
         target_position = target.position;
         distance = 60.0f;
         //rotation.y = pitch_max;
+    }
+
+    public void ReWind() {
+        this.rotation = this.origin_rotation;
+        this.distance = this.origin_distance;
+        this.target_position = this.origin_position;
+        this.Sleep = true;
     }
 
     void OnGUI(){
