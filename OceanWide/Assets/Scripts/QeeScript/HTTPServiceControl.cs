@@ -5,6 +5,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace httpTool
 {
@@ -80,6 +83,83 @@ namespace httpTool
                 Debug.Log("GetPostHttpResponse err：" + ex.Message);
             }
             return retString;
+        }
+
+
+        public static async Task<string> PostDataAsync(string url, string param, string cookies)
+        {
+            string responseString = ""; 
+            Uri uri = new Uri(url);
+            try
+            {
+                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                {
+                    client.Timeout = new TimeSpan(0, 0, 2);
+
+                    if (!string.IsNullOrEmpty(cookies))
+                    {
+                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
+                    }
+
+                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+
+                    var content = new StringContent(param);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    content.Headers.Add("charset", "utf-8");
+
+                    var response = await client.PostAsync("", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        responseString = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        responseString = response.ReasonPhrase;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                responseString = e.Message;
+            }
+            return responseString;
+        }
+
+        public static async Task<string> GetDataAsync(string url, string cookies)
+        {
+            string responseString = "";
+            Uri uri = new Uri(url);
+            try
+            {
+                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                {
+                    client.Timeout = new TimeSpan(0, 0, 2);
+
+                    if (!string.IsNullOrEmpty(cookies))
+                    {
+                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
+                    }
+
+                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+
+                    var response = await client.GetAsync(uri);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        responseString = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        responseString = response.ReasonPhrase;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                responseString = e.Message;
+            }
+            return responseString;
         }
 
     }

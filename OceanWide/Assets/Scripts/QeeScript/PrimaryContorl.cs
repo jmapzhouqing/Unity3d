@@ -8,6 +8,7 @@ using LitJson;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Threading.Tasks;
 
 public class PrimaryContorl : MonoBehaviour
 {
@@ -96,8 +97,45 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
-        string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
+        Task<string> query_data = HTTPServiceControl.GetDataAsync(floorUrlPrefix + "3", token);
 
+        query_data.GetAwaiter().OnCompleted(() =>
+        {
+            if (!string.IsNullOrEmpty(query_data.Result))
+            {
+                try
+                {
+                    string result_LHY = query_data.Result;
+                    LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
+                    for (int i = LHY.Count - 1; i >= 0; i--)
+                    {
+                        if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
+                            LHY.Remove(LHY[i]);
+                    }
+                    LHY = LHY.OrderBy(e =>
+                    {
+                        int index = 0;
+                        index = Array.IndexOf(LHYFloorSort, e.positionId);
+                        if (index != -1) { return index; }
+                        else
+                        {
+                            return int.MaxValue;
+                        }
+                    }).ToList();
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(e.Message);
+                }
+            }
+        });
+
+
+
+        /*string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
+
+        
         LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
 
         for (int i = LHY.Count - 1; i >= 0; i--)
@@ -115,8 +153,10 @@ public class PrimaryContorl : MonoBehaviour
             {
                 return int.MaxValue;
             }
-        }).ToList();
+        }).ToList();*/
         //LHY.Reverse();
+
+
         string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
