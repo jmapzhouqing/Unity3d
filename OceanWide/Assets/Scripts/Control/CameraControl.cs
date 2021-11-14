@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Timers;
 
 enum MouseControl {
     None,
@@ -46,6 +45,39 @@ public class CameraControl : MonoBehaviour
     private float pre_distance = 100;
 
     public Vector3 target_position;
+
+    private bool sleep = true;
+
+    private Timer timer;
+
+    private Vector3 origin_rotation;
+    private Vector3 origin_position;
+    private float origin_distance;
+
+    private bool Sleep {
+        get { return this.sleep; }
+        set {
+            this.sleep = value;
+            if(!value) {
+                timer.Stop();
+                timer.Elapsed += delegate{
+                    this.Sleep = true;
+                };
+                timer.Start();
+            }
+        }
+    }
+
+    private void Awake()
+    {
+        timer = new Timer();
+        timer.Interval = 60000;
+
+        this.origin_position = target_position;
+        this.origin_rotation = rotation;
+        this.origin_distance = distance;
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -77,21 +109,23 @@ public class CameraControl : MonoBehaviour
 
 
         if (control_state.Equals(MouseControl.LeftDrag)){
+            this.Sleep = false;
             rotation += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * 2;
-
             rotation.y = Mathf.Clamp(rotation.y, pitch_min, pitch_max);
-        }
-        else if (control_state.Equals(MouseControl.WheelScroll))
-        {
+        }else if (control_state.Equals(MouseControl.WheelScroll)){
+            this.Sleep = false;
             distance += -1 * Input.GetAxis("Mouse ScrollWheel") * speed;
-
             distance = Mathf.Clamp(distance, distance_min, distance_max);
         }
         else if (control_state.Equals(MouseControl.WheelDrag)) {
+            this.Sleep = false;
             //this.target.position += new Vector3(10,0,10);
             Vector3 direction = Vector3.Cross(this.transform.right, Vector3.up).normalized;
-            target_position += (-1 * this.transform.right * Input.GetAxis("Mouse X") - direction * Input.GetAxis("Mouse Y"))*4
-                ;
+            target_position += (-1 * this.transform.right * Input.GetAxis("Mouse X") - direction * Input.GetAxis("Mouse Y"))*4;
+        }
+
+        if(this.Sleep){
+            rotation.x += 0.05f;
         }
     }
 
@@ -117,6 +151,13 @@ public class CameraControl : MonoBehaviour
         target_position = target.position;
         distance = 60.0f;
         //rotation.y = pitch_max;
+    }
+
+    public void ReWind() {
+        this.rotation = this.origin_rotation;
+        this.distance = this.origin_distance;
+        this.target_position = this.origin_position;
+        this.Sleep = true;
     }
 
     void OnGUI(){

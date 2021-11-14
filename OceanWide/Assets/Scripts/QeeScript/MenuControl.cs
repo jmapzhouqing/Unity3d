@@ -35,8 +35,11 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
     private ResultManager result_manager;
 
+    private CameraControl camera_control;
+
     public void Awake()
     {
+        camera_control = FindObjectOfType<CameraControl>();
         result_manager = FindObjectOfType<ResultManager>();
         all_menu = new Dictionary<string, Dictionary<string, string>> {
             { "management",new Dictionary<string, string>() },
@@ -129,6 +132,9 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         foreach (MenuControl control in this.transform.parent.GetComponentsInChildren<MenuControl>(true)) {
             control.SetUnSelectColor();
         }
+
+
+        camera_control.ReWind();
 
         this.SetSelectedColor();
         result_manager.Clear();
