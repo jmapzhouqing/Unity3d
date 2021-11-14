@@ -143,4 +143,9 @@ public class CategoryControl : MonoBehaviour
     {
         this.Expand(!is_expand);
     }
+
+    private void OnDestroy()
+    {
+        category_container?.gameObject.SetActive(false);
+    }
 }
