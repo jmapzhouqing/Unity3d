@@ -40,7 +40,8 @@ public class PrimaryContorl : MonoBehaviour
 
     public static string waterEleUrl = "http://" + urlPrefix + "/camera/camera/consumption/level1?pageNum=1&pageSize=10&energytype=";
     public static string alarmUrl = "http://" + urlPrefix + "/nanhai/tenant/realtime/alarm?level=";
-    public static string positionIdStr = "000,78,77,22,23,63,62,000";
+    public static string positionIdStrLHY = "000,78,77,22,23,24,000";
+    public static string positionIdStrDF = "000,47,48,59,49,87,88,89,90,91,92,93,94,95,50,000";
     public static List<AlarmGrid> alarmList = new List<AlarmGrid>();
 
     public static string deviceDetailUrl = "http://" + urlPrefix + "/base/tenant/device/page?current=1&rowCount=40000";
@@ -54,7 +55,8 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 24, "室外" }, { 22, "1F" }, { 23, "19F" } };//{ 24, "室外" },
     //public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 63, "B1" }, { 62, "1F" } };
     public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 47, "室外" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "11F" } };//{ 47, "室外" }, 
-    int[] DFFloorSort = new int[] { 48, 59, 47, 49, 87, 88, 89, 90, 91, 92, 93, 94, 95, 50 };
+    int[] DFFloorSort = new int[] { 47, 48, 59,  49, 87, 88, 89, 90, 91, 92, 93, 94, 95, 50 };
+    int[] LHYFloorSort = new int[] {24,78,77,22,23 };
 
     public static string deviceDialogUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectDeviceList";
     public static Dictionary<int, int[]> LHYfloor2MapDic = new Dictionary<int, int[]>() { { 23, new int[] { 7 } }, { 22, new int[] { 6 } }, { 24, new int[] { 12 } }, { 77, new int[] { 18, 43 } }, { 78, new int[] { 17, 44 } } };
@@ -104,7 +106,17 @@ public class PrimaryContorl : MonoBehaviour
                 LHY.Remove(LHY[i]);
         }
 
-        LHY.Reverse();
+        LHY = LHY.OrderBy(e =>
+        {
+            int index = 0;
+            index = Array.IndexOf(LHYFloorSort, e.positionId);
+            if (index != -1) { return index; }
+            else
+            {
+                return int.MaxValue;
+            }
+        }).ToList();
+        //LHY.Reverse();
         string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
@@ -606,17 +618,40 @@ public class PrimaryContorl : MonoBehaviour
 
     public static void qryAlarmList()
     {
-        alarmList.Clear();
-        string result = HTTPServiceControl.GetHttpResponse(alarmUrl + "3", token);
+        try
+        {
+            alarmList.Clear();
+            qryAlarmByType("3");
+            qryAlarmByType("2");
+            qryAlarmByType("1");
+
+        }
+        catch (Exception e) {
+            Debug.Log(e.Message);
+        }
+    }
+
+    public static void qryAlarmByType(string type) {
+        string result = HTTPServiceControl.GetHttpResponse(alarmUrl + type, token);
         List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
-        foreach (AlarmInfo alarmInfo in alarmInfoList) {
-            if (positionIdStr.IndexOf(","+alarmInfo.positionId.ToString()+",") > -1) {
+        foreach (AlarmInfo alarmInfo in alarmInfoList)
+        {
+            if ((positionIdStrLHY.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 3)
+                || (positionIdStrDF.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 4))
+            {
                 int idx = alarmInfo.deviceName.IndexOf("_");
                 AlarmGrid alarmGrid = new AlarmGrid();
                 alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
                 alarmGrid.monitorName = alarmInfo.monitorName;
                 alarmGrid.categoryName = alarmInfo.categoryName;
-                alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                if (idx > -1)
+                {
+                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                }
+                else
+                {
+                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName;
+                }
                 alarmList.Add(alarmGrid);
             }
         }
@@ -659,11 +694,24 @@ public class NameCompare : IComparer<DeviceInfo>
     {
         
         int result = 0;
-        if (!String.IsNullOrEmpty(Regex.Replace(x.deviceName, @"[^0-9]+", "")) && !String.IsNullOrEmpty(Regex.Replace(y.deviceName, @"[^0-9]+", "")))
+        string xNum = Regex.Replace(x.deviceName, @"[^0-9]+", "");
+        string yNum = Regex.Replace(y.deviceName, @"[^0-9]+", "");
+        if (!String.IsNullOrEmpty(xNum) && !String.IsNullOrEmpty(yNum))
         {
-            
-                result = int.Parse(Regex.Replace(x.deviceName, @"[^0-9]+", "")).CompareTo(int.Parse(Regex.Replace(y.deviceName, @"[^0-9]+", "")));
-            
+            if (xNum.Length == yNum.Length)
+            {
+                result = int.Parse(xNum).CompareTo(int.Parse(yNum));
+            }
+            else {
+                if (int.Parse(xNum) < int.Parse(yNum)) {
+                    int len = yNum.Length - xNum.Length;
+                    result = (int.Parse(xNum) * len * 10).CompareTo(int.Parse(yNum));
+                }
+                else {
+                    int len = xNum.Length - yNum.Length;
+                    result = int.Parse(xNum).CompareTo((int.Parse(yNum) * len * 10));
+                }
+            }
         }
         else {
             result = CompareInfo.GetCompareInfo("zh-cn").Compare(x.deviceName, y.deviceName, CompareOptions.IgnoreCase);
