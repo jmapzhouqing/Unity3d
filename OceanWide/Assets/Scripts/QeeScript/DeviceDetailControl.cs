@@ -106,7 +106,17 @@ public class DeviceDetailControl : MonoBehaviour
                         RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
                         DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
                         deviceItem2.SetKey(deviceInfo.monitorList[i].monitorName);
-                        deviceItem2.SetValue(deviceInfo.monitorList[i].value);
+                        if (deviceInfo.categoryId == 6 && deviceInfo.monitorList[i].monitorName == "在离线")
+                        {
+                            string str = deviceInfo.monitorList[i].value == "true" ? "在线" : "离线";
+                            deviceItem2.SetValue(str);
+                        } else if (deviceInfo.categoryId == 9) {
+                            deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
+                        }
+                        else
+                        {
+                            deviceItem2.SetValue(deviceInfo.monitorList[i].value);
+                        }
                         if (i % 2 == 1) deviceItem2.setColor();
                     }
                     else {

@@ -105,6 +105,7 @@ namespace UIDataStruct {
 		public string categoryName;
 		public string descName;
 		public int positionId;
+		public int projectId;
 	}
 
 	public class AlarmGrid
