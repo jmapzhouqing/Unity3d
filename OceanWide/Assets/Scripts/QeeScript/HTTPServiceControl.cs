@@ -92,22 +92,22 @@ namespace httpTool
             Uri uri = new Uri(url);
             try
             {
-                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = false };
+                using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
-
-                    if (!string.IsNullOrEmpty(cookies))
-                    {
-                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
-                    }
-
-                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+                    client.Timeout = new TimeSpan(0, 1, 2);
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var content = new StringContent(param);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     content.Headers.Add("charset", "utf-8");
 
-                    var response = await client.PostAsync("", content);
+                    HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, url);
+                    message.Headers.Add("Cookie", "IORISESSION=" + cookies);
+
+                    message.Content = content;
+
+                    var response = await client.SendAsync(message);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -132,16 +132,13 @@ namespace httpTool
             Uri uri = new Uri(url);
             try
             {
-                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = true };
+                handler.CookieContainer.SetCookies(uri, "IORISESSION=" + cookies);
+
+                using (HttpClient client = new HttpClient(handler))
                 {
                     client.Timeout = new TimeSpan(0, 0, 2);
-
-                    if (!string.IsNullOrEmpty(cookies))
-                    {
-                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
-                    }
-
-                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var response = await client.GetAsync(uri);
 

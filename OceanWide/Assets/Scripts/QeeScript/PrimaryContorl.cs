@@ -97,43 +97,8 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
-        Task<string> query_data = HTTPServiceControl.GetDataAsync(floorUrlPrefix + "3", token);
 
-        query_data.GetAwaiter().OnCompleted(() =>
-        {
-            if (!string.IsNullOrEmpty(query_data.Result))
-            {
-                try
-                {
-                    string result_LHY = query_data.Result;
-                    LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
-                    for (int i = LHY.Count - 1; i >= 0; i--)
-                    {
-                        if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
-                            LHY.Remove(LHY[i]);
-                    }
-                    LHY = LHY.OrderBy(e =>
-                    {
-                        int index = 0;
-                        index = Array.IndexOf(LHYFloorSort, e.positionId);
-                        if (index != -1) { return index; }
-                        else
-                        {
-                            return int.MaxValue;
-                        }
-                    }).ToList();
-                }
-                catch (Exception e)
-                {
-                    dialog.SetActive(true);
-                    dialog.GetComponent<DialogControl>().setContent(e.Message);
-                }
-            }
-        });
-
-
-
-        /*string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
+        string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
         
         LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
@@ -153,7 +118,7 @@ public class PrimaryContorl : MonoBehaviour
             {
                 return int.MaxValue;
             }
-        }).ToList();*/
+        }).ToList();
         //LHY.Reverse();
 
 
@@ -439,7 +404,6 @@ public class PrimaryContorl : MonoBehaviour
             foreach (DeviceInfo item in deviceDic[3]) {
                 string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl+ item.deviceId.ToString(), token);
                 DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
-                
                 item.rtsp = info.rtsp;
             }
         }*/
@@ -707,17 +671,56 @@ public class PrimaryContorl : MonoBehaviour
         deviceControl.sourceCode = sourceCode;
         deviceControl.value = value;
         string content = JsonMapper.ToJson(deviceControl);
-        string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
+        //string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
+        Task<string> query_data = HTTPServiceControl.PostDataAsync(deviceControlUrl, content, token);
+
+        query_data.GetAwaiter().OnCompleted(() =>
+        {
+            if (!string.IsNullOrEmpty(query_data.Result))
+            {
+                try
+                {
+                    
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(query_data.Result);
+                }
+            }
+        });
 
     }
     public static void setDoorControl(string sourceCode)
     {
-        string result = HTTPServiceControl.GetHttpResponse(doorControlUrl+ sourceCode, token);
+        /*string result = HTTPServiceControl.GetHttpResponse(doorControlUrl+ sourceCode, token);
         DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result);
         if (doorInfos.code==0) {
             dialog.SetActive(true);
             dialog.GetComponent<DialogControl>().setContent(doorInfos.msg);
-        }
+        }*/
+        Task<string> query_data = HTTPServiceControl.GetDataAsync(doorControlUrl + sourceCode, token);
+
+        query_data.GetAwaiter().OnCompleted(() =>
+        {
+            if (!string.IsNullOrEmpty(query_data.Result))
+            {
+                try
+                {
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(query_data.Result);
+                    if (doorInfos.code == 0)
+                    {
+                        dialog.SetActive(true);
+                        dialog.GetComponent<DialogControl>().setContent(doorInfos.msg);
+                    }
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(query_data.Result);
+                }
+            }
+        });
     }
 
     void OnApplicationQuit()
@@ -740,7 +743,12 @@ public class NameCompare : IComparer<DeviceInfo>
         {
             if (xNum.Length == yNum.Length)
             {
-                result = int.Parse(xNum).CompareTo(int.Parse(yNum));
+                try {
+                    result = int.Parse(xNum).CompareTo(int.Parse(yNum));
+                }
+                catch(Exception e){
+                    Debug.Log(e.Message);
+                }
             }
             else {
                 if (int.Parse(xNum) < int.Parse(yNum)) {
