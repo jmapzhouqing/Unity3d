@@ -8,6 +8,7 @@ using LitJson;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Threading.Tasks;
 
 public class PrimaryContorl : MonoBehaviour
 {
@@ -96,8 +97,10 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
+
         string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
+        
         LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
 
         for (int i = LHY.Count - 1; i >= 0; i--)
@@ -117,6 +120,8 @@ public class PrimaryContorl : MonoBehaviour
             }
         }).ToList();
         //LHY.Reverse();
+
+
         string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
         DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
@@ -399,7 +404,6 @@ public class PrimaryContorl : MonoBehaviour
             foreach (DeviceInfo item in deviceDic[3]) {
                 string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl+ item.deviceId.ToString(), token);
                 DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
-                
                 item.rtsp = info.rtsp;
             }
         }*/
@@ -667,17 +671,56 @@ public class PrimaryContorl : MonoBehaviour
         deviceControl.sourceCode = sourceCode;
         deviceControl.value = value;
         string content = JsonMapper.ToJson(deviceControl);
-        string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
+        //string result = HTTPServiceControl.GetPostHttpResponse(deviceControlUrl, content, token);
+        Task<string> query_data = HTTPServiceControl.PostDataAsync(deviceControlUrl, content, token);
+
+        query_data.GetAwaiter().OnCompleted(() =>
+        {
+            if (!string.IsNullOrEmpty(query_data.Result))
+            {
+                try
+                {
+                    
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(query_data.Result);
+                }
+            }
+        });
 
     }
     public static void setDoorControl(string sourceCode)
     {
-        string result = HTTPServiceControl.GetHttpResponse(doorControlUrl+ sourceCode, token);
+        /*string result = HTTPServiceControl.GetHttpResponse(doorControlUrl+ sourceCode, token);
         DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result);
         if (doorInfos.code==0) {
             dialog.SetActive(true);
             dialog.GetComponent<DialogControl>().setContent(doorInfos.msg);
-        }
+        }*/
+        Task<string> query_data = HTTPServiceControl.GetDataAsync(doorControlUrl + sourceCode, token);
+
+        query_data.GetAwaiter().OnCompleted(() =>
+        {
+            if (!string.IsNullOrEmpty(query_data.Result))
+            {
+                try
+                {
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(query_data.Result);
+                    if (doorInfos.code == 0)
+                    {
+                        dialog.SetActive(true);
+                        dialog.GetComponent<DialogControl>().setContent(doorInfos.msg);
+                    }
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(query_data.Result);
+                }
+            }
+        });
     }
 
     void OnApplicationQuit()
@@ -700,7 +743,12 @@ public class NameCompare : IComparer<DeviceInfo>
         {
             if (xNum.Length == yNum.Length)
             {
-                result = int.Parse(xNum).CompareTo(int.Parse(yNum));
+                try {
+                    result = int.Parse(xNum).CompareTo(int.Parse(yNum));
+                }
+                catch(Exception e){
+                    Debug.Log(e.Message);
+                }
             }
             else {
                 if (int.Parse(xNum) < int.Parse(yNum)) {
