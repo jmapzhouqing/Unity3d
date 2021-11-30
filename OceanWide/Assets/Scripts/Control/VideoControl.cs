@@ -35,12 +35,6 @@ public class VideoControl : MonoBehaviour
         player.Play(); 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnDestroy()
     {
         socket.Destory();
