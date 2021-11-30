@@ -54,24 +54,21 @@ public class CorrespondWebSocket
 
                 Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);
 
-                //Debug.Log(data.Length);
-
-                //System.IO.FileInfo info = new System.IO.FileInfo(file);
-                //System.IO.Directory.CreateDirectory(info.Directory.FullName);
                 stream.Write(data, 0, data.Length);
                 stream.Flush(true);
-
-                
             }
         });
+    }
 
+    public int GetNumber() {
+        return this.number;
     }
 
     public async void Connect(string ip,Action<string> action)
     {
         await socket.ConnectAsync(new Uri(ip), token);
 
-        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.Read,1024*1024*10,true);
+        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.Read,1024*1024,true);
 
         if (action != null) {
             action(fileName);
@@ -81,11 +78,18 @@ public class CorrespondWebSocket
     }
 
     public void Destory() {
-        this.source.Cancel();
-        if (stream != null){
-            stream.Close();
+        try
+        {
+            this.source.Cancel();
+            if (stream != null)
+            {
+                stream.Close();
+            }
+            socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", token);
         }
-        socket.CloseAsync(WebSocketCloseStatus.NormalClosure,"",token);
+        catch (Exception e) {
+            Debug.Log(e.Message);
+        }
     }
 
 }
