@@ -442,6 +442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7887022556784572408}
   - component: {fileID: 8942782475155627824}
+  - component: {fileID: 63292458623641619}
   m_Layer: 0
   m_Name: UniversalMediaPlayer
   m_TagString: Untagged
@@ -561,6 +562,18 @@ MonoBehaviour:
   _snapshotTakenEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &63292458623641619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967164685396198727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f126353ad25314fbc7c46bb4aa9e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6398724204565288802
 GameObject:
   m_ObjectHideFlags: 0
