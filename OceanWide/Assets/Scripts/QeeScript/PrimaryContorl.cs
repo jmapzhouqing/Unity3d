@@ -165,7 +165,7 @@ public class PrimaryContorl : MonoBehaviour
         categoryDic[3] = "视频监控系统";
         categoryDic[6] = "能耗管理系统";
         categoryDic[9] = "UPS监测系统";
-        categoryDic[5] = "机房监测系统";
+        categoryDic[5] = "机房环境监测系统";
         string result = HTTPServiceControl.GetHttpResponse(fireProtectTypeUrl, token);
         Dictionary<string, List<TabData>> typeInfos = JsonMapper.ToObject<Dictionary<string, List<TabData>>>(result);
         List<TabData> types = typeInfos["tabData"];
