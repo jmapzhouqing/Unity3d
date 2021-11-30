@@ -150,28 +150,32 @@ public class DeviceDetailControl : MonoBehaviour
                 info.GetChild(1).GetComponent<Text>().text = deviceInfo.ytStatusName;
                 info.GetChild(3).GetComponent<Text>().text = deviceInfo.carTopTemperature.ToString();
                 info.GetChild(5).GetComponent<Text>().text = deviceInfo.roomTemperature.ToString();
-
+                Button btn = item.GetComponentInChildren<Button>();
+                btn.onClick.AddListener(delegate () {
+                    this.close();
+                });
                 //UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
                 //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
                 //control.Path = deviceInfo.rtsp;
                 //control.Play();
                 VideoControl control = item.GetComponentInChildren<VideoControl>();
-                Button btn = item.GetComponentInChildren<Button>();
-                btn.onClick.AddListener(delegate () {
-                    this.close();
-                });
+                control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+
+                
             }
             else {
                 RectTransform item = GameObject.Instantiate<RectTransform>(detail_vedio_prefab, detail_container);
+                Button btn = item.GetComponentInChildren<Button>();
+                btn.onClick.AddListener(delegate () {
+                    this.close();
+                });
                 //UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
                 //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
                 //control.Path = deviceInfo.rtsp;
                 //control.Play();
                 VideoControl control = item.GetComponentInChildren<VideoControl>();
-                Button btn = item.GetComponentInChildren<Button>();
-                btn.onClick.AddListener(delegate () {
-                    this.close();
-                });
+                control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+                
             }
             
         }
