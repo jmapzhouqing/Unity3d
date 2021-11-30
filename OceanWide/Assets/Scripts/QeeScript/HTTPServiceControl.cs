@@ -96,7 +96,7 @@ namespace httpTool
                 HttpClientHandler handler = new HttpClientHandler() { UseCookies = false };
                 using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
+                    client.Timeout = new TimeSpan(0, 0, 10);
                     client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var content = new StringContent(param);
@@ -138,7 +138,7 @@ namespace httpTool
                 HttpClientHandler handler = new HttpClientHandler() { UseCookies = false };
                 using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
+                    client.Timeout = new TimeSpan(0, 0, 10);
                     client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var content = new StringContent(param);
@@ -183,7 +183,7 @@ namespace httpTool
 
                 using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
+                    client.Timeout = new TimeSpan(0, 0, 10);
                     client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var response = await client.GetAsync(uri);
@@ -218,7 +218,7 @@ namespace httpTool
 
                 using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
+                    client.Timeout = new TimeSpan(0, 0, 10);
                     client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var response = await client.GetAsync(uri);

@@ -56,8 +56,8 @@ public class PrimaryContorl : MonoBehaviour
     public static Dictionary<int, string> LHYFloorDic = new Dictionary<int, string> { { 78, "B2" }, { 77, "B1" }, { 24, "室外" }, { 22, "1F" }, { 23, "19F" } };//{ 24, "室外" },
     //public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 63, "B1" }, { 62, "1F" } };
     public static Dictionary<int, string> DFFloorDic = new Dictionary<int, string> { { 48, "B2" }, { 59, "B1" }, { 47, "室外" }, { 49, "1F" }, { 87, "2F" }, { 88, "3F" }, { 89, "4F" }, { 90, "5F" }, { 91, "6F" }, { 92, "7F" }, { 93, "8F" }, { 94, "9F" }, { 95, "10F" }, { 50, "11F" } };//{ 47, "室外" }, 
-    int[] DFFloorSort = new int[] { 47, 48, 59,  49, 87, 88, 89, 90, 91, 92, 93, 94, 95, 50 };
-    int[] LHYFloorSort = new int[] {24,78,77,22,23 };
+    int[] DFFloorSort = new int[] { 47, 48, 59, 49, 87, 88, 89, 90, 91, 92, 93, 94, 95, 50 };
+    int[] LHYFloorSort = new int[] { 24, 78, 77, 22, 23 };
 
     public static string deviceDialogUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectDeviceList";
     public static Dictionary<int, int[]> LHYfloor2MapDic = new Dictionary<int, int[]>() { { 23, new int[] { 7 } }, { 22, new int[] { 6 } }, { 24, new int[] { 12 } }, { 77, new int[] { 18, 43 } }, { 78, new int[] { 17, 44 } } };
@@ -85,9 +85,11 @@ public class PrimaryContorl : MonoBehaviour
 
     public static int currentPositionId = -1;
 
+    public static string elecUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectElectricity?categoryId=16&positionParentId=34";
+
     public delegate void displayUI();
-   // Start is called before the first frame update
-   void Awake()
+    // Start is called before the first frame update
+    void Awake()
     {
         dialog = this.transform.Find("messageBox").gameObject;
         LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
@@ -104,12 +106,12 @@ public class PrimaryContorl : MonoBehaviour
 
         string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
-        
+
         LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
 
         for (int i = LHY.Count - 1; i >= 0; i--)
         {
-            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY"  || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
+            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
                 LHY.Remove(LHY[i]);
         }
 
@@ -142,7 +144,8 @@ public class PrimaryContorl : MonoBehaviour
             int index = 0;
             index = Array.IndexOf(DFFloorSort, e.positionId);
             if (index != -1) { return index; }
-            else {
+            else
+            {
                 return int.MaxValue;
             }
         }).ToList();
@@ -152,11 +155,17 @@ public class PrimaryContorl : MonoBehaviour
 
         List<CategoryInfo> dic_category = JsonMapper.ToObject<List<CategoryInfo>>(result_category);
 
-        foreach (CategoryInfo item in dic_category) {
-
+        foreach (CategoryInfo item in dic_category)
+        {
             categoryDic.Add(item.categoryId, item.categoryName);
         }
 
+        categoryDic[15] = "给排水监测系统";
+        categoryDic[12] = "送排风监测系统";
+        categoryDic[3] = "视频监控系统";
+        categoryDic[6] = "能耗管理系统";
+        categoryDic[9] = "UPS监测系统";
+        categoryDic[5] = "机房监测系统";
         string result = HTTPServiceControl.GetHttpResponse(fireProtectTypeUrl, token);
         Dictionary<string, List<TabData>> typeInfos = JsonMapper.ToObject<Dictionary<string, List<TabData>>>(result);
         List<TabData> types = typeInfos["tabData"];
@@ -169,13 +178,15 @@ public class PrimaryContorl : MonoBehaviour
                 break;
             }
         }
-        foreach (TabData item in typeInfos[DFValue]) {
+        foreach (TabData item in typeInfos[DFValue])
+        {
             DFTypes.Add(item.deviceId.ToString(), item.type);
         }
 
     }
 
-    public static void qryDeviceByFloor(int projectId, int positionId, displayUI show) {
+    public static void qryDeviceByFloor(int projectId, int positionId, displayUI show)
+    {
         isDevice = false;
         deviceDic.Clear();
         if (projectId == 3)
@@ -207,81 +218,11 @@ public class PrimaryContorl : MonoBehaviour
                                     deviceDic.Add(item.categoryId, temp);
                                 }
                             }
-                            //if (i==mapArr.Length-1) { 
-                            //照明重组
-                            if (deviceDic.ContainsKey(7))
-                            {
-                                deviceDic.Remove(7);
-                                Task<string> resultLight = HTTPServiceControl.GetDataAsync(lightUrl, token);
-
-                                resultLight.GetAwaiter().OnCompleted(() =>
-                                {
-                                    if (!string.IsNullOrEmpty(resultLight.Result))
-                                    {
-                                        try
-                                        {
-                                            List<DeviceInfo> lights = JsonMapper.ToObject<List<DeviceInfo>>(resultLight.Result);
-                                            foreach (DeviceInfo item in lights)
-                                            {
-                                                if (deviceDic.ContainsKey(item.categoryId))
-                                                {
-                                                    deviceDic[item.categoryId].Add(item);
-                                                }
-                                                else
-                                                {
-                                                    isDevice = true;
-                                                    List<DeviceInfo> temp = new List<DeviceInfo>();
-                                                    temp.Add(item);
-                                                    deviceDic.Add(item.categoryId, temp);
-                                                }
-                                            }
-                                            Dictionary<string, List<monitorItem>> lightItems = new Dictionary<string, List<monitorItem>>();
-                                            foreach (DeviceInfo item in deviceDic[7])
-                                            {
-                                                if (item.deviceName.IndexOf("#") > -1) item.deviceName = item.deviceName.Split('#')[1];
-                                                monitorItem monitor = new monitorItem();
-                                                monitor.monitorName = item.deviceName;
-                                                string prefix = item.deviceName.Substring(0, item.deviceName.IndexOf("-") + 2).ToUpper();
-                                                monitor.value = item.monitorList[0].value;
-                                                monitor.historyTable = item.monitorList[0].historyTable;
-                                                if (lightItems.ContainsKey(prefix))
-                                                {
-                                                    lightItems[prefix].Add(monitor);
-                                                }
-                                                else
-                                                {
-                                                    List<monitorItem> temp = new List<monitorItem>();
-                                                    temp.Add(monitor);
-                                                    lightItems.Add(prefix, temp);
-                                                }
-                                            }
-                                            deviceDic.Remove(7);
-                                            List<DeviceInfo> info = new List<DeviceInfo>();
-                                            deviceDic.Add(7, info);
-                                            foreach (string key in lightItems.Keys)
-                                            {
-                                                lightItems[key].OrderBy(m => m.monitorName).ToList();
-                                                DeviceInfo device = new DeviceInfo();
-                                                device.deviceName = key;
-                                                device.monitorList = lightItems[key];
-                                                device.customType = 2;
-                                                deviceDic[7].Add(device);
-                                            }
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            dialog.SetActive(true);
-                                            dialog.GetComponent<DialogControl>().setContent(resultLight.Result);
-                                        }
-                                    }
-                                });
-                            }
                             foreach (int key in deviceDic.Keys)
                             {
                                 deviceDic[key].Sort(new NameCompare());
                             }
                             show();
-                            //}
                         }
                         catch (Exception e)
                         {
@@ -293,60 +234,23 @@ public class PrimaryContorl : MonoBehaviour
 
                 //门禁动环
                 int[] typeArr = new int[] { 0, 1 };
-                for (int j = 0; j < typeArr.Length; j++) {
+                for (int j = 0; j < typeArr.Length; j++)
+                {
                     string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
                                                             {"digitalMapId",mapArr[i]},
                                                             {"type",typeArr[j]},
                                                             {"ifBind",1},
                                                             {"projectId",3} });
-                    Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i],positionId);
-                    resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result,show));
+                    Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
+                    resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
 
-                    /*resultDoor.GetAwaiter().OnCompleted(() =>
-                    {
-                        if (!string.IsNullOrEmpty(resultDoor.Result))
-                        {
-                            try
-                            {
-                                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor.Result);
-                                int categoryId = -1;
-                                foreach (DeviceInfo door in doorInfos.data)
-                                {
-                                    if (door.digitalMapId == mapArr[i])
-                                    {
-                                        door.deviceEUI = door.doorId;
-                                        door.deviceName = door.doorName;
-                                        door.customType = 3;
-                                        if (deviceDic.ContainsKey(door.categoryId))
-                                        {
-                                            categoryId = door.categoryId;
-                                            deviceDic[door.categoryId].Add(door);
-                                        }
-                                        else
-                                        {
-                                            isDevice = true;
-                                            List<DeviceInfo> temp = new List<DeviceInfo>();
-                                            temp.Add(door);
-                                            deviceDic.Add(door.categoryId, temp);
-                                        }
-                                    }
-                                }
-                                if(categoryId>-1) deviceDic[categoryId].Sort(new NameCompare());
-                                show();
-                            }
-                            catch (Exception e)
-                            {
-                                dialog.SetActive(true);
-                                dialog.GetComponent<DialogControl>().setContent(query_data.Result);
-                            }
-                        }
-                    });*/
                 }
-                
+
             }
-            
+
         }
-        else if (projectId == 4) {
+        else if (projectId == 4)
+        {
             if (!DFfloor2MapDic.ContainsKey(positionId)) return;
             int[] mapArr = DFfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
@@ -374,6 +278,8 @@ public class PrimaryContorl : MonoBehaviour
                                     deviceDic.Add(item.categoryId, temp);
                                 }
                             }
+                            if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
+                            if (deviceDic.ContainsKey(8)) deviceDic.Remove(8);
                             //照明重组
                             if (deviceDic.ContainsKey(7))
                             {
@@ -433,6 +339,8 @@ public class PrimaryContorl : MonoBehaviour
                                                 device.customType = 2;
                                                 deviceDic[7].Add(device);
                                             }
+                                            deviceDic[7].Sort(new NameCompare());
+                                            show();
                                         }
                                         catch (Exception e)
                                         {
@@ -442,6 +350,7 @@ public class PrimaryContorl : MonoBehaviour
                                     }
                                 });
                             }
+
                             foreach (int key in deviceDic.Keys)
                             {
                                 deviceDic[key].Sort(new NameCompare());
@@ -457,52 +366,20 @@ public class PrimaryContorl : MonoBehaviour
                 });
 
                 //消防
-                Task<CallBackResult> resultFloor = HTTPServiceControl.GetDataAsyncNew(fireProtectFloorUrl, token,positionId, positionId);
+                Task<CallBackResult> resultFloor = HTTPServiceControl.GetDataAsyncNew(fireProtectFloorUrl, token, positionId, positionId);
                 resultFloor.GetAwaiter().OnCompleted(() => fireProtectCallBack(resultFloor.Result, show));
 
-                /*Task<string> resultFloor = HTTPServiceControl.GetDataAsync(fireProtectFloorUrl, token);
 
-                resultFloor.GetAwaiter().OnCompleted(() =>
-                {
-                    if (!string.IsNullOrEmpty(resultFloor.Result))
-                    {
-                        try
-                        {
-                            Dictionary<string, List<FireProtect>> fireProtects = JsonMapper.ToObject<Dictionary<string, List<FireProtect>>>(resultFloor.Result);
-                            List<FireProtect> fireProtect = fireProtects[DFValue];
-                            if (DFFireProtectDic.ContainsKey(positionId))
-                            {
-                                foreach (FireProtect protect in fireProtect)
-                                {
-                                    if (protect.floor == DFFireProtectDic[positionId])
-                                    {
-                                        isDevice = true;
-                                        List<DeviceInfo> temp = new List<DeviceInfo>();
-                                        foreach (KeyValuePair<string, string> data in protect.deviceData)
-                                        {
-                                            DeviceInfo item = new DeviceInfo();
-                                            item.deviceName = DFTypes[data.Key] + ":" + data.Value;
-                                            item.customType = 1;
-                                            temp.Add(item);
-                                        }
-                                        if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
-                                        deviceDic.Add(11, temp);
-                                        deviceDic[11].Sort(new NameCompare()); 
-                                        show();
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                        }
-                        catch (Exception e)
-                        {
-                            dialog.SetActive(true);
-                            dialog.GetComponent<DialogControl>().setContent(resultFloor.Result);
-                        }
-                    }
-                });*/
-                //停车
+                //动环
+                string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",1},
+                                                            {"ifBind",1},
+                                                            {"projectId",4} });
+                Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
+                resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
+
+                #region 停车
                 if (positionId == 47)
                 {
                     Task<string> parkResult = HTTPServiceControl.GetDataAsync(parkingUrl, token);
@@ -518,7 +395,7 @@ public class PrimaryContorl : MonoBehaviour
                                 {
                                     if (deviceDic.ContainsKey(item.categoryId))
                                     {
-                                        bool isAct = false;
+                                        /*bool isAct = false;
                                         foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId])
                                         {
                                             if (deviceInfo.deviceId == item.deviceId)
@@ -527,7 +404,8 @@ public class PrimaryContorl : MonoBehaviour
                                                 break;
                                             }
                                         }
-                                        if (!isAct) deviceDic[item.categoryId].Add(item);
+                                        if (!isAct) deviceDic[item.categoryId].Add(item);*/
+                                        deviceDic[item.categoryId].Add(item);
                                     }
                                     else
                                     {
@@ -548,56 +426,46 @@ public class PrimaryContorl : MonoBehaviour
                         }
                     });
                 }
-            //动环
-            string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
-                                                            {"digitalMapId",mapArr[i]},
-                                                            {"type",1},
-                                                            {"ifBind",1},
-                                                            {"projectId",3} });
-                Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
-                resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
-
-                /*Task<string> resultDoor = HTTPServiceControl.PostDataAsync(doorInfoUrl, doorParam, token);
-
-                resultDoor.GetAwaiter().OnCompleted(() =>
+                #endregion
+                #region 电表
+                if (positionId == 59)
                 {
-                    if (!string.IsNullOrEmpty(resultDoor.Result))
+                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(elecUrl, token);
+
+                    parkResult.GetAwaiter().OnCompleted(() =>
                     {
-                        try
+                        if (!string.IsNullOrEmpty(parkResult.Result))
                         {
-                            DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor.Result);
-                            int categoryId = -1;
-                            foreach (DeviceInfo door in doorInfos.data)
+                            try
                             {
-                                if (door.digitalMapId == mapArr[i])
+                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
+                                foreach (DeviceInfo item in parkInfos)
                                 {
-                                    door.deviceEUI = door.doorId;
-                                    door.deviceName = door.doorName;
-                                    door.customType = 3;
-                                    if (deviceDic.ContainsKey(door.categoryId))
+                                    if (deviceDic.ContainsKey(item.categoryId))
                                     {
-                                        deviceDic[door.categoryId].Add(door);
+                                        deviceDic[item.categoryId].Add(item);
                                     }
                                     else
                                     {
                                         isDevice = true;
                                         List<DeviceInfo> temp = new List<DeviceInfo>();
-                                        temp.Add(door);
-                                        deviceDic.Add(door.categoryId, temp);
-                                        categoryId = door.categoryId;
+                                        temp.Add(item);
+                                        deviceDic.Add(item.categoryId, temp);
                                     }
                                 }
+                                deviceDic[16].Sort(new NameCompare());
+                                show();
                             }
-                            if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
-                            show();
+                            catch (Exception e)
+                            {
+                                dialog.SetActive(true);
+                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            dialog.SetActive(true);
-                            dialog.GetComponent<DialogControl>().setContent(resultDoor.Result);
-                        }
-                    }
-                });*/
+                    });
+                }
+                #endregion
+
             }
         }
 
@@ -609,58 +477,56 @@ public class PrimaryContorl : MonoBehaviour
                 item.rtsp = info.rtsp;
             }
         }*/
-
-        /*foreach (int key in deviceDic.Keys) {
-            //deviceDic[key].OrderBy(d => int.Parse(Regex.Match(d.deviceName, @"\d+").Value)).ToList();
-            deviceDic[key].Sort(new NameCompare());
-        }*/
     }
 
 
-    public static void doorQryCallback(CallBackResult result, displayUI show) {
+    public static void doorQryCallback(CallBackResult result, displayUI show)
+    {
         if (result.positionId != currentPositionId) return;
         if (result.isSucc)
         {
-                try
+            try
+            {
+                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result.dataMsg);
+                int categoryId = -1;
+                foreach (DeviceInfo door in doorInfos.data)
                 {
-                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result.dataMsg);
-                    int categoryId = -1;
-                    foreach (DeviceInfo door in doorInfos.data)
+                    if (door.digitalMapId == result.id)
                     {
-                        if (door.digitalMapId == result.id)
+                        door.deviceEUI = door.doorId;
+                        door.deviceName = door.doorName;
+                        door.customType = 3;
+                        if (deviceDic.ContainsKey(door.categoryId))
                         {
-                            door.deviceEUI = door.doorId;
-                            door.deviceName = door.doorName;
-                            door.customType = 3;
-                            if (deviceDic.ContainsKey(door.categoryId))
-                            {
-                                categoryId = door.categoryId;
-                                deviceDic[door.categoryId].Add(door);
-                            }
-                            else
-                            {
-                                isDevice = true;
-                                List<DeviceInfo> temp = new List<DeviceInfo>();
-                                temp.Add(door);
-                                deviceDic.Add(door.categoryId, temp);
-                            }
+                            categoryId = door.categoryId;
+                            deviceDic[door.categoryId].Add(door);
+                        }
+                        else
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            temp.Add(door);
+                            deviceDic.Add(door.categoryId, temp);
                         }
                     }
-                    if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
-                    show();
                 }
-                catch (Exception e)
-                {
-                    dialog.SetActive(true);
-                    dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
-                }
+                if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
+                show();
+            }
+            catch (Exception e)
+            {
+                dialog.SetActive(true);
+                dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+            }
         }
-        else {
+        else
+        {
             dialog.SetActive(true);
             dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
         }
     }
-    public static void fireProtectCallBack(CallBackResult result, displayUI show) {
+    public static void fireProtectCallBack(CallBackResult result, displayUI show)
+    {
         if (result.positionId != currentPositionId) return;
         if (result.isSucc)
         {
@@ -699,19 +565,22 @@ public class PrimaryContorl : MonoBehaviour
                 dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
             }
         }
-        else {
+        else
+        {
             dialog.SetActive(true);
             dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
         }
     }
-    
-    public static string qryDeviceRstp(int deviceId) {
+
+    public static string qryDeviceRstp(int deviceId)
+    {
         string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl + deviceId.ToString(), token);
         DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
         return info.rtsp;
     }
 
-    public static LiftInfo qryLiftRstp(string deviceEUI) {
+    public static LiftInfo qryLiftRstp(string deviceEUI)
+    {
         string resultLight = HTTPServiceControl.GetHttpResponse(liftUrl + deviceEUI, token);
         LiftInfoAll info = JsonMapper.ToObject<LiftInfoAll>(resultLight);
         return info.data;
@@ -904,7 +773,8 @@ public class PrimaryContorl : MonoBehaviour
     }
 
 
-    public static void qryTotalEleWaterNum(ref string powerYear,ref string waterYear) {
+    public static void qryTotalEleWaterNum(ref string powerYear, ref string waterYear)
+    {
         string result = HTTPServiceControl.GetHttpResponse(waterEleUrl, token);
         WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
         waterYear = waterPower.data.waterYear;
@@ -921,12 +791,14 @@ public class PrimaryContorl : MonoBehaviour
             qryAlarmByType("1");
 
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.Log(e.Message);
         }
     }
 
-    public static void qryAlarmByType(string type) {
+    public static void qryAlarmByType(string type)
+    {
         string result = HTTPServiceControl.GetHttpResponse(alarmUrl + type, token);
         List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
         foreach (AlarmInfo alarmInfo in alarmInfoList)
@@ -952,12 +824,14 @@ public class PrimaryContorl : MonoBehaviour
         }
     }
 
-    public static void qryDeviceDetail(int projectId,int positionId) {
+    public static void qryDeviceDetail(int projectId, int positionId)
+    {
         string result = HTTPServiceControl.GetHttpResponse(deviceDetailUrl + "&projectId=" + projectId + "&positionId=" + positionId, token);
         DeviceDetail alarmInfoList = JsonMapper.ToObject<DeviceDetail>(result);
     }
 
-    public static void setDeviceControl(string sourceCode,bool value) {
+    public static void setDeviceControl(string sourceCode, bool value)
+    {
         DeviceControl deviceControl = new DeviceControl();
         deviceControl.sourceCode = sourceCode;
         deviceControl.value = value;
@@ -971,7 +845,7 @@ public class PrimaryContorl : MonoBehaviour
             {
                 try
                 {
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -1278,7 +1152,7 @@ public class NameCompare : IComparer<DeviceInfo>
 {
     public int Compare(DeviceInfo x, DeviceInfo y)
     {
-        
+
         int result = 0;
         string xNum = Regex.Replace(x.deviceName, @"[^0-9]+", "");
         string yNum = Regex.Replace(y.deviceName, @"[^0-9]+", "");
@@ -1286,25 +1160,31 @@ public class NameCompare : IComparer<DeviceInfo>
         {
             if (xNum.Length == yNum.Length)
             {
-                try {
+                try
+                {
                     result = int.Parse(xNum).CompareTo(int.Parse(yNum));
                 }
-                catch(Exception e){
+                catch (Exception e)
+                {
                     Debug.Log(e.Message);
                 }
             }
-            else {
-                if (int.Parse(xNum) < int.Parse(yNum)) {
+            else
+            {
+                if (int.Parse(xNum) < int.Parse(yNum))
+                {
                     int len = yNum.Length - xNum.Length;
                     result = (int.Parse(xNum) * len * 10).CompareTo(int.Parse(yNum));
                 }
-                else {
+                else
+                {
                     int len = xNum.Length - yNum.Length;
                     result = int.Parse(xNum).CompareTo((int.Parse(yNum) * len * 10));
                 }
             }
         }
-        else {
+        else
+        {
             result = CompareInfo.GetCompareInfo("zh-cn").Compare(x.deviceName, y.deviceName, CompareOptions.IgnoreCase);
         }
         return result;

@@ -75,7 +75,7 @@ public class ResultManager : MonoBehaviour
                 categoryControl.CreateDeviceList(item.Value);
             }
             else {
-                categoryControlList[item.Key].CreateDeviceList(item.Value);
+                //categoryControlList[item.Key].CreateDeviceList(item.Value);
             }
         }
 
