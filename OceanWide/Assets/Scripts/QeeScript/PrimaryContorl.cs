@@ -82,8 +82,12 @@ public class PrimaryContorl : MonoBehaviour
     public static string rstpUrl = "http://" + urlPrefix + "/base/tenant/device/get/";
 
     public static string liftUrl = "http://" + urlPrefix + "/attendance/elevator/queryLiftDetail?registerCode=";
-    // Start is called before the first frame update
-    void Awake()
+
+    public static int currentPositionId = -1;
+
+    public delegate void displayUI();
+   // Start is called before the first frame update
+   void Awake()
     {
         dialog = this.transform.Find("messageBox").gameObject;
         LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
@@ -171,7 +175,7 @@ public class PrimaryContorl : MonoBehaviour
 
     }
 
-    public static void qryDeviceByFloor(int projectId, int positionId) {
+    public static void qryDeviceByFloor(int projectId, int positionId, displayUI show) {
         isDevice = false;
         deviceDic.Clear();
         if (projectId == 3)
@@ -180,27 +184,113 @@ public class PrimaryContorl : MonoBehaviour
             int[] mapArr = LHYfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
-                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
-                List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
-                foreach (DeviceInfo item in deviceInfos)
-                {
-                    
-                    //if (item.monitorList != null)
-                    //{
-                    if (deviceDic.ContainsKey(item.categoryId))
-                    {
-                        deviceDic[item.categoryId].Add(item);
-                    }
-                    else
-                    {
-                        isDevice = true;
-                        List<DeviceInfo> temp = new List<DeviceInfo>();
-                        temp.Add(item);
-                        deviceDic.Add(item.categoryId, temp);
-                    }
-                    //}
+                Task<string> query_data = HTTPServiceControl.GetDataAsync(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
 
-                }
+                query_data.GetAwaiter().OnCompleted(() =>
+                {
+                    if (!string.IsNullOrEmpty(query_data.Result))
+                    {
+                        try
+                        {
+                            List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(query_data.Result);
+                            foreach (DeviceInfo item in deviceInfos)
+                            {
+                                if (deviceDic.ContainsKey(item.categoryId))
+                                {
+                                    deviceDic[item.categoryId].Add(item);
+                                }
+                                else
+                                {
+                                    isDevice = true;
+                                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                                    temp.Add(item);
+                                    deviceDic.Add(item.categoryId, temp);
+                                }
+                            }
+                            //if (i==mapArr.Length-1) { 
+                            //照明重组
+                            if (deviceDic.ContainsKey(7))
+                            {
+                                deviceDic.Remove(7);
+                                Task<string> resultLight = HTTPServiceControl.GetDataAsync(lightUrl, token);
+
+                                resultLight.GetAwaiter().OnCompleted(() =>
+                                {
+                                    if (!string.IsNullOrEmpty(resultLight.Result))
+                                    {
+                                        try
+                                        {
+                                            List<DeviceInfo> lights = JsonMapper.ToObject<List<DeviceInfo>>(resultLight.Result);
+                                            foreach (DeviceInfo item in lights)
+                                            {
+                                                if (deviceDic.ContainsKey(item.categoryId))
+                                                {
+                                                    deviceDic[item.categoryId].Add(item);
+                                                }
+                                                else
+                                                {
+                                                    isDevice = true;
+                                                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                                                    temp.Add(item);
+                                                    deviceDic.Add(item.categoryId, temp);
+                                                }
+                                            }
+                                            Dictionary<string, List<monitorItem>> lightItems = new Dictionary<string, List<monitorItem>>();
+                                            foreach (DeviceInfo item in deviceDic[7])
+                                            {
+                                                if (item.deviceName.IndexOf("#") > -1) item.deviceName = item.deviceName.Split('#')[1];
+                                                monitorItem monitor = new monitorItem();
+                                                monitor.monitorName = item.deviceName;
+                                                string prefix = item.deviceName.Substring(0, item.deviceName.IndexOf("-") + 2).ToUpper();
+                                                monitor.value = item.monitorList[0].value;
+                                                monitor.historyTable = item.monitorList[0].historyTable;
+                                                if (lightItems.ContainsKey(prefix))
+                                                {
+                                                    lightItems[prefix].Add(monitor);
+                                                }
+                                                else
+                                                {
+                                                    List<monitorItem> temp = new List<monitorItem>();
+                                                    temp.Add(monitor);
+                                                    lightItems.Add(prefix, temp);
+                                                }
+                                            }
+                                            deviceDic.Remove(7);
+                                            List<DeviceInfo> info = new List<DeviceInfo>();
+                                            deviceDic.Add(7, info);
+                                            foreach (string key in lightItems.Keys)
+                                            {
+                                                lightItems[key].OrderBy(m => m.monitorName).ToList();
+                                                DeviceInfo device = new DeviceInfo();
+                                                device.deviceName = key;
+                                                device.monitorList = lightItems[key];
+                                                device.customType = 2;
+                                                deviceDic[7].Add(device);
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            dialog.SetActive(true);
+                                            dialog.GetComponent<DialogControl>().setContent(resultLight.Result);
+                                        }
+                                    }
+                                });
+                            }
+                            foreach (int key in deviceDic.Keys)
+                            {
+                                deviceDic[key].Sort(new NameCompare());
+                            }
+                            show();
+                            //}
+                        }
+                        catch (Exception e)
+                        {
+                            dialog.SetActive(true);
+                            dialog.GetComponent<DialogControl>().setContent(query_data.Result);
+                        }
+                    }
+                });
+
                 //门禁动环
                 int[] typeArr = new int[] { 0, 1 };
                 for (int j = 0; j < typeArr.Length; j++) {
@@ -209,193 +299,305 @@ public class PrimaryContorl : MonoBehaviour
                                                             {"type",typeArr[j]},
                                                             {"ifBind",1},
                                                             {"projectId",3} });
-                    string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
-                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
-                    foreach (DeviceInfo door in doorInfos.data)
+                    Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i],positionId);
+                    resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result,show));
+
+                    /*resultDoor.GetAwaiter().OnCompleted(() =>
                     {
-                        if (door.digitalMapId == mapArr[i])
+                        if (!string.IsNullOrEmpty(resultDoor.Result))
                         {
-                            door.deviceEUI = door.doorId;
-                            door.deviceName = door.doorName;
-                            door.customType = 3;
-                            if (deviceDic.ContainsKey(door.categoryId))
+                            try
                             {
-                                deviceDic[door.categoryId].Add(door);
+                                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor.Result);
+                                int categoryId = -1;
+                                foreach (DeviceInfo door in doorInfos.data)
+                                {
+                                    if (door.digitalMapId == mapArr[i])
+                                    {
+                                        door.deviceEUI = door.doorId;
+                                        door.deviceName = door.doorName;
+                                        door.customType = 3;
+                                        if (deviceDic.ContainsKey(door.categoryId))
+                                        {
+                                            categoryId = door.categoryId;
+                                            deviceDic[door.categoryId].Add(door);
+                                        }
+                                        else
+                                        {
+                                            isDevice = true;
+                                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                                            temp.Add(door);
+                                            deviceDic.Add(door.categoryId, temp);
+                                        }
+                                    }
+                                }
+                                if(categoryId>-1) deviceDic[categoryId].Sort(new NameCompare());
+                                show();
                             }
-                            else
+                            catch (Exception e)
                             {
-                                isDevice = true;
-                                List<DeviceInfo> temp = new List<DeviceInfo>();
-                                temp.Add(door);
-                                deviceDic.Add(door.categoryId, temp);
+                                dialog.SetActive(true);
+                                dialog.GetComponent<DialogControl>().setContent(query_data.Result);
                             }
                         }
-                    }
+                    });*/
                 }
-
                 
             }
+            
         }
         else if (projectId == 4) {
             if (!DFfloor2MapDic.ContainsKey(positionId)) return;
             int[] mapArr = DFfloor2MapDic[positionId];
             for (int i = 0; i < mapArr.Length; i++)
             {
-                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
-                List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
-                foreach (DeviceInfo item in deviceInfos)
+                Task<string> resultMap = HTTPServiceControl.GetDataAsync(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
+
+                resultMap.GetAwaiter().OnCompleted(() =>
                 {
-                    //if (item.monitorList != null)
-                    //{
-                    if (deviceDic.ContainsKey(item.categoryId))
+                    if (!string.IsNullOrEmpty(resultMap.Result))
                     {
-                        deviceDic[item.categoryId].Add(item);
-                    }
-                    else
-                    {
-                        isDevice = true;
-                        List<DeviceInfo> temp = new List<DeviceInfo>();
-                        temp.Add(item);
-                        deviceDic.Add(item.categoryId, temp);
-                    }
-                    //}
-                }
-
-                //消防
-                string resultFloor = HTTPServiceControl.GetHttpResponse(fireProtectFloorUrl, token);
-                Dictionary<string, List<FireProtect>> fireProtects = JsonMapper.ToObject<Dictionary<string, List<FireProtect>>>(resultFloor);
-                List<FireProtect> fireProtect = fireProtects[DFValue];
-                if (DFFireProtectDic.ContainsKey(positionId)) {
-                    foreach (FireProtect protect in fireProtect) {
-                        if (protect.floor == DFFireProtectDic[positionId]) {
-                            isDevice = true;
-                            List<DeviceInfo> temp = new List<DeviceInfo>();
-                            foreach (KeyValuePair<string, string> data in protect.deviceData)
-                            {
-                                DeviceInfo item = new DeviceInfo();
-                                item.deviceName = DFTypes[data.Key] + ":" + data.Value;
-                                item.customType = 1;
-                                temp.Add(item);
-                            }
-                            if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
-                            deviceDic.Add(11, temp);
-                            break;
-                        }
-                    }
-                }
-
-                //停车
-                if (positionId == 47) {
-                    string parkResult = HTTPServiceControl.GetHttpResponse(parkingUrl, token);
-                    List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult);
-                    foreach (DeviceInfo item in parkInfos)
-                    {
-                        //if (item.monitorList != null)
-                        //{
-                        if (deviceDic.ContainsKey(item.categoryId))
+                        try
                         {
-                            bool isAct = false;
-                            foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId]) {
-                                if (deviceInfo.deviceId == item.deviceId) {
-                                    isAct = true;
-                                    break;
+                            List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap.Result);
+                            foreach (DeviceInfo item in deviceInfos)
+                            {
+                                if (deviceDic.ContainsKey(item.categoryId))
+                                {
+                                    deviceDic[item.categoryId].Add(item);
+                                }
+                                else
+                                {
+                                    isDevice = true;
+                                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                                    temp.Add(item);
+                                    deviceDic.Add(item.categoryId, temp);
                                 }
                             }
-                            if (!isAct) deviceDic[item.categoryId].Add(item);
-                        }
-                        else
-                        {
-                            isDevice = true;
-                            List<DeviceInfo> temp = new List<DeviceInfo>();
-                            temp.Add(item);
-                            deviceDic.Add(item.categoryId, temp);
-                        }
-                        //}
-                    }
-                }
+                            //照明重组
+                            if (deviceDic.ContainsKey(7))
+                            {
+                                deviceDic.Remove(7);
+                                Task<string> resultLight = HTTPServiceControl.GetDataAsync(lightUrl, token);
 
-                //动环
-                string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                resultLight.GetAwaiter().OnCompleted(() =>
+                                {
+                                    if (!string.IsNullOrEmpty(resultLight.Result))
+                                    {
+                                        try
+                                        {
+                                            List<DeviceInfo> lights = JsonMapper.ToObject<List<DeviceInfo>>(resultLight.Result);
+                                            foreach (DeviceInfo item in lights)
+                                            {
+                                                if (deviceDic.ContainsKey(item.categoryId))
+                                                {
+                                                    deviceDic[item.categoryId].Add(item);
+                                                }
+                                                else
+                                                {
+                                                    isDevice = true;
+                                                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                                                    temp.Add(item);
+                                                    deviceDic.Add(item.categoryId, temp);
+                                                }
+                                            }
+                                            Dictionary<string, List<monitorItem>> lightItems = new Dictionary<string, List<monitorItem>>();
+                                            foreach (DeviceInfo item in deviceDic[7])
+                                            {
+                                                if (item.deviceName.IndexOf("#") > -1) item.deviceName = item.deviceName.Split('#')[1];
+                                                monitorItem monitor = new monitorItem();
+                                                monitor.monitorName = item.deviceName;
+                                                string prefix = item.deviceName.Substring(0, item.deviceName.IndexOf("-") + 2).ToUpper();
+                                                monitor.value = item.monitorList[0].value;
+                                                monitor.historyTable = item.monitorList[0].historyTable;
+                                                if (lightItems.ContainsKey(prefix))
+                                                {
+                                                    lightItems[prefix].Add(monitor);
+                                                }
+                                                else
+                                                {
+                                                    List<monitorItem> temp = new List<monitorItem>();
+                                                    temp.Add(monitor);
+                                                    lightItems.Add(prefix, temp);
+                                                }
+                                            }
+                                            deviceDic.Remove(7);
+                                            List<DeviceInfo> info = new List<DeviceInfo>();
+                                            deviceDic.Add(7, info);
+                                            foreach (string key in lightItems.Keys)
+                                            {
+                                                lightItems[key].OrderBy(m => m.monitorName).ToList();
+                                                DeviceInfo device = new DeviceInfo();
+                                                device.deviceName = key;
+                                                device.monitorList = lightItems[key];
+                                                device.customType = 2;
+                                                deviceDic[7].Add(device);
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            dialog.SetActive(true);
+                                            dialog.GetComponent<DialogControl>().setContent(resultLight.Result);
+                                        }
+                                    }
+                                });
+                            }
+                            foreach (int key in deviceDic.Keys)
+                            {
+                                deviceDic[key].Sort(new NameCompare());
+                            }
+                            show();
+                        }
+                        catch (Exception e)
+                        {
+                            dialog.SetActive(true);
+                            dialog.GetComponent<DialogControl>().setContent(resultMap.Result);
+                        }
+                    }
+                });
+
+                //消防
+                Task<CallBackResult> resultFloor = HTTPServiceControl.GetDataAsyncNew(fireProtectFloorUrl, token,positionId, positionId);
+                resultFloor.GetAwaiter().OnCompleted(() => fireProtectCallBack(resultFloor.Result, show));
+
+                /*Task<string> resultFloor = HTTPServiceControl.GetDataAsync(fireProtectFloorUrl, token);
+
+                resultFloor.GetAwaiter().OnCompleted(() =>
+                {
+                    if (!string.IsNullOrEmpty(resultFloor.Result))
+                    {
+                        try
+                        {
+                            Dictionary<string, List<FireProtect>> fireProtects = JsonMapper.ToObject<Dictionary<string, List<FireProtect>>>(resultFloor.Result);
+                            List<FireProtect> fireProtect = fireProtects[DFValue];
+                            if (DFFireProtectDic.ContainsKey(positionId))
+                            {
+                                foreach (FireProtect protect in fireProtect)
+                                {
+                                    if (protect.floor == DFFireProtectDic[positionId])
+                                    {
+                                        isDevice = true;
+                                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                                        foreach (KeyValuePair<string, string> data in protect.deviceData)
+                                        {
+                                            DeviceInfo item = new DeviceInfo();
+                                            item.deviceName = DFTypes[data.Key] + ":" + data.Value;
+                                            item.customType = 1;
+                                            temp.Add(item);
+                                        }
+                                        if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
+                                        deviceDic.Add(11, temp);
+                                        deviceDic[11].Sort(new NameCompare()); 
+                                        show();
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                        }
+                        catch (Exception e)
+                        {
+                            dialog.SetActive(true);
+                            dialog.GetComponent<DialogControl>().setContent(resultFloor.Result);
+                        }
+                    }
+                });*/
+                //停车
+                if (positionId == 47)
+                {
+                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(parkingUrl, token);
+
+                    parkResult.GetAwaiter().OnCompleted(() =>
+                    {
+                        if (!string.IsNullOrEmpty(parkResult.Result))
+                        {
+                            try
+                            {
+                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
+                                foreach (DeviceInfo item in parkInfos)
+                                {
+                                    if (deviceDic.ContainsKey(item.categoryId))
+                                    {
+                                        bool isAct = false;
+                                        foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId])
+                                        {
+                                            if (deviceInfo.deviceId == item.deviceId)
+                                            {
+                                                isAct = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isAct) deviceDic[item.categoryId].Add(item);
+                                    }
+                                    else
+                                    {
+                                        isDevice = true;
+                                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                                        temp.Add(item);
+                                        deviceDic.Add(item.categoryId, temp);
+                                    }
+                                    //}
+                                }
+                                show();
+                            }
+                            catch (Exception e)
+                            {
+                                dialog.SetActive(true);
+                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
+                            }
+                        }
+                    });
+                }
+            //动环
+            string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
                                                             {"digitalMapId",mapArr[i]},
                                                             {"type",1},
                                                             {"ifBind",1},
                                                             {"projectId",3} });
-                string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
-                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
-                foreach (DeviceInfo door in doorInfos.data)
+                Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
+                resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
+
+                /*Task<string> resultDoor = HTTPServiceControl.PostDataAsync(doorInfoUrl, doorParam, token);
+
+                resultDoor.GetAwaiter().OnCompleted(() =>
                 {
-                    if (door.digitalMapId == mapArr[i])
+                    if (!string.IsNullOrEmpty(resultDoor.Result))
                     {
-                        door.deviceEUI = door.doorId;
-                        door.deviceName = door.doorName;
-                        door.customType = 3;
-                        if (deviceDic.ContainsKey(door.categoryId))
+                        try
                         {
-                            deviceDic[door.categoryId].Add(door);
+                            DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor.Result);
+                            int categoryId = -1;
+                            foreach (DeviceInfo door in doorInfos.data)
+                            {
+                                if (door.digitalMapId == mapArr[i])
+                                {
+                                    door.deviceEUI = door.doorId;
+                                    door.deviceName = door.doorName;
+                                    door.customType = 3;
+                                    if (deviceDic.ContainsKey(door.categoryId))
+                                    {
+                                        deviceDic[door.categoryId].Add(door);
+                                    }
+                                    else
+                                    {
+                                        isDevice = true;
+                                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                                        temp.Add(door);
+                                        deviceDic.Add(door.categoryId, temp);
+                                        categoryId = door.categoryId;
+                                    }
+                                }
+                            }
+                            if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
+                            show();
                         }
-                        else
+                        catch (Exception e)
                         {
-                            isDevice = true;
-                            List<DeviceInfo> temp = new List<DeviceInfo>();
-                            temp.Add(door);
-                            deviceDic.Add(door.categoryId, temp);
+                            dialog.SetActive(true);
+                            dialog.GetComponent<DialogControl>().setContent(resultDoor.Result);
                         }
                     }
-                }
-            }
-        }
-
-        //照明重组
-        if (deviceDic.ContainsKey(7))
-        {
-            deviceDic.Remove(7);
-            string resultLight = HTTPServiceControl.GetHttpResponse(lightUrl, token);
-            List<DeviceInfo> lights = JsonMapper.ToObject<List<DeviceInfo>>(resultLight);
-            foreach (DeviceInfo item in lights)
-            {
-                if (deviceDic.ContainsKey(item.categoryId))
-                {
-                    deviceDic[item.categoryId].Add(item);
-                }
-                else
-                {
-                    isDevice = true;
-                    List<DeviceInfo> temp = new List<DeviceInfo>();
-                    temp.Add(item);
-                    deviceDic.Add(item.categoryId, temp);
-                }
-            }
-            Dictionary<string, List<monitorItem>> lightItems = new Dictionary<string, List<monitorItem>>();
-            foreach (DeviceInfo item in deviceDic[7])
-            {
-                if (item.deviceName.IndexOf("#") > -1) item.deviceName = item.deviceName.Split('#')[1];
-                monitorItem monitor = new monitorItem();
-                monitor.monitorName = item.deviceName;
-                string prefix = item.deviceName.Substring(0, item.deviceName.IndexOf("-")+2).ToUpper();
-                monitor.value = item.monitorList[0].value;
-                monitor.historyTable = item.monitorList[0].historyTable;
-                if (lightItems.ContainsKey(prefix))
-                {
-                    lightItems[prefix].Add(monitor);
-                }
-                else
-                {
-                    List<monitorItem> temp = new List<monitorItem>();
-                    temp.Add(monitor);
-                    lightItems.Add(prefix, temp);
-                }
-            }
-            deviceDic.Remove(7);
-            List<DeviceInfo> info = new List<DeviceInfo>();
-            deviceDic.Add(7, info);
-            foreach (string key in lightItems.Keys)
-            {
-                lightItems[key].OrderBy(m => m.monitorName).ToList();
-                DeviceInfo device = new DeviceInfo();
-                device.deviceName = key;
-                device.monitorList = lightItems[key];
-                device.customType = 2;
-                deviceDic[7].Add(device);
+                });*/
             }
         }
 
@@ -407,13 +609,102 @@ public class PrimaryContorl : MonoBehaviour
                 item.rtsp = info.rtsp;
             }
         }*/
-        foreach (int key in deviceDic.Keys) {
+
+        /*foreach (int key in deviceDic.Keys) {
             //deviceDic[key].OrderBy(d => int.Parse(Regex.Match(d.deviceName, @"\d+").Value)).ToList();
             deviceDic[key].Sort(new NameCompare());
+        }*/
+    }
+
+
+    public static void doorQryCallback(CallBackResult result, displayUI show) {
+        if (result.positionId != currentPositionId) return;
+        if (result.isSucc)
+        {
+                try
+                {
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(result.dataMsg);
+                    int categoryId = -1;
+                    foreach (DeviceInfo door in doorInfos.data)
+                    {
+                        if (door.digitalMapId == result.id)
+                        {
+                            door.deviceEUI = door.doorId;
+                            door.deviceName = door.doorName;
+                            door.customType = 3;
+                            if (deviceDic.ContainsKey(door.categoryId))
+                            {
+                                categoryId = door.categoryId;
+                                deviceDic[door.categoryId].Add(door);
+                            }
+                            else
+                            {
+                                isDevice = true;
+                                List<DeviceInfo> temp = new List<DeviceInfo>();
+                                temp.Add(door);
+                                deviceDic.Add(door.categoryId, temp);
+                            }
+                        }
+                    }
+                    if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
+                    show();
+                }
+                catch (Exception e)
+                {
+                    dialog.SetActive(true);
+                    dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+                }
+        }
+        else {
+            dialog.SetActive(true);
+            dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+        }
+    }
+    public static void fireProtectCallBack(CallBackResult result, displayUI show) {
+        if (result.positionId != currentPositionId) return;
+        if (result.isSucc)
+        {
+            try
+            {
+                Dictionary<string, List<FireProtect>> fireProtects = JsonMapper.ToObject<Dictionary<string, List<FireProtect>>>(result.dataMsg);
+                List<FireProtect> fireProtect = fireProtects[DFValue];
+                if (DFFireProtectDic.ContainsKey(result.id))
+                {
+                    foreach (FireProtect protect in fireProtect)
+                    {
+                        if (protect.floor == DFFireProtectDic[result.id])
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            foreach (KeyValuePair<string, string> data in protect.deviceData)
+                            {
+                                DeviceInfo item = new DeviceInfo();
+                                item.deviceName = DFTypes[data.Key] + ":" + data.Value;
+                                item.customType = 1;
+                                temp.Add(item);
+                            }
+                            if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
+                            deviceDic.Add(11, temp);
+                            deviceDic[11].Sort(new NameCompare());
+                            show();
+                            break;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                dialog.SetActive(true);
+                dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+            }
+        }
+        else {
+            dialog.SetActive(true);
+            dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
         }
     }
     
-
     public static string qryDeviceRstp(int deviceId) {
         string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl + deviceId.ToString(), token);
         DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
@@ -728,6 +1019,258 @@ public class PrimaryContorl : MonoBehaviour
         websocket.Close();
     }
 
+    public static void qryDeviceByFloorAnycBak(int projectId, int positionId, displayUI show)
+    {
+        isDevice = false;
+        deviceDic.Clear();
+        if (projectId == 3)
+        {
+            if (!LHYfloor2MapDic.ContainsKey(positionId)) return;
+            int[] mapArr = LHYfloor2MapDic[positionId];
+            for (int i = 0; i < mapArr.Length; i++)
+            {
+
+                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
+                List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
+                foreach (DeviceInfo item in deviceInfos)
+                {
+
+                    //if (item.monitorList != null)
+                    //{
+                    if (deviceDic.ContainsKey(item.categoryId))
+                    {
+                        deviceDic[item.categoryId].Add(item);
+                    }
+                    else
+                    {
+                        isDevice = true;
+                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                        temp.Add(item);
+                        deviceDic.Add(item.categoryId, temp);
+                    }
+                    //}
+
+                }
+                //门禁动环
+                int[] typeArr = new int[] { 0, 1 };
+                for (int j = 0; j < typeArr.Length; j++)
+                {
+                    string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",typeArr[j]},
+                                                            {"ifBind",1},
+                                                            {"projectId",3} });
+                    string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
+                    DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
+                    foreach (DeviceInfo door in doorInfos.data)
+                    {
+                        if (door.digitalMapId == mapArr[i])
+                        {
+                            door.deviceEUI = door.doorId;
+                            door.deviceName = door.doorName;
+                            door.customType = 3;
+                            if (deviceDic.ContainsKey(door.categoryId))
+                            {
+                                deviceDic[door.categoryId].Add(door);
+                            }
+                            else
+                            {
+                                isDevice = true;
+                                List<DeviceInfo> temp = new List<DeviceInfo>();
+                                temp.Add(door);
+                                deviceDic.Add(door.categoryId, temp);
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+        else if (projectId == 4)
+        {
+            if (!DFfloor2MapDic.ContainsKey(positionId)) return;
+            int[] mapArr = DFfloor2MapDic[positionId];
+            for (int i = 0; i < mapArr.Length; i++)
+            {
+                string resultMap = HTTPServiceControl.GetHttpResponse(deviceDialogUrl + "?digitalMapId=" + mapArr[i] + "&categoryId=0", token);
+                List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap);
+                foreach (DeviceInfo item in deviceInfos)
+                {
+                    //if (item.monitorList != null)
+                    //{
+                    if (deviceDic.ContainsKey(item.categoryId))
+                    {
+                        deviceDic[item.categoryId].Add(item);
+                    }
+                    else
+                    {
+                        isDevice = true;
+                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                        temp.Add(item);
+                        deviceDic.Add(item.categoryId, temp);
+                    }
+                    //}
+                }
+
+                //消防
+                string resultFloor = HTTPServiceControl.GetHttpResponse(fireProtectFloorUrl, token);
+                Dictionary<string, List<FireProtect>> fireProtects = JsonMapper.ToObject<Dictionary<string, List<FireProtect>>>(resultFloor);
+                List<FireProtect> fireProtect = fireProtects[DFValue];
+                if (DFFireProtectDic.ContainsKey(positionId))
+                {
+                    foreach (FireProtect protect in fireProtect)
+                    {
+                        if (protect.floor == DFFireProtectDic[positionId])
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            foreach (KeyValuePair<string, string> data in protect.deviceData)
+                            {
+                                DeviceInfo item = new DeviceInfo();
+                                item.deviceName = DFTypes[data.Key] + ":" + data.Value;
+                                item.customType = 1;
+                                temp.Add(item);
+                            }
+                            if (deviceDic.ContainsKey(11)) deviceDic.Remove(11);
+                            deviceDic.Add(11, temp);
+                            break;
+                        }
+                    }
+                }
+
+                //停车
+                if (positionId == 47)
+                {
+                    string parkResult = HTTPServiceControl.GetHttpResponse(parkingUrl, token);
+                    List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult);
+                    foreach (DeviceInfo item in parkInfos)
+                    {
+                        //if (item.monitorList != null)
+                        //{
+                        if (deviceDic.ContainsKey(item.categoryId))
+                        {
+                            bool isAct = false;
+                            foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId])
+                            {
+                                if (deviceInfo.deviceId == item.deviceId)
+                                {
+                                    isAct = true;
+                                    break;
+                                }
+                            }
+                            if (!isAct) deviceDic[item.categoryId].Add(item);
+                        }
+                        else
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            temp.Add(item);
+                            deviceDic.Add(item.categoryId, temp);
+                        }
+                        //}
+                    }
+                }
+
+                //动环
+                string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                                                            {"digitalMapId",mapArr[i]},
+                                                            {"type",1},
+                                                            {"ifBind",1},
+                                                            {"projectId",3} });
+                string resultDoor = HTTPServiceControl.GetPostHttpResponse(doorInfoUrl, doorParam, token);
+                DoorInfo doorInfos = JsonMapper.ToObject<DoorInfo>(resultDoor);
+                foreach (DeviceInfo door in doorInfos.data)
+                {
+                    if (door.digitalMapId == mapArr[i])
+                    {
+                        door.deviceEUI = door.doorId;
+                        door.deviceName = door.doorName;
+                        door.customType = 3;
+                        if (deviceDic.ContainsKey(door.categoryId))
+                        {
+                            deviceDic[door.categoryId].Add(door);
+                        }
+                        else
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            temp.Add(door);
+                            deviceDic.Add(door.categoryId, temp);
+                        }
+                    }
+                }
+            }
+        }
+
+        //照明重组
+        if (deviceDic.ContainsKey(7))
+        {
+            deviceDic.Remove(7);
+            string resultLight = HTTPServiceControl.GetHttpResponse(lightUrl, token);
+            List<DeviceInfo> lights = JsonMapper.ToObject<List<DeviceInfo>>(resultLight);
+            foreach (DeviceInfo item in lights)
+            {
+                if (deviceDic.ContainsKey(item.categoryId))
+                {
+                    deviceDic[item.categoryId].Add(item);
+                }
+                else
+                {
+                    isDevice = true;
+                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                    temp.Add(item);
+                    deviceDic.Add(item.categoryId, temp);
+                }
+            }
+            Dictionary<string, List<monitorItem>> lightItems = new Dictionary<string, List<monitorItem>>();
+            foreach (DeviceInfo item in deviceDic[7])
+            {
+                if (item.deviceName.IndexOf("#") > -1) item.deviceName = item.deviceName.Split('#')[1];
+                monitorItem monitor = new monitorItem();
+                monitor.monitorName = item.deviceName;
+                string prefix = item.deviceName.Substring(0, item.deviceName.IndexOf("-") + 2).ToUpper();
+                monitor.value = item.monitorList[0].value;
+                monitor.historyTable = item.monitorList[0].historyTable;
+                if (lightItems.ContainsKey(prefix))
+                {
+                    lightItems[prefix].Add(monitor);
+                }
+                else
+                {
+                    List<monitorItem> temp = new List<monitorItem>();
+                    temp.Add(monitor);
+                    lightItems.Add(prefix, temp);
+                }
+            }
+            deviceDic.Remove(7);
+            List<DeviceInfo> info = new List<DeviceInfo>();
+            deviceDic.Add(7, info);
+            foreach (string key in lightItems.Keys)
+            {
+                lightItems[key].OrderBy(m => m.monitorName).ToList();
+                DeviceInfo device = new DeviceInfo();
+                device.deviceName = key;
+                device.monitorList = lightItems[key];
+                device.customType = 2;
+                deviceDic[7].Add(device);
+            }
+        }
+
+        //安防系统rstp查询
+        /*if (deviceDic.ContainsKey(3)) {
+            foreach (DeviceInfo item in deviceDic[3]) {
+                string resultLight = HTTPServiceControl.GetHttpResponse(rstpUrl+ item.deviceId.ToString(), token);
+                DeviceInfo info = JsonMapper.ToObject<DeviceInfo>(resultLight);
+                item.rtsp = info.rtsp;
+            }
+        }*/
+        foreach (int key in deviceDic.Keys)
+        {
+            //deviceDic[key].OrderBy(d => int.Parse(Regex.Match(d.deviceName, @"\d+").Value)).ToList();
+            deviceDic[key].Sort(new NameCompare());
+        }
+    }
 
 }
 

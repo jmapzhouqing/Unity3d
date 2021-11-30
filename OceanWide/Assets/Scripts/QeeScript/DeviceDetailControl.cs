@@ -110,7 +110,7 @@ public class DeviceDetailControl : MonoBehaviour
                         {
                             string str = deviceInfo.monitorList[i].value == "true" ? "在线" : "离线";
                             deviceItem2.SetValue(str);
-                        } else if (deviceInfo.categoryId == 9) {
+                        } else if (deviceInfo.categoryId == 9|| deviceInfo.categoryId == 9) {
                             deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
                         }
                         else
