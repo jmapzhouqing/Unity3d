@@ -159,6 +159,7 @@ public class DeviceDetailControl : MonoBehaviour
                 //control.Path = deviceInfo.rtsp;
                 //control.Play();
                 VideoControl control = item.GetComponentInChildren<VideoControl>();
+                Debug.Log("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
                 control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
 
                 
