@@ -14,18 +14,16 @@ public class VideoControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //player = this.GetComponent<VideoPlayer>();
-        //VideoClip clip = 
-
         player = this.GetComponent<UniversalMediaPlayer>();
+        //this.PlayVideo("ws://222.128.39.16:8866/live?url=rtsp://admin:admin@192.168.1.173:554/cam/realmonitor?channel=10&subtype=0");
+    }
 
-        socket = new CorrespondWebSocket(Application.persistentDataPath+"/"+"video.flv");
-        socket.Connect("ws://222.128.39.16:8866/live?url=rtsp://admin:admin@192.168.1.173:554/cam/realmonitor?channel=10&subtype=0",delegate(string fileName) {
+    public void PlayVideo(string url) {
+        socket = new CorrespondWebSocket(Application.persistentDataPath + "/" + "video.flv");
+        socket.Connect(url, delegate (string fileName) {
             player.Path = fileName;
-
             StartCoroutine(Play());
         });
-
     }
 
 
