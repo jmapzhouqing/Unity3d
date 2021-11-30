@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/UI-Merge-late.unity
-    guid: e41710f4051a58647ad5a5c6a79fd9db
+    path: Assets/UniversalMediaPlayer/Scenes/NewUIExample.unity
+    guid: dab7ec0a00c6074498654650cb92858d
   m_configObjects: {}
