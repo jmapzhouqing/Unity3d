@@ -5290,11 +5290,11 @@ PrefabInstance:
       objectReference: {fileID: 946660130}
     - target: {fileID: 11420564, guid: c404114afaafa3b4494665d1634c383c, type: 3}
       propertyPath: _path
-      value: http://clips.vorwaerts-gmbh.de/VfE_html5.mp4
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11420564, guid: c404114afaafa3b4494665d1634c383c, type: 3}
       propertyPath: _mute
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11420564, guid: c404114afaafa3b4494665d1634c383c, type: 3}
       propertyPath: _loop
