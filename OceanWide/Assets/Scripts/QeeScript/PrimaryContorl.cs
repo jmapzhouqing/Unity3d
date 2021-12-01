@@ -788,9 +788,11 @@ public class PrimaryContorl : MonoBehaviour
     public static void qryTotalEleWaterNum(ref string powerYear, ref string waterYear)
     {
         string result = HTTPServiceControl.GetHttpResponse(waterEleUrl, token);
-        WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
-        waterYear = waterPower.data.waterYear;
-        powerYear = waterPower.data.powerYear;
+        if (!string.IsNullOrEmpty(result)) {
+            WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
+            waterYear = waterPower.data.waterYear;
+            powerYear = waterPower.data.powerYear;
+        }
     }
 
     public static void qryAlarmList()
@@ -812,26 +814,29 @@ public class PrimaryContorl : MonoBehaviour
     public static void qryAlarmByType(string type)
     {
         string result = HTTPServiceControl.GetHttpResponse(alarmUrl + type, token);
-        List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
-        foreach (AlarmInfo alarmInfo in alarmInfoList)
-        {
-            if ((positionIdStrLHY.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 3)
-                || (positionIdStrDF.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 4))
+
+        if (!string.IsNullOrEmpty(result)) {
+            List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
+            foreach (AlarmInfo alarmInfo in alarmInfoList)
             {
-                int idx = alarmInfo.deviceName.IndexOf("_");
-                AlarmGrid alarmGrid = new AlarmGrid();
-                alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
-                alarmGrid.monitorName = alarmInfo.monitorName;
-                alarmGrid.categoryName = alarmInfo.categoryName;
-                if (idx > -1)
+                if ((positionIdStrLHY.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 3)
+                    || (positionIdStrDF.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 4))
                 {
-                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                    int idx = alarmInfo.deviceName.IndexOf("_");
+                    AlarmGrid alarmGrid = new AlarmGrid();
+                    alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
+                    alarmGrid.monitorName = alarmInfo.monitorName;
+                    alarmGrid.categoryName = alarmInfo.categoryName;
+                    if (idx > -1)
+                    {
+                        alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                    }
+                    else
+                    {
+                        alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName;
+                    }
+                    alarmList.Add(alarmGrid);
                 }
-                else
-                {
-                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName;
-                }
-                alarmList.Add(alarmGrid);
             }
         }
     }

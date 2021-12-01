@@ -66,20 +66,29 @@ namespace httpTool
             {"userAccount",this.userName},
             {"password",this.passwordBase64} });
 
-            string httpResult = HTTPServiceControl.GetPostHttpResponse(this.url, parameters,null);
-            Dictionary<string, string> resultDic = JsonMapper.ToObject<Dictionary<string, string>>(httpResult);
-            string tokenStr = resultDic["authToken"];
-            string tokenStrEncrypt = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenStr));
+            string tokenStr = "";
 
-            string tokrnResult1 = HTTPServiceControl.GetHttpResponse(this.tokenUrl1 + tokenStrEncrypt, tokenStr);
-            //Debug.Log(tokrnResult1);
-            string tokrnResult2 = HTTPServiceControl.GetHttpResponse(this.tokenUrl2, tokenStr);
-            //Debug.Log(tokrnResult2);
-            List<tokenMsg> tokenMsg = JsonMapper.ToObject<List<tokenMsg>>(tokrnResult2);
-            string tokenParam = JsonMapper.ToJson(new Dictionary<string, string> {
-            {"tenantId",tokenMsg[0].tenantId.ToString()},
-            {"productKey",tokenMsg[0].productKey} });
-            string tokrnResult3 = HTTPServiceControl.GetPostHttpResponse(this.tokenUrl3, tokenParam, tokenStr);
+            string httpResult = HTTPServiceControl.GetPostHttpResponse(this.url, parameters,null);
+
+            if (!string.IsNullOrEmpty(httpResult)) {
+                Dictionary<string, string> resultDic = JsonMapper.ToObject<Dictionary<string, string>>(httpResult);
+                tokenStr = resultDic["authToken"];
+                string tokenStrEncrypt = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenStr));
+
+                string tokrnResult1 = HTTPServiceControl.GetHttpResponse(this.tokenUrl1 + tokenStrEncrypt, tokenStr);
+                
+                string tokrnResult2 = HTTPServiceControl.GetHttpResponse(this.tokenUrl2, tokenStr);
+
+                if (!string.IsNullOrEmpty(tokrnResult2)) {
+                    List<tokenMsg> tokenMsg = JsonMapper.ToObject<List<tokenMsg>>(tokrnResult2);
+                    string tokenParam = JsonMapper.ToJson(new Dictionary<string, string> {
+                    {"tenantId",tokenMsg[0].tenantId.ToString()},
+                    {"productKey",tokenMsg[0].productKey} });
+
+                    string tokrnResult3 = HTTPServiceControl.GetPostHttpResponse(this.tokenUrl3, tokenParam, tokenStr);
+                }
+            }
+            
             //Debug.Log(tokrnResult3);
             return tokenStr;
         }
