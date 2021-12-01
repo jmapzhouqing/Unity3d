@@ -88,8 +88,8 @@ public class PrimaryContorl : MonoBehaviour
     public static string elecUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectElectricity?categoryId=16&positionParentId=34";
 
     public delegate void displayUI();
-    // Start is called before the first frame update
-    void Awake()
+
+    private void Awake()
     {
         dialog = this.transform.Find("messageBox").gameObject;
         LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
@@ -103,10 +103,10 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
-
         string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
-        if (!string.IsNullOrEmpty(result_LHY)) {
+        if (!string.IsNullOrEmpty(result_LHY))
+        {
             LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
 
             for (int i = LHY.Count - 1; i >= 0; i--)
@@ -127,12 +127,12 @@ public class PrimaryContorl : MonoBehaviour
             }).ToList();
         }
 
-       
         //LHY.Reverse();
 
         string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
-        if (!string.IsNullOrEmpty(result_DF)) {
+        if (!string.IsNullOrEmpty(result_DF))
+        {
             DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
 
             for (int i = DF.Count - 1; i >= 0; i--)
@@ -153,11 +153,11 @@ public class PrimaryContorl : MonoBehaviour
                 }
             }).ToList();
         }
-       
 
         string result_category = HTTPServiceControl.GetHttpResponse(this.categoryUrl, token);
 
-        if (!string.IsNullOrEmpty(result_category)) {
+        if (!string.IsNullOrEmpty(result_category))
+        {
             List<CategoryInfo> dic_category = JsonMapper.ToObject<List<CategoryInfo>>(result_category);
 
             foreach (CategoryInfo item in dic_category)
@@ -172,10 +172,11 @@ public class PrimaryContorl : MonoBehaviour
             categoryDic[9] = "UPS监测系统";
             categoryDic[5] = "机房环境监测系统";
         }
-        
+
         string result = HTTPServiceControl.GetHttpResponse(fireProtectTypeUrl, token);
 
-        if (!string.IsNullOrEmpty(result)) {
+        if (!string.IsNullOrEmpty(result))
+        {
             Dictionary<string, List<TabData>> typeInfos = JsonMapper.ToObject<Dictionary<string, List<TabData>>>(result);
             List<TabData> types = typeInfos["tabData"];
             DFValue = "";

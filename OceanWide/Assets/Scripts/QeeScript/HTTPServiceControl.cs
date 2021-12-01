@@ -60,7 +60,6 @@ namespace httpTool
             var retString = "";
             try
             {
-
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "GET";
                 request.ContentType = "application/json;charset=UTF-8";
@@ -84,6 +83,7 @@ namespace httpTool
                 PrimaryContorl.dialog.GetComponent<DialogControl>().setContent(ex.Message);
                 Debug.Log("GetPostHttpResponse err：" + ex.Message);
             }
+            
             return retString;
         }
 
