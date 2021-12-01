@@ -83,6 +83,7 @@ namespace httpTool
                 PrimaryContorl.dialog.GetComponent<DialogControl>().setContent(ex.Message);
                 Debug.Log("GetPostHttpResponse err：" + ex.Message);
             }
+            
             return retString;
         }
 

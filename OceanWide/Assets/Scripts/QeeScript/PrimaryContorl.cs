@@ -88,8 +88,8 @@ public class PrimaryContorl : MonoBehaviour
     public static string elecUrl = "http://" + urlPrefix + "/base/tenant/devicemap/selectElectricity?categoryId=16&positionParentId=34";
 
     public delegate void displayUI();
-    // Start is called before the first frame update
-    void Awake()
+
+    private void Awake()
     {
         dialog = this.transform.Find("messageBox").gameObject;
         LHYDeviceDic = JsonMapper.ToObject<Dictionary<string, List<string>>>(LHYDevice);
@@ -103,86 +103,96 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
 
-
         string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
-
-        LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
-
-        for (int i = LHY.Count - 1; i >= 0; i--)
+        if (!string.IsNullOrEmpty(result_LHY))
         {
-            if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
-                LHY.Remove(LHY[i]);
+            LHY = JsonMapper.ToObject<List<FloorInfo>>(result_LHY);
+
+            for (int i = LHY.Count - 1; i >= 0; i--)
+            {
+                if (LHY[i].positionCode.IndexOf("LHY") < 0 || LHY[i].positionCode == "LHY" || LHY[i].positionCode == "LHYDXEC" || LHY[i].positionCode == "LHYDXYC")//|| LHY[i].positionCode == "LHYSW"
+                    LHY.Remove(LHY[i]);
+            }
+
+            LHY = LHY.OrderBy(e =>
+            {
+                int index = 0;
+                index = Array.IndexOf(LHYFloorSort, e.positionId);
+                if (index != -1) { return index; }
+                else
+                {
+                    return int.MaxValue;
+                }
+            }).ToList();
         }
 
-        LHY = LHY.OrderBy(e =>
-        {
-            int index = 0;
-            index = Array.IndexOf(LHYFloorSort, e.positionId);
-            if (index != -1) { return index; }
-            else
-            {
-                return int.MaxValue;
-            }
-        }).ToList();
         //LHY.Reverse();
-
 
         string result_DF = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "4", token);
 
-        DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
-
-        for (int i = DF.Count - 1; i >= 0; i--)
+        if (!string.IsNullOrEmpty(result_DF))
         {
-            //if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
-            if (DF[i].positionCode.IndexOf("DF") < 0 || DF[i].positionCode.IndexOf("DFHS") > -1 || DF[i].positionCode == "DF")//|| DF[i].positionCode == "DFSW"
-                DF.Remove(DF[i]);
-        }
+            DF = JsonMapper.ToObject<List<FloorInfo>>(result_DF);
 
-        DF = DF.OrderBy(e =>
-        {
-            int index = 0;
-            index = Array.IndexOf(DFFloorSort, e.positionId);
-            if (index != -1) { return index; }
-            else
+            for (int i = DF.Count - 1; i >= 0; i--)
             {
-                return int.MaxValue;
+                //if (DF[i].positionCode.IndexOf("DFHS") <0|| DF[i].positionCode == "DFHS")
+                if (DF[i].positionCode.IndexOf("DF") < 0 || DF[i].positionCode.IndexOf("DFHS") > -1 || DF[i].positionCode == "DF")//|| DF[i].positionCode == "DFSW"
+                    DF.Remove(DF[i]);
             }
-        }).ToList();
-        //DF.Reverse();
+
+            DF = DF.OrderBy(e =>
+            {
+                int index = 0;
+                index = Array.IndexOf(DFFloorSort, e.positionId);
+                if (index != -1) { return index; }
+                else
+                {
+                    return int.MaxValue;
+                }
+            }).ToList();
+        }
 
         string result_category = HTTPServiceControl.GetHttpResponse(this.categoryUrl, token);
 
-        List<CategoryInfo> dic_category = JsonMapper.ToObject<List<CategoryInfo>>(result_category);
-
-        foreach (CategoryInfo item in dic_category)
+        if (!string.IsNullOrEmpty(result_category))
         {
-            categoryDic.Add(item.categoryId, item.categoryName);
+            List<CategoryInfo> dic_category = JsonMapper.ToObject<List<CategoryInfo>>(result_category);
+
+            foreach (CategoryInfo item in dic_category)
+            {
+                categoryDic.Add(item.categoryId, item.categoryName);
+            }
+
+            categoryDic[15] = "给排水监测系统";
+            categoryDic[12] = "送排风监测系统";
+            categoryDic[3] = "视频监控系统";
+            categoryDic[6] = "能耗管理系统";
+            categoryDic[9] = "UPS监测系统";
+            categoryDic[5] = "机房环境监测系统";
         }
 
-        categoryDic[15] = "给排水监测系统";
-        categoryDic[12] = "送排风监测系统";
-        categoryDic[3] = "视频监控系统";
-        categoryDic[6] = "能耗管理系统";
-        categoryDic[9] = "UPS监测系统";
-        categoryDic[5] = "机房环境监测系统";
         string result = HTTPServiceControl.GetHttpResponse(fireProtectTypeUrl, token);
-        Dictionary<string, List<TabData>> typeInfos = JsonMapper.ToObject<Dictionary<string, List<TabData>>>(result);
-        List<TabData> types = typeInfos["tabData"];
-        DFValue = "";
-        foreach (TabData tabData in types)
+
+        if (!string.IsNullOrEmpty(result))
         {
-            if (tabData.name == "东府")
+            Dictionary<string, List<TabData>> typeInfos = JsonMapper.ToObject<Dictionary<string, List<TabData>>>(result);
+            List<TabData> types = typeInfos["tabData"];
+            DFValue = "";
+            foreach (TabData tabData in types)
             {
-                DFValue = tabData.value;
-                break;
+                if (tabData.name == "东府")
+                {
+                    DFValue = tabData.value;
+                    break;
+                }
+            }
+            foreach (TabData item in typeInfos[DFValue])
+            {
+                DFTypes.Add(item.deviceId.ToString(), item.type);
             }
         }
-        foreach (TabData item in typeInfos[DFValue])
-        {
-            DFTypes.Add(item.deviceId.ToString(), item.type);
-        }
-
     }
 
     public static void qryDeviceByFloor(int projectId, int positionId, displayUI show)

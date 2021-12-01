@@ -43,35 +43,34 @@ public class CorrespondWebSocket
                 {
                     break;
                 }
+
                 Task<WebSocketReceiveResult> task = socket.ReceiveAsync(buffer, token);
                 await task;
 
                 WebSocketReceiveResult result = task.Result;
-
+                /*
                 byte[] data = new byte[result.Count];
 
-                number += result.Count;
+                Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);*/
 
-                Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);
-
-                //Debug.Log(data.Length);
-
-                //System.IO.FileInfo info = new System.IO.FileInfo(file);
-                //System.IO.Directory.CreateDirectory(info.Directory.FullName);
-                stream.Write(data, 0, data.Length);
-                stream.Flush(true);
-
-                
+                if (stream != null) {
+                    stream.Write(buffer_data, 0, result.Count);
+                    stream.Flush(true);
+                }
+               
             }
         });
+    }
 
+    public long GetNumber() {
+        return this.stream.Length;
     }
 
     public async void Connect(string ip,Action<string> action)
     {
         await socket.ConnectAsync(new Uri(ip), token);
 
-        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.Read,1024*1024*10,true);
+        stream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 102400, true);
 
         if (action != null) {
             action(fileName);
@@ -81,11 +80,20 @@ public class CorrespondWebSocket
     }
 
     public void Destory() {
-        this.source.Cancel();
-        if (stream != null){
-            stream.Close();
+        try
+        {
+            this.source.Cancel();
+            if (stream != null)
+            {
+                stream.Close();
+                stream = null;
+            }
+            File.Delete(this.fileName);
+            socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", token);
         }
-        socket.CloseAsync(WebSocketCloseStatus.NormalClosure,"",token);
+        catch (Exception e) {
+            Debug.Log(e.Message);
+        }
     }
 
 }
