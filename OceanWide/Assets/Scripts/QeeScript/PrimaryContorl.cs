@@ -172,7 +172,6 @@ public class PrimaryContorl : MonoBehaviour
             categoryDic[9] = "UPS监测系统";
             categoryDic[5] = "机房环境监测系统";
         }
-
         
         string result = HTTPServiceControl.GetHttpResponse(fireProtectTypeUrl, token);
 
