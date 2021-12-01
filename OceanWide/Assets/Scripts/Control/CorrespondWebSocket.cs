@@ -43,6 +43,7 @@ public class CorrespondWebSocket
                 {
                     break;
                 }
+
                 Task<WebSocketReceiveResult> task = socket.ReceiveAsync(buffer, token);
                 await task;
 
@@ -54,8 +55,11 @@ public class CorrespondWebSocket
 
                 Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);
 
-                stream.Write(data, 0, data.Length);
-                stream.Flush(true);
+                if (stream != null) {
+                    stream.Write(data, 0, data.Length);
+                    stream.Flush(true);
+                }
+               
             }
         });
     }
@@ -68,7 +72,7 @@ public class CorrespondWebSocket
     {
         await socket.ConnectAsync(new Uri(ip), token);
 
-        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.Read,1024*1024,true);
+        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite,1024*1024,true);
 
         if (action != null) {
             action(fileName);
@@ -84,7 +88,9 @@ public class CorrespondWebSocket
             if (stream != null)
             {
                 stream.Close();
+                stream = null;
             }
+            File.Delete(this.fileName);
             socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", token);
         }
         catch (Exception e) {

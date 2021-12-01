@@ -18,11 +18,10 @@ public class VideoControl : MonoBehaviour
     {
         player = this.GetComponent<UniversalMediaPlayer>();
 
-        this.PlayVideo("ws://222.128.39.16:8866/live?url=rtsp://admin:admin@192.168.1.173:554/cam/realmonitor?channel=10&subtype=0");
+        //this.PlayVideo("ws://222.128.39.16:8866/live?url=rtsp://admin:admin@192.168.1.173:554/cam/realmonitor?channel=10&subtype=0");
     }
 
     public void PlayVideo(string url) {
-        Debug.Log(url);
         socket = new CorrespondWebSocket(Application.persistentDataPath + "/" + "video.flv");
         socket.Connect(url, delegate (string fileName) {
             player.Path = fileName;
@@ -49,7 +48,7 @@ public class VideoControl : MonoBehaviour
 
     IEnumerator Play() {
         player.Stop();
-        while (socket.GetNumber() < 1024*100) {
+        while (socket.GetNumber() < 1024*400) {
             yield return new WaitForEndOfFrame();
         }
         player.Play(); 
