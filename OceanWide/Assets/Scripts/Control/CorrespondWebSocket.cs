@@ -48,15 +48,13 @@ public class CorrespondWebSocket
                 await task;
 
                 WebSocketReceiveResult result = task.Result;
-
+                /*
                 byte[] data = new byte[result.Count];
 
-                number += result.Count;
-
-                Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);
+                Buffer.BlockCopy(buffer_data, 0, data, 0, data.Length);*/
 
                 if (stream != null) {
-                    stream.Write(data, 0, data.Length);
+                    stream.Write(buffer_data, 0, result.Count);
                     stream.Flush(true);
                 }
                
@@ -64,15 +62,15 @@ public class CorrespondWebSocket
         });
     }
 
-    public int GetNumber() {
-        return this.number;
+    public long GetNumber() {
+        return this.stream.Length;
     }
 
     public async void Connect(string ip,Action<string> action)
     {
         await socket.ConnectAsync(new Uri(ip), token);
 
-        stream = new FileStream(fileName, FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite,1024*1024,true);
+        stream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 102400, true);
 
         if (action != null) {
             action(fileName);
