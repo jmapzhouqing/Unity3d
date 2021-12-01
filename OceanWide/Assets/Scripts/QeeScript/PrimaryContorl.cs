@@ -206,6 +206,7 @@ public class PrimaryContorl : MonoBehaviour
                             List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(query_data.Result);
                             foreach (DeviceInfo item in deviceInfos)
                             {
+                                item.projectId = 3;
                                 if (deviceDic.ContainsKey(item.categoryId))
                                 {
                                     deviceDic[item.categoryId].Add(item);
@@ -266,6 +267,7 @@ public class PrimaryContorl : MonoBehaviour
                             List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap.Result);
                             foreach (DeviceInfo item in deviceInfos)
                             {
+                                item.projectId = 4;
                                 if (deviceDic.ContainsKey(item.categoryId))
                                 {
                                     deviceDic[item.categoryId].Add(item);
