@@ -157,4 +157,10 @@ namespace UIDataStruct {
 		public LiftInfo data;
 	}
 
+	public class CallBackResult {
+		public bool isSucc;
+		public int id;
+		public string dataMsg;
+		public int positionId;
+	}
 }

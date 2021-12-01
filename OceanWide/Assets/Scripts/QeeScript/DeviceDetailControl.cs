@@ -110,7 +110,7 @@ public class DeviceDetailControl : MonoBehaviour
                         {
                             string str = deviceInfo.monitorList[i].value == "true" ? "在线" : "离线";
                             deviceItem2.SetValue(str);
-                        } else if (deviceInfo.categoryId == 9) {
+                        } else if (deviceInfo.categoryId == 9|| deviceInfo.categoryId == 9) {
                             deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
                         }
                         else
@@ -150,26 +150,33 @@ public class DeviceDetailControl : MonoBehaviour
                 info.GetChild(1).GetComponent<Text>().text = deviceInfo.ytStatusName;
                 info.GetChild(3).GetComponent<Text>().text = deviceInfo.carTopTemperature.ToString();
                 info.GetChild(5).GetComponent<Text>().text = deviceInfo.roomTemperature.ToString();
-
-                UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
-                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
-                control.Path = deviceInfo.rtsp;
-                control.Play();
                 Button btn = item.GetComponentInChildren<Button>();
                 btn.onClick.AddListener(delegate () {
                     this.close();
                 });
+                //UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
+                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
+                //control.Path = deviceInfo.rtsp;
+                //control.Play();
+                VideoControl control = item.GetComponentInChildren<VideoControl>();
+                
+                control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+
+                
             }
             else {
                 RectTransform item = GameObject.Instantiate<RectTransform>(detail_vedio_prefab, detail_container);
-                UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
-                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
-                control.Path = deviceInfo.rtsp;
-                control.Play();
                 Button btn = item.GetComponentInChildren<Button>();
                 btn.onClick.AddListener(delegate () {
                     this.close();
                 });
+                //UniversalMediaPlayer control = item.GetComponentInChildren<UniversalMediaPlayer>();
+                //control.Path = "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4";
+                //control.Path = deviceInfo.rtsp;
+                //control.Play();
+                VideoControl control = item.GetComponentInChildren<VideoControl>();
+                control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+                
             }
             
         }

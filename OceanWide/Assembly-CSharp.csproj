@@ -119,8 +119,10 @@
     <Compile Include="Assets\HighlightingSystemDemo\Scripts\StaticOccluderController.cs" />
     <Compile Include="Assets\HighlightingSystemDemo\Scripts\WallMovementController.cs" />
     <Compile Include="Assets\Scripts\Control\CameraControl.cs" />
+    <Compile Include="Assets\Scripts\Control\CorrespondWebSocket.cs" />
     <Compile Include="Assets\Scripts\Control\PlayVideo.cs" />
     <Compile Include="Assets\Scripts\Control\TwinkleControl.cs" />
+    <Compile Include="Assets\Scripts\Control\VideoControl.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderControl.cs" />
     <Compile Include="Assets\Scripts\Level\BuilderManager.cs" />
     <Compile Include="Assets\Scripts\Level\LevelExhibitionControl.cs" />

@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using UIDataStruct;
 
 namespace httpTool
 {
@@ -92,22 +93,22 @@ namespace httpTool
             Uri uri = new Uri(url);
             try
             {
-                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = false };
+                using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
-
-                    if (!string.IsNullOrEmpty(cookies))
-                    {
-                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
-                    }
-
-                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+                    client.Timeout = new TimeSpan(0, 0, 10);
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var content = new StringContent(param);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     content.Headers.Add("charset", "utf-8");
 
-                    var response = await client.PostAsync("", content);
+                    HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, url);
+                    message.Headers.Add("Cookie", "IORISESSION=" + cookies);
+
+                    message.Content = content;
+
+                    var response = await client.SendAsync(message);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -126,22 +127,64 @@ namespace httpTool
             return responseString;
         }
 
+        public static async Task<CallBackResult> PostDataAsyncNew(string url, string param, string cookies,int id, int positionId)
+        {
+            CallBackResult responseString = new CallBackResult();
+            responseString.id = id;
+            responseString.positionId = positionId;
+            Uri uri = new Uri(url);
+            try
+            {
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = false };
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    client.Timeout = new TimeSpan(0, 0, 10);
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+                    var content = new StringContent(param);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    content.Headers.Add("charset", "utf-8");
+
+                    HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, url);
+                    message.Headers.Add("Cookie", "IORISESSION=" + cookies);
+
+                    message.Content = content;
+
+                    var response = await client.SendAsync(message);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        responseString.isSucc = true;
+                        responseString.dataMsg = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        responseString.isSucc = false;
+                        responseString.dataMsg = response.ReasonPhrase;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                responseString.isSucc = false;
+                responseString.dataMsg = e.Message;
+            }
+            return responseString;
+        }
+
         public static async Task<string> GetDataAsync(string url, string cookies)
         {
             string responseString = "";
             Uri uri = new Uri(url);
             try
             {
-                using (HttpClient client = new HttpClient() { BaseAddress = uri })
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = true };
+                handler.CookieContainer.SetCookies(uri, "IORISESSION=" + cookies);
+
+                using (HttpClient client = new HttpClient(handler))
                 {
-                    client.Timeout = new TimeSpan(0, 0, 2);
-
-                    if (!string.IsNullOrEmpty(cookies))
-                    {
-                        client.DefaultRequestHeaders.Add("IORISESSION", cookies);
-                    }
-
-                    client.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0");
+                    client.Timeout = new TimeSpan(0, 0, 10);
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
 
                     var response = await client.GetAsync(uri);
 
@@ -158,6 +201,44 @@ namespace httpTool
             catch (Exception e)
             {
                 responseString = e.Message;
+            }
+            return responseString;
+        }
+
+        public static async Task<CallBackResult> GetDataAsyncNew(string url, string cookies,int id,int positionId)
+        {
+            CallBackResult responseString = new CallBackResult();
+            responseString.id = id;
+            responseString.positionId = positionId;
+            Uri uri = new Uri(url);
+            try
+            {
+                HttpClientHandler handler = new HttpClientHandler() { UseCookies = true };
+                handler.CookieContainer.SetCookies(uri, "IORISESSION=" + cookies);
+
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    client.Timeout = new TimeSpan(0, 0, 10);
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+                    var response = await client.GetAsync(uri);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        responseString.isSucc = true;
+                        responseString.dataMsg = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        responseString.isSucc = false;
+                        responseString.dataMsg = response.ReasonPhrase;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                responseString.isSucc = false;
+                responseString.dataMsg = e.Message;
             }
             return responseString;
         }

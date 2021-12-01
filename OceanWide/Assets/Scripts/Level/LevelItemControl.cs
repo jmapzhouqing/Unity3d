@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Threading.Tasks;
+using httpTool;
+using System;
 
 public class LevelItemControl : MonoBehaviour, IPointerClickHandler
 {
@@ -55,16 +58,27 @@ public class LevelItemControl : MonoBehaviour, IPointerClickHandler
         image.color = new Color(60 / 255f, 87 / 255f, 122 / 255f, 0.3f);
     }
 
+
+    private ResultManager resultManager;
+    private Transform floor;
     public void OnPointerClick(PointerEventData eventData)
     {
         this.Selected();
 
-        ResultManager resultManager = GameObject.FindObjectOfType<ResultManager>();
+        resultManager = GameObject.FindObjectOfType<ResultManager>();
 
-        Transform floor = level_exhibition_control.transform.Find(this.levelExhibitionName);
+        floor = level_exhibition_control.transform.Find(this.levelExhibitionName);
 
-        PrimaryContorl.qryDeviceByFloor(this.projectId, this.positionId);
         resultManager.SetLevelName(this.floorName);
+
+        resultManager.Clear();
+        #region
+        PrimaryContorl.currentPositionId = this.positionId;
+        PrimaryContorl.qryDeviceByFloor( this.projectId, this.positionId, show);
+
+        #endregion
+
+        /*PrimaryContorl.qryDeviceByFloor(this.projectId, this.positionId);
         if (PrimaryContorl.isDevice)
         {
             resultManager.CreateCategory(floor,PrimaryContorl.categoryDic, PrimaryContorl.deviceDic);
@@ -72,8 +86,14 @@ public class LevelItemControl : MonoBehaviour, IPointerClickHandler
         else
         {
             resultManager.Clear();
-        }
+        }*/
     }
+
+    private void show() {
+        //resultManager.Clear();
+        resultManager.CreateCategory(floor, PrimaryContorl.categoryDic, PrimaryContorl.deviceDic);
+    }
+
 
     public void setProjectId(int value)
     {

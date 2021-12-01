@@ -20,6 +20,8 @@ public class ResultManager : MonoBehaviour
 
     private float duration = 0.2f;
 
+    private Dictionary<int, CategoryControl> categoryControlList;
+
     void Awake()
     {
         DOTween.Init(true, true, null);
@@ -33,8 +35,8 @@ public class ResultManager : MonoBehaviour
         }
 
         category_prefab = Resources.Load<RectTransform>("UIPrefab/Category");
-        
 
+        categoryControlList = new Dictionary<int, CategoryControl>();
     }
 
     private void Start()
@@ -53,20 +55,28 @@ public class ResultManager : MonoBehaviour
     }
     public void CreateCategory(Transform floor,Dictionary<int,string> categoryName,Dictionary<int,List<DeviceInfo>> devices)
     {
-        for (int i = 0, number = container.childCount; i < number; i++)
+        /*for (int i = 0, number = container.childCount; i < number; i++)
         {
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
-        }
+        }*/
         foreach (KeyValuePair<int,List<DeviceInfo>> item in devices)
         {
-            RectTransform child = GameObject.Instantiate<RectTransform>(category_prefab, container);
-            CategoryControl categoryControl = child.GetComponentInChildren<CategoryControl>();
-            categoryControl.target = floor;
-            string category_name;
-            if (categoryName.TryGetValue(item.Key, out category_name)) {
-                categoryControl.SetCategoryName(category_name);
+            if (!categoryControlList.ContainsKey(item.Key))
+            {
+                RectTransform child = GameObject.Instantiate<RectTransform>(category_prefab, container);
+                CategoryControl categoryControl = child.GetComponentInChildren<CategoryControl>();
+                categoryControlList.Add(item.Key, categoryControl);
+                categoryControl.target = floor;
+                string category_name;
+                if (categoryName.TryGetValue(item.Key, out category_name))
+                {
+                    categoryControl.SetCategoryName(category_name);
+                }
+                categoryControl.CreateDeviceList(item.Value);
             }
-            categoryControl.CreateDeviceList(item.Value);
+            else {
+                //categoryControlList[item.Key].CreateDeviceList(item.Value);
+            }
         }
 
         if (devices.Count != 0) {
@@ -94,6 +104,7 @@ public class ResultManager : MonoBehaviour
 
     public void Clear() {
         this.title.name = "";
+        this.categoryControlList.Clear();
         for (int i = 0, number = container.childCount; i < number; i++){
             GameObject.DestroyImmediate(container.GetChild(0).gameObject);
         }
