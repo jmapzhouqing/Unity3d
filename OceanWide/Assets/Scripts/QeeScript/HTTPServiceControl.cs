@@ -60,6 +60,7 @@ namespace httpTool
             var retString = "";
             try
             {
+
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "GET";
                 request.ContentType = "application/json;charset=UTF-8";

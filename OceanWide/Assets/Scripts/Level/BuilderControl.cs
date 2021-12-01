@@ -69,31 +69,33 @@ public class BuilderControl : MonoBehaviour
     {
         level_exhibition_control = GameObject.Find(name)?.GetComponent<LevelExhibitionControl>();
 
-        for (int i = 0; i < floorList.Count; i++)
-        {
-            RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
-            LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
-            switch (name)
+        if (floorList != null) {
+            for (int i = 0; i < floorList.Count; i++)
             {
-                case "LHY":
-                    control.setProjectId(3);
-                    control.setFloorName("兰海园3号楼" + floorList[i].positionName);
-                    control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);
-                    break;
-                case "DF":
-                    control.setProjectId(4);
-                    control.setFloorName("东府5号楼" + floorList[i].positionName);
-                    control.SetLevelName(PrimaryContorl.DFFloorDic[floorList[i].positionId]);
-                    break;
+                RectTransform child = GameObject.Instantiate<RectTransform>(level_prefab, container);
+                LevelItemControl control = child.GetComponentInChildren<LevelItemControl>();
+                switch (name)
+                {
+                    case "LHY":
+                        control.setProjectId(3);
+                        control.setFloorName("兰海园3号楼" + floorList[i].positionName);
+                        control.SetLevelName(PrimaryContorl.LHYFloorDic[floorList[i].positionId]);
+                        break;
+                    case "DF":
+                        control.setProjectId(4);
+                        control.setFloorName("东府5号楼" + floorList[i].positionName);
+                        control.SetLevelName(PrimaryContorl.DFFloorDic[floorList[i].positionId]);
+                        break;
+                }
+
+
+                control.setPositionId(floorList[i].positionId);
+                control.SetLevelControl(this.level_exhibition_control);
+                levels.Add(i, control);
             }
 
-
-            control.setPositionId(floorList[i].positionId);
-            control.SetLevelControl(this.level_exhibition_control);
-            levels.Add(i, control);
+            StartCoroutine(UpdateElementHeight());
         }
-
-        StartCoroutine(UpdateElementHeight());
     }
 
     public void SetLevel(int index)
