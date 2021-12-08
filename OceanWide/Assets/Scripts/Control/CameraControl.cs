@@ -125,7 +125,7 @@ public class CameraControl : MonoBehaviour
         }
 
         if(this.Sleep){
-            rotation.x += 0.05f;
+            rotation.x += 0.1f;
         }
     }
 
