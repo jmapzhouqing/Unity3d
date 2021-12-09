@@ -229,6 +229,7 @@ public class PrimaryContorl : MonoBehaviour
                                     deviceDic.Add(item.categoryId, temp);
                                 }
                             }
+                            if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
                             foreach (int key in deviceDic.Keys)
                             {
                                 deviceDic[key].Sort(new NameCompare());
@@ -256,6 +257,45 @@ public class PrimaryContorl : MonoBehaviour
                     resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
 
                 }
+
+                #region 电表
+                if (positionId == 77)
+                {
+                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(elecUrl, token);
+
+                    parkResult.GetAwaiter().OnCompleted(() =>
+                    {
+                        if (!string.IsNullOrEmpty(parkResult.Result))
+                        {
+                            try
+                            {
+                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
+                                foreach (DeviceInfo item in parkInfos)
+                                {
+                                    if (deviceDic.ContainsKey(item.categoryId))
+                                    {
+                                        deviceDic[item.categoryId].Add(item);
+                                    }
+                                    else
+                                    {
+                                        isDevice = true;
+                                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                                        temp.Add(item);
+                                        deviceDic.Add(item.categoryId, temp);
+                                    }
+                                }
+                                deviceDic[16].Sort(new NameCompare());
+                                show();
+                            }
+                            catch (Exception e)
+                            {
+                                dialog.SetActive(true);
+                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
+                            }
+                        }
+                    });
+                }
+                #endregion
 
             }
 
