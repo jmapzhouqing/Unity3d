@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{6665F698-70DC-39E7-61CE-DD980B781034}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -26,7 +27,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +37,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -71,6 +74,22 @@
     <Compile Include="Assets\Demigiant\DOTweenPro\DOTweenProShortcuts.cs" />
     <Compile Include="Assets\Demigiant\DOTweenPro\DOTweenTextMeshPro.cs" />
     <Compile Include="Assets\Demigiant\DOTweenPro\DOTweenTk2d.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.avcodec.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.avdevice.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.avfilter.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.avformat.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.avutil.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.swresample.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\FFmpeg.swscale.g.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\Properties\AssemblyInfo.cs" />
+    <Compile Include="Assets\EasyMovieTexture\FFmpeg.AutoGen\Unresolved.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\MedaiPlayerSampleGUI.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\MedaiPlayerSampleSphereGUI.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\MediaPlayerCtrl.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\MediaPlayerEvent.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\MediaPlayerFullScreenCtrl.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\SeekBarCtrl.cs" />
+    <Compile Include="Assets\EasyMovieTexture\Scripts\SphereMirror.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\Graphs\WMG_Axis_Graph.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\Graphs\WMG_Bezier_Band_Graph.cs" />
     <Compile Include="Assets\GraphMarker\Scripts\Graphs\WMG_Grid.cs" />
@@ -201,13 +220,19 @@
     <None Include="Assets\GraphMarker\Shaders\ComputeCircularBand.compute" />
     <None Include="Assets\Demigiant\DOTweenPro\readme.txt" />
     <None Include="Assets\UniversalMediaPlayer\Resources\UMPSettings.txt" />
+    <None Include="Assets\EasyMovieTexture\Unlit_SphereInside.shader" />
     <None Include="Assets\UniversalMediaPlayer\Shaders\UMP-TransparentCanvas.shader" />
     <None Include="Assets\UniversalMediaPlayer\Shaders\UMP-QuadrantCanvas(Linear).shader" />
+    <None Include="Assets\EasyMovieTexture\Chromakey.shader" />
     <None Include="Assets\GraphMarker\Shaders\AreaShading.shader" />
+    <None Include="Assets\EasyMovieTexture\Resources\Unlit_YUV.shader" />
+    <None Include="Assets\EasyMovieTexture\readme.txt" />
     <None Include="Assets\UniversalMediaPlayer\Shaders\UMP-EquirectangularCanvas.shader" />
     <None Include="Assets\UniversalMediaPlayer\Shaders\UMP-ARVideoCanvas.shader" />
     <None Include="Assets\GraphMarker\Shaders\AreaShading_SF.shader" />
+    <None Include="Assets\EasyMovieTexture\Chromakey2.shader" />
     <None Include="Assets\Demigiant\DOTween\readme.txt" />
+    <None Include="Assets\EasyMovieTexture\readme_License.txt" />
     <None Include="Assets\Demigiant\DemiLib\Core\DemiLib.xml" />
     <None Include="Assets\UniversalMediaPlayer\Shaders\UMP-VideoSphericalCanvas.shader" />
     <None Include="Assets\GraphMarker\Shaders\ComputeLineGraph.compute" />
