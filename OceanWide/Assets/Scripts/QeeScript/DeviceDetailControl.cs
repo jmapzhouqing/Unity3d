@@ -112,7 +112,7 @@ public class DeviceDetailControl : MonoBehaviour
                             deviceItem2.SetValue(str);
                         } else if (deviceInfo.categoryId == 9) {
                             deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
-                        } else if (deviceInfo.monitorList[i].value.IndexOf(".")>-1&& deviceInfo.categoryId == 16) {
+                        } else if (deviceInfo.categoryId == 16 && deviceInfo.monitorList[i].value.IndexOf(".")>-1) {
                             deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
                         }
                         else

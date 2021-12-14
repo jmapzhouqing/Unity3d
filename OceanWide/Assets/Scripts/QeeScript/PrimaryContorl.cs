@@ -244,8 +244,9 @@ public class PrimaryContorl : MonoBehaviour
                     }
                 });
 
-                //门禁动环
-                int[] typeArr = new int[] { 0, 1 };
+                //门禁动环 int[] typeArr = new int[] { 0, 1 }; 
+                
+                int[] typeArr = new int[] { 0 };
                 for (int j = 0; j < typeArr.Length; j++)
                 {
                     string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
@@ -423,14 +424,14 @@ public class PrimaryContorl : MonoBehaviour
 
 
                 //动环
-                string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
+                /*string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
                                                             {"digitalMapId",mapArr[i]},
                                                             {"type",1},
                                                             {"ifBind",1},
                                                             {"projectId",4} });
                 Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
                 resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
-
+                */
                 #region 停车
                 if (positionId == 47)
                 {
