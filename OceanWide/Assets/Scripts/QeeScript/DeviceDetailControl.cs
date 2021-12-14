@@ -37,7 +37,7 @@ public class DeviceDetailControl : MonoBehaviour
 
     public void setContainer(DeviceEventType deviceEventType,DeviceInfo deviceInfo) 
     {
-        if (deviceInfo.categoryId == 3) {
+        if (deviceInfo.categoryId == 3|| (deviceInfo.categoryId == 5&& deviceInfo.monitorList == null)) {
             deviceInfo.rtsp = PrimaryContorl.qryDeviceRstp(deviceInfo.deviceId);
             if (!String.IsNullOrEmpty(deviceInfo.rtsp)) deviceEventType = DeviceEventType.Video;
         } else if (deviceInfo.categoryId == 17) {
