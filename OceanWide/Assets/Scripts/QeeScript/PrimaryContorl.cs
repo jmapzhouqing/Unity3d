@@ -217,6 +217,12 @@ public class PrimaryContorl : MonoBehaviour
                             foreach (DeviceInfo item in deviceInfos)
                             {
                                 item.projectId = 3;
+                                //门禁
+                                if (item.categoryId == 4)
+                                {
+                                    item.doorId = item.deviceEUI.Substring(item.deviceEUI.IndexOf('-') + 1);
+                                    item.customType = 3;
+                                }
                                 if (deviceDic.ContainsKey(item.categoryId))
                                 {
                                     deviceDic[item.categoryId].Add(item);
@@ -246,7 +252,7 @@ public class PrimaryContorl : MonoBehaviour
 
                 //门禁动环 int[] typeArr = new int[] { 0, 1 }; 
                 
-                int[] typeArr = new int[] { 0 };
+                /*int[] typeArr = new int[] { 0 };
                 for (int j = 0; j < typeArr.Length; j++)
                 {
                     string doorParam = JsonMapper.ToJson(new Dictionary<string, int> {
@@ -257,48 +263,48 @@ public class PrimaryContorl : MonoBehaviour
                     Task<CallBackResult> resultDoor = HTTPServiceControl.PostDataAsyncNew(doorInfoUrl, doorParam, token, mapArr[i], positionId);
                     resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
 
-                }
-
-                #region 电表
-                if (positionId == 77)
-                {
-                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(elecUrl, token);
-
-                    parkResult.GetAwaiter().OnCompleted(() =>
-                    {
-                        if (!string.IsNullOrEmpty(parkResult.Result))
-                        {
-                            try
-                            {
-                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
-                                foreach (DeviceInfo item in parkInfos)
-                                {
-                                    if (deviceDic.ContainsKey(item.categoryId))
-                                    {
-                                        deviceDic[item.categoryId].Add(item);
-                                    }
-                                    else
-                                    {
-                                        isDevice = true;
-                                        List<DeviceInfo> temp = new List<DeviceInfo>();
-                                        temp.Add(item);
-                                        deviceDic.Add(item.categoryId, temp);
-                                    }
-                                }
-                                deviceDic[16].Sort(new NameCompare());
-                                show();
-                            }
-                            catch (Exception e)
-                            {
-                                dialog.SetActive(true);
-                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
-                            }
-                        }
-                    });
-                }
-                #endregion
+                }*/
 
             }
+            #region 电表
+            if (positionId == 77)
+            {
+                Task<CallBackResult> parkResult = HTTPServiceControl.GetDataAsyncNew(elecUrl, token,positionId,positionId);
+
+                parkResult.GetAwaiter().OnCompleted(() =>
+                {
+                    if (parkResult.Result.positionId != currentPositionId) return;
+                    if (parkResult.Result.isSucc)
+                    {
+                        try
+                        {
+                            List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result.dataMsg);
+                            foreach (DeviceInfo item in parkInfos)
+                            {
+                                if (deviceDic.ContainsKey(item.categoryId))
+                                {
+                                    deviceDic[item.categoryId].Add(item);
+                                }
+                                else
+                                {
+                                    isDevice = true;
+                                    List<DeviceInfo> temp = new List<DeviceInfo>();
+                                    temp.Add(item);
+                                    deviceDic.Add(item.categoryId, temp);
+                                }
+                            }
+                            deviceDic[16].Sort(new NameCompare());
+                            show();
+                        }
+                        catch (Exception e)
+                        {
+                            dialog.SetActive(true);
+                            dialog.GetComponent<DialogControl>().setContent(parkResult.Result.dataMsg);
+                        }
+                    }
+                });
+            }
+            #endregion
 
         }
         else if (projectId == 4)
@@ -403,6 +409,7 @@ public class PrimaryContorl : MonoBehaviour
                                     }
                                 });
                             }
+                            
 
                             foreach (int key in deviceDic.Keys)
                             {
@@ -483,15 +490,16 @@ public class PrimaryContorl : MonoBehaviour
                 #region 电表
                 if (positionId == 59)
                 {
-                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(elecUrl, token);
+                    Task<CallBackResult> parkResult = HTTPServiceControl.GetDataAsyncNew(elecUrl, token,positionId,positionId);
 
                     parkResult.GetAwaiter().OnCompleted(() =>
                     {
-                        if (!string.IsNullOrEmpty(parkResult.Result))
+                        if (parkResult.Result.positionId != currentPositionId) return;
+                        if (parkResult.Result.isSucc)
                         {
                             try
                             {
-                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
+                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result.dataMsg);
                                 foreach (DeviceInfo item in parkInfos)
                                 {
                                     if (deviceDic.ContainsKey(item.categoryId))
@@ -512,13 +520,12 @@ public class PrimaryContorl : MonoBehaviour
                             catch (Exception e)
                             {
                                 dialog.SetActive(true);
-                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
+                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result.dataMsg);
                             }
                         }
                     });
                 }
                 #endregion
-
             }
         }
 

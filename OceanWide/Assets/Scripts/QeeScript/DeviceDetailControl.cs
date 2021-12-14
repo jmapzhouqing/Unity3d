@@ -48,6 +48,18 @@ public class DeviceDetailControl : MonoBehaviour
             deviceInfo.carTopTemperature = lift.carTopTemperature;
             if (!String.IsNullOrEmpty(deviceInfo.rtsp)) deviceEventType = DeviceEventType.Video;
         }
+        /*if (deviceInfo.categoryId == 5 && deviceInfo.monitorList != null) {
+            for (int i = 0; i < deviceInfo.monitorList.Count; i++)
+            {
+                if (deviceInfo.monitorList[i].monitorName == "温度") {
+                    float temp = float.Parse(deviceInfo.monitorList[i].value);
+
+                }
+                else if(deviceInfo.monitorList[i].monitorName == "湿度") {
+                    float temp = float.Parse(deviceInfo.monitorList[i].value);
+                }
+            }
+        }*/
 
         for (int i = 0, child_number = detail_container.childCount; i < child_number; i++)
         {
