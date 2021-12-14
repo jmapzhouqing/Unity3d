@@ -91,22 +91,29 @@ public class VideoControl : MonoBehaviour
 
     IEnumerator Play(string fileName) {
         yield return new WaitForSeconds(2.0f);
-        
-        player.Load(fileName);
 
-        yield return new WaitForSeconds(0.5f);
+        if (socket.GetNumber() > 0){
+            player.Load(fileName);
 
-        if (!player.GetCurrentState().Equals(MediaPlayerCtrl.MEDIAPLAYER_STATE.READY)){
-            player.UnLoad();
+            yield return new WaitForSeconds(0.5f);
+
+            if (!player.GetCurrentState().Equals(MediaPlayerCtrl.MEDIAPLAYER_STATE.READY))
+            {
+                player.UnLoad();
+                StartCoroutine(Play(fileName));
+                yield break;
+            }
+            else
+            {
+                player.SeekTo(position);
+                player.Play();
+                //player.SetSpeed(0.5f);
+            }
+        }else {
             StartCoroutine(Play(fileName));
             yield break;
         }
-        else {
-            
-            player.SeekTo(position);
-            player.Play();
-            //player.SetSpeed(0.5f);
-        }
+        
         /*
         while(socket.GetNumber() < 1024 * 200){
             yield return new WaitForSeconds(1.0f);
