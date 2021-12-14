@@ -2307,9 +2307,7 @@ public class MediaPlayerCtrl : MonoBehaviour
 
             pFormatContext = ppFomatContext;
 
-
-
-			if (ffmpeg.avformat_find_stream_info(pFormatContext, null) != 0)
+            if (ffmpeg.avformat_find_stream_info(pFormatContext, null) != 0)
 			{
 				m_CurrentState = MEDIAPLAYER_STATE.ERROR;
                 Debug.Log("Could not find stream info");
@@ -2353,8 +2351,6 @@ public class MediaPlayerCtrl : MonoBehaviour
 					bFindVideo = true;
 					pStream = (pFormatContext)->streams[i];
 					iStreamIndex = i;
-
-					Debug.Log("Video" +  iStreamIndex);
 				}
 
 			}
@@ -2366,9 +2362,6 @@ public class MediaPlayerCtrl : MonoBehaviour
                     pStreamAudio = (pFormatContext)->streams[i];
                     iStreamAudioIndex = i;
                 }
-
-
-
             }
 		}
 
@@ -2393,6 +2386,9 @@ public class MediaPlayerCtrl : MonoBehaviour
 		m_iHeight = codecContext.height;
 		var sourcePixFmt = codecContext.pix_fmt;
 		var codecId = codecContext.codec_id;
+
+        //Debug.Log("frame:"+pStream->codec->coded_frame->repeat_pict);
+
 		var convertToPixFmt = AVPixelFormat.AV_PIX_FMT_RGBA;
 
 	#if UNITY_5
@@ -2469,6 +2465,7 @@ public class MediaPlayerCtrl : MonoBehaviour
 		}
 
 		pDecodedFrame = ffmpeg.av_frame_alloc();
+
 		pDecodedAudioFrame = ffmpeg.av_frame_alloc();
 
 
@@ -2534,17 +2531,9 @@ public class MediaPlayerCtrl : MonoBehaviour
 	bool bInterrupt = false;
 
 
-	public void Interrupt1()
-	{
+	public void Interrupt1(){
 		pFormatContext->interrupt_callback.callback = (IntPtr)null;
 		bInterrupt = true;
-
-		//Debug.Log ("Interrupt1");
-
-
-		//Call_Pause ();
-
-
 	}
 
 
@@ -2568,18 +2557,13 @@ public class MediaPlayerCtrl : MonoBehaviour
 	List<double> listAudioPtsTime;
 	Queue<float> listVideoPts;
 
-
 	private static void DebugMethod(string message)
 	{
 		Debug.Log("EasyMovieTexture: " + message);
 	}
 
-
 	private void ThreadUpdate()
 	{
-
-
-
 		/*lock (listVideo)
         {
             if (listVideo != null)
@@ -2607,33 +2591,20 @@ public class MediaPlayerCtrl : MonoBehaviour
                 while (listVideo.Count >10 || bEnd == true )
 				{
 					Thread.Sleep(5);
-
-             
 				}
 			}
 
-
-
-
 			// if( m_CurrentState == MEDIAPLAYER_STATE.PLAYING)
-
-
-
-
-
 
 			UpdateVideo();
 			Thread.Sleep(10);
-
-
 
 			//Thread.Sleep(5);
 		}
 	}
 
 
-	private void UpdateVideo()
-	{
+	private void UpdateVideo(){
 
 		var gotPicture = 0;
 		var gotSound = 0;
@@ -2647,21 +2618,13 @@ public class MediaPlayerCtrl : MonoBehaviour
 
 				if (pPacket->stream_index == iStreamIndex) {
 
-
-
 					var size = ffmpeg.avcodec_decode_video2 (pCodecContext, pDecodedFrame, &gotPicture, pPacket);
+
 					if (size < 0) {
                         //throw new ApplicationException (string.Format (@"Error while decoding frame "));
-
                         Debug.Log("Error while decoding frame");
-                        return;
-                   
+                        //return;
                     }
-
-
-
-
-
 
 					if ((ulong)pPacket->dts != ffmpeg.AV_NOPTS_VALUE) {
 						pts = ffmpeg.av_frame_get_best_effort_timestamp (pDecodedFrame);
@@ -2692,7 +2655,6 @@ public class MediaPlayerCtrl : MonoBehaviour
 
 						//fLastFrameTime = (float)pts;
 
-
 						sbyte** src = &pDecodedFrame->data0;
 						sbyte** dst = &pConvertedFrame->data0;
 						int* srcStride = pDecodedFrame->linesize;
@@ -2703,8 +2665,6 @@ public class MediaPlayerCtrl : MonoBehaviour
 						int iLineSize2 = srcStride[2] ;
 
 						if (m_bPC_FastMode == true) {
-							
-
 
 							int iVideoSize = m_iWidth * m_iHeight + (2 * m_iWidth / 2 * m_iHeight / 2);
 							byte[] buffer = new byte[iVideoSize];
@@ -3717,10 +3677,7 @@ public class MediaPlayerCtrl : MonoBehaviour
 
 	private void Call_SetSeekPosition(int iSeek)
 	{
-
-
-		if( threadVideo != null)
-		{
+		if( threadVideo != null){
 			while(threadVideo.IsAlive == true)
 			{
 				threadVideo.Abort();
@@ -3735,27 +3692,16 @@ public class MediaPlayerCtrl : MonoBehaviour
 
 		long seek_target = (long)iSeek * 1000;
 
-
-
-		Debug.Log (seek_target);
 		seek_target= ffmpeg.av_rescale_q(seek_target, ffmpeg.av_get_time_base_q() , pStream->time_base);
-
-		Debug.Log (seek_target);
-
 
 		//int seek_flags =  iSeek - (int)(fLastFrameTime * 1000.0f) < 0 ? ffmpeg.AVSEEK_FLAG_BACKWARD : ffmpeg.AVSEEK_FLAG_BACKWARD;
 
 		if(ffmpeg.av_seek_frame(pFormatContext, iStreamIndex, 
 			seek_target, ffmpeg.AVSEEK_FLAG_BACKWARD) < 0) {
-            //error
-
           
-
 		} else {
 			/* handle packet queues... more later... */
-
 		}
-
 
 		fCurrentSeekTime = (float)iSeek / 1000.0f;
 		//fLastFrameTime = 0;
@@ -3770,20 +3716,7 @@ public class MediaPlayerCtrl : MonoBehaviour
         Destroy(audioClip);
         audioClip = null;
       
-
-
-
-
-
-
-
         ffmpeg.avcodec_flush_buffers (pCodecContext);
-
-
-
-
-		//Debug.Log (fLastFrameTime + " " + fCurrentSeekTime);
-
 	}
 
 	private int Call_GetSeekPosition()
