@@ -92,7 +92,7 @@ public class VideoControl : MonoBehaviour
     IEnumerator Play(string fileName) {
         yield return new WaitForSeconds(2.0f);
 
-        if (socket.GetNumber() > 0){
+        if (socket.GetNumber() > 1024*10){
             player.Load(fileName);
 
             yield return new WaitForSeconds(0.5f);
