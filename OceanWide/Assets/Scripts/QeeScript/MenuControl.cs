@@ -43,7 +43,7 @@ public class MenuControl : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         result_manager = FindObjectOfType<ResultManager>();
         all_menu = new Dictionary<string, Dictionary<string, string>> {
             { "management",new Dictionary<string, string>() },
-            { "buildercontrol",new Dictionary<string, string>{ { "8", "BA系统" }, { "7", "人脸识别系统" }, { "6", "能耗系统" }, { "5", "停车场所系统" }, { "4","变配电系统" },{"3", "智能照明系统" },{"2","机房环境监测"},{"1", "电梯运行监测" } } },
+            { "buildercontrol",new Dictionary<string, string>{ { "8", "BA系统" }, { "7", "人脸识别系统" }, { "6", "能耗系统" }, { "5", "停车场系统" }, { "4","变配电系统" },{"3", "智能照明系统" },{"2","机房环境监测"},{"1", "电梯运行监测" } } },
             { "security",new Dictionary<string, string>{ {"1","视频监控"},{"2","消防系统"}, { "3", "电梯运行监测" } } },
             { "information",new Dictionary<string, string>{ {"1","动态"}} },
         };
