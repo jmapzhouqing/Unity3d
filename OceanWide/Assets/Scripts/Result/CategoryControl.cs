@@ -37,6 +37,8 @@ public class CategoryControl : MonoBehaviour
 
     private string categoryName;
 
+    private List<string> deviceNameList;
+
     private int i = 0;
     // Start is called before the first frame update
     void Awake()
@@ -52,6 +54,8 @@ public class CategoryControl : MonoBehaviour
         element = this.GetComponent<LayoutElement>();
         this.size = new Vector2(element.preferredWidth, element.preferredHeight);
         this.Expand(false);
+
+        deviceNameList = new List<string>();
     }
 
     public void SetCategoryName(string name) {
@@ -64,6 +68,14 @@ public class CategoryControl : MonoBehaviour
     public void CreateDeviceList(List<DeviceInfo> devices)
     {
         foreach (DeviceInfo device in devices) {
+            string finalName = device.deviceName == null ? device.doorName : device.deviceName;
+            if (deviceNameList.Contains(finalName))
+            {
+                continue;
+            }
+            else {
+                deviceNameList.Add(finalName);
+            }
             RectTransform child = GameObject.Instantiate<RectTransform>(result_prefab, container);
             child.gameObject.GetComponentInChildren<Text>().text = device.deviceName == null?device.doorName:device.deviceName;
             //ResultControl categoryControl = child.GetComponentInChildren<ResultControl>();
