@@ -106,12 +106,17 @@ public class DeviceDetailControl : MonoBehaviour
                         RectTransform info_item2 = GameObject.Instantiate<RectTransform>(detail_info_item_prefab, container);
                         DeviceItem deviceItem2 = info_item2.GetComponentInChildren<DeviceItem>();
                         deviceItem2.SetKey(deviceInfo.monitorList[i].monitorName);
+
                         if (deviceInfo.categoryId == 6 && deviceInfo.monitorList[i].monitorName == "在离线")
                         {
                             string str = deviceInfo.monitorList[i].value == "true" ? "在线" : "离线";
                             deviceItem2.SetValue(str);
-                        } else if (deviceInfo.categoryId == 9|| deviceInfo.categoryId == 9) {
+                        } else if (deviceInfo.categoryId == 9) {
                             deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
+                        } else if (deviceInfo.categoryId == 16) {
+                            if (!string.IsNullOrEmpty(deviceInfo.monitorList[i].value) && deviceInfo.monitorList[i].value.IndexOf(".") > -1) {
+                                deviceItem2.SetValue(float.Parse(deviceInfo.monitorList[i].value).ToString("F2"));
+                            }
                         }
                         else
                         {
@@ -175,7 +180,14 @@ public class DeviceDetailControl : MonoBehaviour
                 //control.Path = deviceInfo.rtsp;
                 //control.Play();
                 VideoControl control = item.GetComponentInChildren<VideoControl>();
-                control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+                if (deviceInfo.projectId == 3)
+                {
+                    control.PlayVideo("ws://222.128.39.16:8866/live?url=" + deviceInfo.rtsp);
+                }
+                else if (deviceInfo.projectId == 4) {
+                    control.PlayVideo("ws://222.128.39.25:8866/live?url=" + deviceInfo.rtsp);
+                }
+                
                 
             }
             

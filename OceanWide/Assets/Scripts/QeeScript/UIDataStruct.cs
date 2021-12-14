@@ -52,6 +52,7 @@ namespace UIDataStruct {
 		public double carTopTemperature;
 		public string ytStatusName;
 		public double roomTemperature;
+		public int projectId;
 	}
 
 	public class DynamicEnvironmentDataItem {

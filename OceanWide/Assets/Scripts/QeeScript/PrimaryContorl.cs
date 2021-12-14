@@ -216,6 +216,7 @@ public class PrimaryContorl : MonoBehaviour
                             List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(query_data.Result);
                             foreach (DeviceInfo item in deviceInfos)
                             {
+                                item.projectId = 3;
                                 if (deviceDic.ContainsKey(item.categoryId))
                                 {
                                     deviceDic[item.categoryId].Add(item);
@@ -228,6 +229,7 @@ public class PrimaryContorl : MonoBehaviour
                                     deviceDic.Add(item.categoryId, temp);
                                 }
                             }
+                            if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
                             foreach (int key in deviceDic.Keys)
                             {
                                 deviceDic[key].Sort(new NameCompare());
@@ -256,6 +258,45 @@ public class PrimaryContorl : MonoBehaviour
 
                 }
 
+                #region 电表
+                if (positionId == 77)
+                {
+                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(elecUrl, token);
+
+                    parkResult.GetAwaiter().OnCompleted(() =>
+                    {
+                        if (!string.IsNullOrEmpty(parkResult.Result))
+                        {
+                            try
+                            {
+                                List<DeviceInfo> parkInfos = JsonMapper.ToObject<List<DeviceInfo>>(parkResult.Result);
+                                foreach (DeviceInfo item in parkInfos)
+                                {
+                                    if (deviceDic.ContainsKey(item.categoryId))
+                                    {
+                                        deviceDic[item.categoryId].Add(item);
+                                    }
+                                    else
+                                    {
+                                        isDevice = true;
+                                        List<DeviceInfo> temp = new List<DeviceInfo>();
+                                        temp.Add(item);
+                                        deviceDic.Add(item.categoryId, temp);
+                                    }
+                                }
+                                deviceDic[16].Sort(new NameCompare());
+                                show();
+                            }
+                            catch (Exception e)
+                            {
+                                dialog.SetActive(true);
+                                dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
+                            }
+                        }
+                    });
+                }
+                #endregion
+
             }
 
         }
@@ -276,6 +317,7 @@ public class PrimaryContorl : MonoBehaviour
                             List<DeviceInfo> deviceInfos = JsonMapper.ToObject<List<DeviceInfo>>(resultMap.Result);
                             foreach (DeviceInfo item in deviceInfos)
                             {
+                                item.projectId = 4;
                                 if (deviceDic.ContainsKey(item.categoryId))
                                 {
                                     deviceDic[item.categoryId].Add(item);
@@ -786,9 +828,11 @@ public class PrimaryContorl : MonoBehaviour
     public static void qryTotalEleWaterNum(ref string powerYear, ref string waterYear)
     {
         string result = HTTPServiceControl.GetHttpResponse(waterEleUrl, token);
-        WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
-        waterYear = waterPower.data.waterYear;
-        powerYear = waterPower.data.powerYear;
+        if (!string.IsNullOrEmpty(result)) {
+            WaterPower waterPower = JsonMapper.ToObject<WaterPower>(result);
+            waterYear = waterPower.data.waterYear;
+            powerYear = waterPower.data.powerYear;
+        }
     }
 
     public static void qryAlarmList()
@@ -810,26 +854,29 @@ public class PrimaryContorl : MonoBehaviour
     public static void qryAlarmByType(string type)
     {
         string result = HTTPServiceControl.GetHttpResponse(alarmUrl + type, token);
-        List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
-        foreach (AlarmInfo alarmInfo in alarmInfoList)
-        {
-            if ((positionIdStrLHY.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 3)
-                || (positionIdStrDF.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 4))
+
+        if (!string.IsNullOrEmpty(result)) {
+            List<AlarmInfo> alarmInfoList = JsonMapper.ToObject<List<AlarmInfo>>(result);
+            foreach (AlarmInfo alarmInfo in alarmInfoList)
             {
-                int idx = alarmInfo.deviceName.IndexOf("_");
-                AlarmGrid alarmGrid = new AlarmGrid();
-                alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
-                alarmGrid.monitorName = alarmInfo.monitorName;
-                alarmGrid.categoryName = alarmInfo.categoryName;
-                if (idx > -1)
+                if ((positionIdStrLHY.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 3)
+                    || (positionIdStrDF.IndexOf("," + alarmInfo.positionId.ToString() + ",") > -1 && alarmInfo.projectId == 4))
                 {
-                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                    int idx = alarmInfo.deviceName.IndexOf("_");
+                    AlarmGrid alarmGrid = new AlarmGrid();
+                    alarmGrid.deviceName = alarmInfo.deviceName.Substring(idx + 1);
+                    alarmGrid.monitorName = alarmInfo.monitorName;
+                    alarmGrid.categoryName = alarmInfo.categoryName;
+                    if (idx > -1)
+                    {
+                        alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName.Substring(0, idx);
+                    }
+                    else
+                    {
+                        alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName;
+                    }
+                    alarmList.Add(alarmGrid);
                 }
-                else
-                {
-                    alarmGrid.descName = alarmInfo.descName + "_" + alarmInfo.deviceName;
-                }
-                alarmList.Add(alarmGrid);
             }
         }
     }

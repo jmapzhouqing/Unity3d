@@ -32,7 +32,7 @@ public class CorrespondWebSocket
         socket = new ClientWebSocket();
         source = new CancellationTokenSource();
         token = source.Token;
-        buffer_data = new byte[102400];
+        buffer_data = new byte[10240];
         buffer = new ArraySegment<byte>(buffer_data);
 
         receive_data = new Task(async () =>
