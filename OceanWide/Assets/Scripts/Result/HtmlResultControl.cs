@@ -11,7 +11,7 @@ public class HtmlResultControl : MonoBehaviour,IPointerClickHandler
     private string urlParam;
     private Transform dynamic_container;
 
-    private string urlPrefix = "http://uat.qywlsp.com.cn/#/singlePage/";
+    private string urlPrefix = "http://uat.qywlsp.com.cn/html-new/index.html?data=";
 
     public void SetUrlParam(string value) {
         this.urlParam = value;
@@ -22,8 +22,9 @@ public class HtmlResultControl : MonoBehaviour,IPointerClickHandler
         if (eventData.clickCount == 2)
         {
             DeviceDetailControl deviceDetailControl = dynamic_container.GetComponent<DeviceDetailControl>();
-            
-            switch (this.urlParam) {
+            deviceDetailControl.setContainerHTML(urlPrefix + this.urlParam);
+
+            /*switch (this.urlParam) {
                 case "er_bpdjcxt":
                     deviceDetailControl.setContainerHTML(urlPrefix+ "distributionElectricity/dongfu-high");
                     break;
@@ -54,7 +55,7 @@ public class HtmlResultControl : MonoBehaviour,IPointerClickHandler
                 case "yi_rlsbjl":
                     deviceDetailControl.setContainerHTML(urlPrefix + "accessControl/index?local=1");
                     break;
-            }
+            }*/
         }
     }
     void Start(){
