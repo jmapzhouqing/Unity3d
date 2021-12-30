@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UIDataStruct;
 using UnityEngine;
 using UnityEngine.UI;
+using Vuplex.WebView;
 
 public class DeviceDetailControl : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class DeviceDetailControl : MonoBehaviour
     private RectTransform detail_lift_prefab;
     private RectTransform detail_grid_prefab;
     private RectTransform detail_info_control_prefab;
+
+
+    private RectTransform html_prefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,8 @@ public class DeviceDetailControl : MonoBehaviour
         detail_vedio_prefab = Resources.Load<RectTransform>("UIPrefab/deviceVedioForm");
         detail_lift_prefab = Resources.Load<RectTransform>("UIPrefab/deviceLiftForm");
         detail_info_control_prefab = Resources.Load<RectTransform>("UIPrefab/deviceInfoControl");
+
+        html_prefab = Resources.Load<RectTransform>("UIPrefab/HTML");
     }
 
     
@@ -206,5 +212,15 @@ public class DeviceDetailControl : MonoBehaviour
         }
         
 
+    }
+
+    public void setContainerHTML(string url) {
+        RectTransform item = GameObject.Instantiate<RectTransform>(html_prefab, detail_container);
+        Button btn = item.GetComponentInChildren<Button>();
+        btn.onClick.AddListener(delegate () {
+            this.close();
+        });
+        CanvasWebViewPrefab control = item.GetComponentInChildren<CanvasWebViewPrefab>();
+        control.LoadHTML(url);
     }
 }

@@ -237,6 +237,7 @@ public class PrimaryContorl : MonoBehaviour
                                 }
                             }
                             if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
+                            if (deviceDic.ContainsKey(18)) deviceDic.Remove(18);
                             foreach (int key in deviceDic.Keys)
                             {
                                 deviceDic[key].Sort(new NameCompare());
@@ -268,7 +269,7 @@ public class PrimaryContorl : MonoBehaviour
 
             }
             #region 电表
-            if (positionId == 77)
+            /*if (positionId == 77)
             {
                 Task<CallBackResult> parkResult = HTTPServiceControl.GetDataAsyncNew(elecUrl, token,positionId,positionId);
 
@@ -304,7 +305,7 @@ public class PrimaryContorl : MonoBehaviour
                         }
                     }
                 });
-            }
+            }*/
             #endregion
 
         }
@@ -340,11 +341,13 @@ public class PrimaryContorl : MonoBehaviour
                             }
                             if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
                             if (deviceDic.ContainsKey(8)) deviceDic.Remove(8);
+                            if (deviceDic.ContainsKey(18)) deviceDic.Remove(18);//人脸识别
+                            if (deviceDic.ContainsKey(19)) deviceDic.Remove(19);//变配电
                             //照明重组
                             if (deviceDic.ContainsKey(7))
                             {
                                 deviceDic.Remove(7);
-                                Task<string> resultLight = HTTPServiceControl.GetDataAsync(lightUrl, token);
+                                /*Task<string> resultLight = HTTPServiceControl.GetDataAsync(lightUrl, token);
 
                                 resultLight.GetAwaiter().OnCompleted(() =>
                                 {
@@ -408,7 +411,7 @@ public class PrimaryContorl : MonoBehaviour
                                             dialog.GetComponent<DialogControl>().setContent(resultLight.Result);
                                         }
                                     }
-                                });
+                                });*/
                             }
                             
 
@@ -427,8 +430,8 @@ public class PrimaryContorl : MonoBehaviour
                 });
 
                 //消防
-                Task<CallBackResult> resultFloor = HTTPServiceControl.GetDataAsyncNew(fireProtectFloorUrl, token, positionId, positionId);
-                resultFloor.GetAwaiter().OnCompleted(() => fireProtectCallBack(resultFloor.Result, show));
+                //Task<CallBackResult> resultFloor = HTTPServiceControl.GetDataAsyncNew(fireProtectFloorUrl, token, positionId, positionId);
+                //resultFloor.GetAwaiter().OnCompleted(() => fireProtectCallBack(resultFloor.Result, show));
 
 
                 //动环
@@ -489,7 +492,7 @@ public class PrimaryContorl : MonoBehaviour
                 }
                 #endregion
                 #region 电表
-                if (positionId == 59)
+                /*if (positionId == 59)
                 {
                     Task<CallBackResult> parkResult = HTTPServiceControl.GetDataAsyncNew(elecUrl, token,positionId,positionId);
 
@@ -525,7 +528,7 @@ public class PrimaryContorl : MonoBehaviour
                             }
                         }
                     });
-                }
+                }*/
                 #endregion
             }
         }

@@ -91,6 +91,7 @@ public class LevelItemControl : MonoBehaviour, IPointerClickHandler
 
     private void show() {
         //resultManager.Clear();
+        resultManager.SetPositionId(this.positionId);
         resultManager.CreateCategory(floor, PrimaryContorl.categoryDic, PrimaryContorl.deviceDic);
     }
 

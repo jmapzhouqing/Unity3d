@@ -83,6 +83,17 @@
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPEditor.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPPostBuilds.cs" />
     <Compile Include="Assets\UniversalMediaPlayer\Editor\UMPPreference.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\CanvasPointerInputDetectorInspector.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\CanvasWebViewPrefabInspector.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\DefaultPointerInputDetectorInspector.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\DocumentationLinkDrawer.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\EditorUtils.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\LabelDrawer.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Common\WebViewPrefabInspector.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Mac\MacBuildScript.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Mac\MacEditorScript.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Standalone\StandaloneVideoCodecsWindow.cs" />
+    <Compile Include="Assets\Vuplex\WebView\Editor\Windows\WindowsBuildScript.cs" />
     <None Include="Assets\Demigiant\DemiLib\Core\Editor\DemiEditor.xml" />
     <Reference Include="Unity.DocZh.Editor">
       <HintPath>F:/publishUnity/Unity3d/OceanWide/Library/ScriptAssemblies/Unity.DocZh.Editor.dll</HintPath>

@@ -21,6 +21,7 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
 
     private CameraControl camera_control;
 
+
     public DeviceEventType DeviceEvent
     {
         get { return devideEvent; }
@@ -29,6 +30,8 @@ public class ResultControl : MonoBehaviour,IPointerClickHandler
         }
     
     }
+
+    
 
     public void setDeviceInfo(DeviceInfo value) {
         this.deviceInfo = value;
