@@ -102,6 +102,7 @@ public class PrimaryContorl : MonoBehaviour
         tokenControl.setTokenUrl2(tokenUrl2);
         tokenControl.setTokenUrl3(tokenUrl3);
         token = tokenControl.getToken();
+        Debug.Log(token);
 
         string result_LHY = HTTPServiceControl.GetHttpResponse(floorUrlPrefix + "3", token);
 
