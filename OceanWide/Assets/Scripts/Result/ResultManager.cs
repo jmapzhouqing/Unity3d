@@ -29,7 +29,8 @@ public class ResultManager : MonoBehaviour
     ,{ "消防监测系统","er_xfjcxt"} ,{ "人脸识别记录","er_rlsbjl"} ,{ "停车场查询","er_tcccx"}
     ,{ "智能照明管理系统","er_znzmglxt"} };
     private Dictionary<string, string> LHYHtml = new Dictionary<string, string>() {
-        { "电表系统","yi_nhglxt"},{ "门禁刷卡记录","yi_mjskjl"},{ "人脸识别记录","yi_rlsbjl"} };
+        { "电表系统","yi_nhglxt"},{ "门禁刷卡记录","yi_mjskjl"},{ "人脸识别记录","yi_rlsbjl"}
+    ,{ "停车场查询","yi_tcccx"}};
     void Awake()
     {
         DOTween.Init(true, true, null);

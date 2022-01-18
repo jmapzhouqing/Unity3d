@@ -236,6 +236,7 @@ public class PrimaryContorl : MonoBehaviour
                                     deviceDic.Add(item.categoryId, temp);
                                 }
                             }
+                            if (deviceDic.ContainsKey(8)) deviceDic.Remove(8);
                             if (deviceDic.ContainsKey(16)) deviceDic.Remove(16);
                             if (deviceDic.ContainsKey(18)) deviceDic.Remove(18);
                             foreach (int key in deviceDic.Keys)
@@ -253,7 +254,7 @@ public class PrimaryContorl : MonoBehaviour
                 });
 
                 //门禁动环 int[] typeArr = new int[] { 0, 1 }; 
-                
+
                 /*int[] typeArr = new int[] { 0 };
                 for (int j = 0; j < typeArr.Length; j++)
                 {
@@ -266,8 +267,16 @@ public class PrimaryContorl : MonoBehaviour
                     resultDoor.GetAwaiter().OnCompleted(() => doorQryCallback(resultDoor.Result, show));
 
                 }*/
-
+                #region 停车
+                if (positionId == 24)
+                {
+                    Task<CallBackResult> resultPark = HTTPServiceControl.GetDataAsyncNew(parkingUrl, token, mapArr[i], positionId);
+                    resultPark.GetAwaiter().OnCompleted(() => parkQryCallback(resultPark.Result, show));
+                }
+                #endregion
             }
+
+
             #region 电表
             /*if (positionId == 77)
             {
@@ -446,7 +455,10 @@ public class PrimaryContorl : MonoBehaviour
                 #region 停车
                 if (positionId == 47)
                 {
-                    Task<string> parkResult = HTTPServiceControl.GetDataAsync(parkingUrl, token);
+                    Task<CallBackResult> resultPark = HTTPServiceControl.GetDataAsyncNew(parkingUrl, token, mapArr[i], positionId);
+                    resultPark.GetAwaiter().OnCompleted(() => parkQryCallback(resultPark.Result, show));
+
+                    /*Task<string> parkResult = HTTPServiceControl.GetDataAsync(parkingUrl, token);
 
                     parkResult.GetAwaiter().OnCompleted(() =>
                     {
@@ -459,16 +471,16 @@ public class PrimaryContorl : MonoBehaviour
                                 {
                                     if (deviceDic.ContainsKey(item.categoryId))
                                     {
-                                        /*bool isAct = false;
-                                        foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId])
-                                        {
-                                            if (deviceInfo.deviceId == item.deviceId)
-                                            {
-                                                isAct = true;
-                                                break;
-                                            }
-                                        }
-                                        if (!isAct) deviceDic[item.categoryId].Add(item);*/
+                                        //bool isAct = false;
+                                        //foreach (DeviceInfo deviceInfo in deviceDic[item.categoryId])
+                                        //{
+                                        //    if (deviceInfo.deviceId == item.deviceId)
+                                        //    {
+                                        //        isAct = true;
+                                        //        break;
+                                        //    }
+                                        //}
+                                        //if (!isAct) deviceDic[item.categoryId].Add(item);
                                         deviceDic[item.categoryId].Add(item);
                                     }
                                     else
@@ -488,7 +500,7 @@ public class PrimaryContorl : MonoBehaviour
                                 dialog.GetComponent<DialogControl>().setContent(parkResult.Result);
                             }
                         }
-                    });
+                    });*/
                 }
                 #endregion
                 #region 电表
@@ -543,7 +555,48 @@ public class PrimaryContorl : MonoBehaviour
         }*/
     }
 
-
+    public static void parkQryCallback(CallBackResult result, displayUI show)
+    {
+        if (result.positionId != currentPositionId) return;
+        if (result.isSucc)
+        {
+            try
+            {
+                List<DeviceInfo> doorInfos = JsonMapper.ToObject<List<DeviceInfo>>(result.dataMsg);
+                int categoryId = -1;
+                foreach (DeviceInfo item in doorInfos)
+                {
+                    if (item.digitalMapId == result.id)
+                    {
+                        if (deviceDic.ContainsKey(item.categoryId))
+                        {
+                            deviceDic[item.categoryId].Add(item);
+                        }
+                        else
+                        {
+                            isDevice = true;
+                            List<DeviceInfo> temp = new List<DeviceInfo>();
+                            temp.Add(item);
+                            deviceDic.Add(item.categoryId, temp);
+                            categoryId = item.categoryId;
+                        }
+                    }
+                }
+                if (categoryId > -1) deviceDic[categoryId].Sort(new NameCompare());
+                show();
+            }
+            catch (Exception e)
+            {
+                dialog.SetActive(true);
+                dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+            }
+        }
+        else
+        {
+            dialog.SetActive(true);
+            dialog.GetComponent<DialogControl>().setContent(result.dataMsg);
+        }
+    }
     public static void doorQryCallback(CallBackResult result, displayUI show)
     {
         if (result.positionId != currentPositionId) return;
